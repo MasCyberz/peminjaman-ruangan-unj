@@ -46,14 +46,14 @@
                 <ul class="">
                     <li class="link flex items-center justify-center">
                         <a href="{{ route('home') }}"
-                            class="hover:bg-putihan/[10%] active-link flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
+                            class="hover:bg-putihan/[10%] {{ Request::route()->named('home') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-home text-xl mx-1 me-7'></i>
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="{{route('peminjaman')}}"
-                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
+                        <a href="{{ route('peminjaman') }}"
+                            class="hover:bg-putihan/[10%] {{ Request::route()->named('peminjaman') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-spreadsheet text-xl mx-1 me-7'></i>
                             <span class="text">Peminjaman</span>
                         </a>
@@ -104,6 +104,8 @@
                 </div>
             </div>
 
+            {{-- profile-end --}}
+
             {{-- Content-start --}}
 
             @yield('content')
@@ -112,10 +114,7 @@
     </section>
 
 
-    {{-- profile-end --}}
 
-
-    {{-- Sidebar-end --}}
 
 
 </body>

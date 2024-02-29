@@ -20,7 +20,7 @@
         </div>
 
 
-        <div class="flex ms-20 h-48 gap-4 mt-14 rounded text-white">
+        <div class="flex items-center justify-center h-48 gap-4 mt-14 rounded text-white">
             <div
                 class="w-[425px] h-[225px] bg-red-500 rounded-lg relative hover:scale-105 transition-all duration-500 ease-in-out">
                 <div class="flex m-5">
