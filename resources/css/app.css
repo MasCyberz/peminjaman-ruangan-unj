@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    * {
+        @apply box-border p-0 m-0;
+    }
+    .kontener {
+        @apply w-[80%] h-[80%] bg-gray-700;
+        margin: 0 auto;
+        border: 10px solid var(--clr-dark);
+    }
+    #sidebar {
+        @apply transition-all duration-[0.7s] ease-in-out;
+    }
+    #sidebar.close {
+        @apply w-[90px];
+    }
+    #sidebar.close .text {
+        @apply opacity-0 pointer-events-none transition-opacity duration-[0.2s] delay-0;
+    }
+    #sidebar.close ~ .home {
+        @apply left-[90px] w-[calc(100%-90px)] transition-all duration-[0.7s] delay-0;
+    }
+    #sidebar .text {
+        @apply whitespace-nowrap opacity-100 transition-opacity delay-[0.4s];
+    }
+    #sidebar .image {
+        @apply min-w-[60px] me-5;
+    }
+    #sidebar li {
+        @apply h-[50px] mt-[10px] list-none flex items-center;
+    }
+    #sidebar li a {
+        @apply h-full flex items-center w-full;
+    }
+    .active-link {
+        @apply bg-putihan/[10%] rounded-lg;
+    }
+    #reason.tutup {
+        @apply scale-0;
+    }
+}
+
