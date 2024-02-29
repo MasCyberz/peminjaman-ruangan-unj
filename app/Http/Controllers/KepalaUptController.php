@@ -39,7 +39,7 @@ class KepalaUptController extends Controller
             $message = 'Surat berhasil ditolak.';
         }
 
-        $surat->save();
+        $surat->save(); 
         return redirect('/kepala-upt/peminjaman')->with('success', $message);
     }
 }
