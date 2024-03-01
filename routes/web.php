@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\KepalaUptController;
-use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SuratController;
+use App\Http\Controllers\JaringanController;
+use App\Http\Controllers\KepalaUptController;
+use App\Http\Controllers\KoordinatorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,11 @@ Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kep
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');
 Route::get('kepala-upt/peminjaman-detail/{id}' , [KepalaUptController::class, 'show_peminjaman'])->name('detail_peminjaman_kepala_upt');
 Route::put('kepala-upt/peminjaman-detail/{id}/respond' , [KepalaUptController::class, 'respond'])->name('respond_kepala_upt');
+
+Route::get('/jaringan', [ JaringanController::class, 'index'] )->name('home_jaringan');
+Route::get('/jaringan/peminjaman', [JaringanController::class, 'table_peminjaman'])->name('peminjaman_jaringan');
+Route::get('/jaringan/data_referensi', [JaringanController::class, 'data_referensi'])->name('referensi_jaringan');
+
+Route::get('/koordinator', [KoordinatorController::class, 'index'])->name('home_koordinator');
+Route::get('/koordinator/pengajuan', [KoordinatorController::class, 'pengajuan'])->name('pengajuan_koordinator');
+route::get('/koordinator/data_referensi', [KoordinatorController::class, 'data_referensi'])->name('referensi_koordinator');
