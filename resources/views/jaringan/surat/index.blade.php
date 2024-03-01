@@ -27,7 +27,7 @@
                     <i class='bx bx-list-ul text-[150px]'></i>                            
                 </div>
             </div>
-            <a href="PeminjamanJaringan.html">
+            <a href="{{ route('peminjaman_jaringan') }}">
                 <div class="bg-red-600 w-full h-8 absolute bottom-0 left-0 flex items-center justify-center rounded-lg cursor-pointer" >
                     <span class="my-auto">Selengkapnya</span>
                     <i class='bx bxs-right-arrow-circle ms-2 text-2xl my-auto'></i>
@@ -45,7 +45,7 @@
                     <i class='bx bxs-file-find text-[150px]'></i>                            
                 </div>
             </div>
-            <a href="DataReferensiJaringan.html">
+            <a href="{{ route('referensi_jaringan') }}">
                 <div class="bg-gray-700 w-full h-8 absolute bottom-0 left-0 flex items-center justify-center rounded-lg cursor-pointer" >
                     <span class="my-auto">Selengkapnya</span>
                     <i class='bx bxs-right-arrow-circle ms-2 text-2xl my-auto'></i>

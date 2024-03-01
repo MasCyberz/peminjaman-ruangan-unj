@@ -35,6 +35,7 @@ Route::put('kepala-upt/peminjaman-detail/{id}/respond' , [KepalaUptController::c
 Route::get('/jaringan', [ JaringanController::class, 'index'] )->name('home_jaringan');
 Route::get('/jaringan/peminjaman', [JaringanController::class, 'table_peminjaman'])->name('peminjaman_jaringan');
 Route::get('/jaringan/data_referensi', [JaringanController::class, 'data_referensi'])->name('referensi_jaringan');
+Route::get('/jaringan/detail-surat/{id}', [JaringanController::class, 'show_detail'])->name('detail_surat_jaringan');
 
 Route::get('/koordinator', [KoordinatorController::class, 'index'])->name('home_koordinator');
 Route::get('/koordinator/pengajuan', [KoordinatorController::class, 'pengajuan'])->name('pengajuan_koordinator');
