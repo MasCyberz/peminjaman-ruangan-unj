@@ -8,11 +8,11 @@
     <div class="w-[90%] flex mx-auto px-5 mt-5 pe-4">
         <div class="flex my-2 gap-2 p-3">
             <span>Show</span>
-            <div class="border-2 border-gray-300 w-[50px]">
+            <div class="">
                 <form id="filterForm" action="{{ url('peminjaman_jaringan') }}" method="GET" class="mx-auto">
                     <label for="numero"></label>
                     <select name="numero" id="numero"
-                        class="outline-none py-1 px-2 text-end border border-gray-300 shadow-[0_0px_5px_1px_rgba(0,0,0,0.2)]">
+                        class="outline-none py-1 px-2 text-center border border-gray-300 shadow-[0_0px_5px_1px_rgba(0,0,0,0.2)]">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
