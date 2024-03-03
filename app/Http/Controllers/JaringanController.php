@@ -12,10 +12,11 @@ class JaringanController extends Controller
     }
 
     public function table_peminjaman(Request $request){
+        $limit = $request->input('numero', 10);
         $surat = surat::where('nomor_surat', 'like', '%' . $request->keyword . '%')
                         ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%')
-                        ->paginate();
-        return view('jaringan.surat.peminjaman-jaringan', ['suratList' => $surat]);
+                        ->paginate($limit);
+        return view('jaringan.surat.peminjaman-jaringan', ['suratList' => $surat, 'numero' => $request->input('numero')]);
     }
 
     public function data_referensi(){
