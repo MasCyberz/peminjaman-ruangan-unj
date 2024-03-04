@@ -41,7 +41,7 @@
                 <div class="relative">
                     <input type="text" name="keyword" id="default-search"
                         class="block w-full p-1.5 ps-2 text-base font-medium text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
-                        placeholder="Search" required />
+                        placeholder="Search" />
                     <button type="submit"
                         class="text-white flex items-center absolute end-0 bottom-0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-e-full text-sm px-4 py-2 hover:bg-gray-300">
                         <svg class="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -93,7 +93,48 @@
             </div>
             {{-- table atas end --}}
 
+            {{-- <div class="my-4">
+                {{ $suratList->links() }}
+            </div> --}}
 
+            
+            <div class="flex justify-center my-4">
+                <nav class="inline-flex">
+                    <ul class="flex items-center">
+                        {{-- Tombol "Previous" --}}
+                        @if ($suratList->onFirstPage())
+                            <li>
+                                <span class="bg-gray-300 px-2 py-1 mr-1 rounded-md cursor-not-allowed">&laquo;</span>
+                            </li>
+                        @else
+                            <li>
+                                <a href="{{ $suratList->previousPageUrl() }}" class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&laquo;</a>
+                            </li>
+                        @endif
+            
+                        {{-- Loop untuk menampilkan tombol-tombol pagination --}}
+                        @foreach ($suratList->getUrlRange(1, $suratList->lastPage()) as $page => $url)
+                            <li>
+                                <a href="{{ $url }}" class="{{ $page == $suratList->currentPage() ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black' }} px-2 py-1 mr-1 rounded-md">{{ $page }}</a>
+                            </li>
+                        @endforeach
+            
+                        {{-- Tombol "Next" --}}
+                        @if ($suratList->hasMorePages())
+                            <li>
+                                <a href="{{ $suratList->nextPageUrl() }}" class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&raquo;</a>
+                            </li>
+                        @else
+                            <li>
+                                <span class="bg-gray-300 px-2 py-1 mr-1 rounded-md cursor-not-allowed">&raquo;</span>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+            </div>
+            
+
+            
             {{-- Table Bawah start --}}
             <div class="w-full h-1/2 mx-auto mt-10">
                 <div class="flex flex-col mx-5">
