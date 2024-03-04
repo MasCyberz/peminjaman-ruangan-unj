@@ -20,7 +20,7 @@ class SuratController extends Controller
     public function peminjaman()
     {
 
-        $surat = surat::get();
+        $surat = surat::orderby('created_at', 'desc')->Paginate(10);
 
         // dd($surat);
         return view('admin.surat.peminjaman', ['suratList' => $surat]);

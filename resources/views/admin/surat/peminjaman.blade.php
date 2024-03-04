@@ -16,9 +16,9 @@
 
     <div class="w-[90%] flex mx-auto py-2 ps-10 pe-4">
         <!-- <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 my-auto">
-                                                                                                                                <i class='bx bx-plus text-2xl'></i>
-                                                                                                                                Tambah Data
-                                                                                                                            </button> -->
+                                                                                                                                            <i class='bx bx-plus text-2xl'></i>
+                                                                                                                                            Tambah Data
+                                                                                                                                        </button> -->
         <a href="{{ route('surat_tambah') }}">
             <button data-modal-target="default-modal" data-modal-toggle="default-modal" type="button"
                 class="px-5 py-2.5 text-base font-medium text-center inline-flex items-center text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -143,7 +143,12 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
+
+        </div>
+        <div class="my-5">
+            {{ $suratList->links() }}
         </div>
     </div>
     <!-- ContentReal End -->
