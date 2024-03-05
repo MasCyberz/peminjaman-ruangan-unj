@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="DataRuanganAUT.html"
+                        <a href="{{ route('data-referensi') }}"
                             class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bx-line-chart text-xl mx-1 me-7'></i>
                             <span class="text">Data Referensi</span>

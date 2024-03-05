@@ -5,6 +5,7 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\JaringanController;
 use App\Http\Controllers\KepalaUptController;
 use App\Http\Controllers\KoordinatorController;
+use App\Http\Controllers\RuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::get('admin/peminjaman', [SuratController::class, 'peminjaman'])->name('pe
 Route::get('admin/surat_tambah' , [SuratController::class, 'create_peminjaman'])->name('surat_tambah');
 Route::post('admin/surat_store' , [SuratController::class, 'store_peminjaman'])->name('surat_store');
 Route::get('admin/surat_delete/{id}' , [SuratController::class, 'destroy'])->name('surat_delete');
+Route::get('admin/data-referensi', [RuanganController::class, 'index'])->name('data-referensi');
+Route::get('admin/tambah-referensi', [RuanganController::class, 'create'])->name('tambah_ruangan');
+Route::post('admin/tambah-referensi/store', [RuanganController::class, 'store'])->name('ruangan_store');
 
 Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kepala_upt');
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');
