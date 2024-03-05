@@ -39,6 +39,10 @@
         
         <div class="mt-5">
             <div class="">
+                <p class="text leading-relaxed text-lg flex items-center justify-center mb-1">Hai,
+                    <span class="mx-1">Admin</span>
+                    UPT TIK
+                </p>
                 <ul class="">
                     <li class="link flex items-center justify-center">
                         <a href="{{ route('home_jaringan') }}" class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
