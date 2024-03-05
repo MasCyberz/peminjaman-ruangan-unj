@@ -5,6 +5,21 @@
 @section('content')
 
     <div class="w-[calc(100%-8rem)] h-full mx-auto py-3 px-4">
+
+        @if (empty($ruanganList))
+            <div
+                class=" hidden absolute w-14 h-11 inline-flex items-center justify-center left-[13.7rem] top-[7.4rem] transition-all duration-300 ease-in-out">
+                <a href="{{ route('tambah_ruangan') }}"><i data-tooltip-target="tooltip-right" data-tooltip-placement="right"
+                        class='bx bx-plus text-4xl hover:bg-sidebarunj h-11 py-1 rounded-lg text-red-400 font-medium hover:text-white transition-all duration-300 ease-in-out'></i></a>
+            </div>
+        @else
+            <div
+                class="absolute w-14 h-11 inline-flex items-center justify-center left-[13.7rem] top-[7.4rem] transition-all duration-300 ease-in-out">
+                <a href="{{ route('tambah_ruangan') }}"><i data-tooltip-target="tooltip-right" data-tooltip-placement="right"
+                        class='bx bx-plus text-4xl hover:bg-sidebarunj h-11 py-1 rounded-lg text-red-400 font-medium hover:text-white transition-all duration-300 ease-in-out'></i></a>
+            </div>
+        @endif
+
         @php
             $tombolDitampilkan = false;
         @endphp
@@ -23,7 +38,7 @@
                     </div>
                 @endif
 
-                
+
 
                 <div class="flex my-auto justify-center relative">
                     <div class="flex flex-col z-10">
@@ -50,7 +65,8 @@
                                 @foreach ($ruang->fasilitas as $fasilitas)
                                     @if ($ruang->fasilitas && $fasilitas->nama_fasilitas && $fasilitas->jumlah)
                                         <li> <span>{{ $fasilitas->jumlah }}</span>
-                                            <span>{{ $fasilitas->nama_fasilitas }}</span> </li>
+                                            <span>{{ $fasilitas->nama_fasilitas }}</span>
+                                        </li>
                                     @else
                                         -
                                     @endif
