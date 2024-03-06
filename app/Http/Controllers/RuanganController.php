@@ -36,37 +36,35 @@ class RuanganController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        try{
+        try {
+
+            $ruangan = ruangan::create([
+                'nomor_ruang' => $request->input('nomor_ruang'),
+                'nama_ruang' => $request->input('nama_ruang'),
+                'jml_pc' => $request->input('jml_pc'),
+                'kapasitas_orang' => $request->input('kapasitas_orang'),
+            ]);
 
             if ($request->hasFile('foto')) {
                 $now = now();
                 $tanggalJam = $now->format('dmY-His');
                 $extension = $request->file('foto')->getClientOriginalExtension();
                 $namaBaru = $request->nomor_ruang . '-' . $tanggalJam . '.' . $extension;
-                $request->file('foto')->storeAs('ruangan', $namaBaru, 'public');
+                $request->file('foto')->storeAs('foto_ruangan', $namaBaru, 'public');
+                $ruangan->gambar_ruang = $namaBaru;
+                $ruangan->save();
             }
 
-            dd($request->all());
+            $fasilitas = $request->input('fasilitas');
+            foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+                fasilitas::create([
+                    'nama_fasilitas' => $namaFasilitas,
+                    'jumlah' => $fasilitas['jumlah'][$key],
+                    'ruangans_id' => $ruangan->id,
+                ]);
+            }
 
-            // $ruangan = ruangan::create([
-            //     'nomor_ruang' => $request->input('nomor_ruang'),
-            //     'nama_ruang' => $request->input('nama_ruang'),
-            //     'jml_pc' => $request->input('jml_pc'),
-            //     'kapasitas_orang' => $request->input('kapasitas_orang'),
-            // ]);
-
-            // $fasilitas = $request->input('fasilitas');
-            // foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
-            //     fasilitas::create([
-            //         'nama_fasilitas' => $namaFasilitas,
-            //         'jumlah' => $fasilitas['jumlah'][$key],
-            //         'ruangans_id' => $ruangan->id,
-            //     ]);
-            // }
-
-            // return redirect('/admin/data-referensi')->with('success', 'Data ruangan baru ditambahkan');
-
-
+            return redirect('/admin/data-referensi')->with('success', 'Data ruangan baru ditambahkan');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan data. Silakan coba lagi.');
         }
