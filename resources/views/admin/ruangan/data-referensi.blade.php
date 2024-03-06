@@ -45,71 +45,61 @@
         </a>
 
         @foreach ($ruanganList as $index => $ruang)
-            <div class="my-5 mx-auto rounded-lg shadow-all-side h-[420px] w-[60%] flex flex-col p-3 relative">
+            <div class="my-5 mx-auto rounded-lg shadow-all-side w-[70%] p-5 relative">
+                <div class="flex flex-col">
+                    <div class="flex relative justify-between mx-20 ">
+                        <div class="flex flex-col z-10">
+                            <span class="block mt-3 mx-3 text-base font-semibold">Nomor Ruangan</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Nama Ruangan</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Jumlah PC</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Kapasitas Orang</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Fasilitas</span>
+                        </div>
+                        <div class="flex flex-col z-10">
+                            <span class="mt-3 text-base font-semibold mx-3">:</span>
+                            <span class="mt-3 text-base font-semibold mx-3">:</span>
+                            <span class="mt-3 text-base font-semibold mx-3">:</span>
+                            <span class="mt-3 text-base font-semibold mx-3">:</span>
+                            <span class="mt-3 text-base font-semibold mx-3">:</span>
+                        </div>
+                        <div class="flex flex-col z-10 relative">
+                            <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->nomor_ruang }}</span>
+                            <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->nama_ruang }}</span>
+                            <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->jml_pc }}</span>
+                            <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->kapasitas_orang }}</span>
+                            <span class="mt-3 text-base font-semibold mx-3">
+                                <ul>
+                                    @foreach ($ruang->fasilitas as $fasilitas)
+                                        @if ($ruang->fasilitas && $fasilitas->nama_fasilitas && $fasilitas->jumlah)
+                                            <li> <span>{{ $fasilitas->jumlah }}</span>
+                                                <span>{{ $fasilitas->nama_fasilitas }}</span>
+                                            </li>
+                                        @else
+                                            -
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </span>
+                        </div>
+                        {{-- <div class="right-0 mx-5 -z-0 flex-col w-[20rem]  absolute">
+                            <img class="rounded-[50px]" src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}"
+                                alt="">
+                        </div> --}}
 
-                <div class="flex my-auto relative mx-20">
-                    <div class="flex flex-col z-10">
-                        <span class="block mt-3 mx-3 text-base font-semibold">Nomor Ruangan</span>
-                        <span class="block mt-3 mx-3 text-base font-semibold">Nama Ruangan</span>
-                        <span class="block mt-3 mx-3 text-base font-semibold">Jumlah PC</span>
-                        <span class="block mt-3 mx-3 text-base font-semibold">Kapasitas Orang</span>
-                        <span class="block mt-3 mx-3 text-base font-semibold">Fasilitas</span>
-                    </div>
-                    <div class="flex flex-col z-10">
-                        <span class="mt-3 text-base font-semibold mx-3">:</span>
-                        <span class="mt-3 text-base font-semibold mx-3">:</span>
-                        <span class="mt-3 text-base font-semibold mx-3">:</span>
-                        <span class="mt-3 text-base font-semibold mx-3">:</span>
-                        <span class="mt-3 text-base font-semibold mx-3">:</span>
-                    </div>
-                    <div class="flex flex-col z-10 relative">
-                        <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->nomor_ruang }}</span>
-                        <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->nama_ruang }}</span>
-                        <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->jml_pc }}</span>
-                        <span class="mt-3 text-base font-semibold mx-3">{{ $ruang->kapasitas_orang }}</span>
-                        <span class="mt-3 text-base font-semibold mx-3">
-                            <ul>
-                                @foreach ($ruang->fasilitas as $fasilitas)
-                                    @if ($ruang->fasilitas && $fasilitas->nama_fasilitas && $fasilitas->jumlah)
-                                        <li> <span>{{ $fasilitas->jumlah }}</span>
-                                            <span>{{ $fasilitas->nama_fasilitas }}</span>
-                                        </li>
-                                    @else
-                                        -
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </span>
-
-                        <div class="flex gap-2 left-[25rem] top-[3rem] relative ">
-                            <a href="{{ route('edit_ruangan', $ruang->id) }}"><button type="submit"
-                                    class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
-                                        class='bx bx-edit me-2'></i>Edit
-                                </button>
-                            </a>
-                            {{-- <form action="{{ route('delete_ruangan', $ruang->id) }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit"
-                                    class="text-white bg-red-500 hover:bg-red-600  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
-                                    <i class='bx bxs-trash me-2'></i>Hapus
-                                </button>
-                            </form> --}}
-
-                            <button id="deleteButton" type="button"
-                                class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
-                                <i class='bx bxs-trash me-2'></i>Hapus
-                            </button>
-
+                        <div class="bg-slate-300 w-[20rem] rounded-3xl bg-cover bg-center"
+                            style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
                         </div>
                     </div>
-                    {{-- <div class="right-0 mx-5 -z-0 flex-col w-[20rem]  absolute">
-                        <img class="rounded-[50px]" src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}"
-                            alt="">
-                    </div> --}}
-
-                    <div class="bg-slate-300 h-[76%] w-1/2 rounded-3xl mx-auto bg-cover bg-center"
-                        style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
+                    <div class="inline-flex justify-end gap-2 mt-10 ">
+                        <a href="{{ route('edit_ruangan', $ruang->id) }}"><button type="submit"
+                                class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
+                                    class='bx bx-edit me-2'></i>Edit
+                            </button>
+                        </a>
+                        <button id="deleteButton" type="button"
+                            class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
+                            <i class='bx bxs-trash me-2'></i>Hapus
+                        </button>
 
                     </div>
 
@@ -151,14 +141,14 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 flex justify-end items-end">
                         @foreach ($ruanganList as $ruang)
-                        <form action="{{ route('delete_ruangan', $ruang->id) }}" method="POST" id="deleteForm">
-                            @csrf
-                            @method('DELETE')
-                            <button id="confirmButton" type="button"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                Hapus
-                            </button>
-                        </form>
+                            <form action="{{ route('delete_ruangan', $ruang->id) }}" method="POST" id="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <button id="confirmButton" type="button"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Hapus
+                                </button>
+                            </form>
                         @endforeach
                         <button id="cancelButton" type="button"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -172,27 +162,27 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const modal = document.getElementById('modal');
-          const confirmButton = document.getElementById('confirmButton');
-          const cancelButton = document.getElementById('cancelButton');
-          const deleteForm = document.getElementById('deleteForm');
-      
-          confirmButton.addEventListener('click', function() {
-            modal.classList.add('hidden');
-            deleteForm.submit();
-          });
-      
-          cancelButton.addEventListener('click', function() {
-            modal.classList.add('hidden');
-          });
-      
-          // Show modal when delete button is clicked
-          document.getElementById('deleteButton').addEventListener('click', function() {
-            modal.classList.remove('hidden');
-          });
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById('modal');
+            const confirmButton = document.getElementById('confirmButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const deleteForm = document.getElementById('deleteForm');
+
+            confirmButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                deleteForm.submit();
+            });
+
+            cancelButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
+            });
+
+            // Show modal when delete button is clicked
+            document.getElementById('deleteButton').addEventListener('click', function() {
+                modal.classList.remove('hidden');
+            });
         });
-      </script>
-      
+    </script>
+
 
 @endsection
