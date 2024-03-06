@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\surat;
+use App\Models\ruangan;
 use Illuminate\Http\Request;
+use App\Models\fasilitas;
 
 class JaringanController extends Controller
 {
@@ -20,7 +22,9 @@ class JaringanController extends Controller
     }
 
     public function data_referensi(){
-        return view('jaringan.surat.data-referensi');
+        $ruangan = ruangan::with('fasilitas')->get();
+        $fasilitas = fasilitas::get();
+        return view('jaringan.surat.data-referensi', ['ruanganList' => $ruangan, 'fasilitasList' => $fasilitas]);
     }
 
     public function show_detail($id){
@@ -28,5 +32,7 @@ class JaringanController extends Controller
         return view('jaringan.surat.detail-surat-peminjaman', ['suratList' => $surat]);
     }
     
+
+
 
 }
