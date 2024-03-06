@@ -37,23 +37,34 @@ class RuanganController extends Controller
     {
         // dd($request->all());
         try{
-            $ruangan = ruangan::create([
-                'nomor_ruang' => $request->input('nomor_ruang'),
-                'nama_ruang' => $request->input('nama_ruang'),
-                'jml_pc' => $request->input('jml_pc'),
-                'kapasitas_orang' => $request->input('kapasitas_orang'),
-            ]);
 
-            $fasilitas = $request->input('fasilitas');
-            foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
-                fasilitas::create([
-                    'nama_fasilitas' => $namaFasilitas,
-                    'jumlah' => $fasilitas['jumlah'][$key],
-                    'ruangans_id' => $ruangan->id,
-                ]);
+            if ($request->hasFile('foto')) {
+                $now = now();
+                $tanggalJam = $now->format('dmY-His');
+                $extension = $request->file('foto')->getClientOriginalExtension();
+                $namaBaru = $request->nomor_ruang . '-' . $tanggalJam . '.' . $extension;
+                $request->file('foto')->storeAs('ruangan', $namaBaru, 'public');
             }
 
-            return redirect('/admin/data-referensi')->with('success', 'Data ruangan baru ditambahkan');
+            dd($request->all());
+
+            // $ruangan = ruangan::create([
+            //     'nomor_ruang' => $request->input('nomor_ruang'),
+            //     'nama_ruang' => $request->input('nama_ruang'),
+            //     'jml_pc' => $request->input('jml_pc'),
+            //     'kapasitas_orang' => $request->input('kapasitas_orang'),
+            // ]);
+
+            // $fasilitas = $request->input('fasilitas');
+            // foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+            //     fasilitas::create([
+            //         'nama_fasilitas' => $namaFasilitas,
+            //         'jumlah' => $fasilitas['jumlah'][$key],
+            //         'ruangans_id' => $ruangan->id,
+            //     ]);
+            // }
+
+            // return redirect('/admin/data-referensi')->with('success', 'Data ruangan baru ditambahkan');
 
 
         } catch (\Exception $e) {
