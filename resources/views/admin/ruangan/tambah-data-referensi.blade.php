@@ -36,19 +36,19 @@
 
             <div id="facilities-container">
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold mb-1">Pilih Fasilitas:</label>
+                    <label class="block text-sm text-gray-900 font-semibold mb-1.5">Pilih Fasilitas:</label>
                     <div id="facilities">
-                        <div class="inline-flex items-center">
-                            <div class="w-1/2">
-                                <select name="fasilitas[nama_fasilitas][]" class="form-select py-1 px-2">
+                        <div class="inline-flex items-center gap-2">
+                            <div class=" h-10 inline-flex items-center justify-center">
+                                <select name="fasilitas[nama_fasilitas][]" class="focus:outline-none py-1 px-2 text-start">
                                     <option value="AC">AC</option>
                                     <option value="Keyboard">Keyboard</option>
                                     <option value="Mouse">Mouse</option>
                                     <!-- Add more options for other facilities -->
                                 </select>
                             </div>
-                            <div class="w-1/2">
-                                <input type="number" name="fasilitas[jumlah][]" class="form-input py-1">
+                            <div class=" h-10 inline-flex items-center justify-center">
+                                <input type="number" name="fasilitas[jumlah][]" class="focus:outline-none py-1">
                             </div>
                         </div>
                     </div>
@@ -64,18 +64,20 @@
 
 
 
-            <div class="flex gap-2 mt-3">
-                <input type="file" id="uploadfile" class="hidden">
-                <label for="uploadfile"
-                    class="flex items-center text-base bg-gray-500 hover:bg-gray-600 text-center px-5 py-2 select-none cursor-pointer rounded-2xl text-white">
+            <div class="flex gap-2 mt-3 items-center">
+                <input id="foto" type="file" name="foto" class="hidden" onchange="displayFileName()" multiple>
+                <label for="foto"
+                    class="flex items-center text-base bg-gray-500 hover:bg-gray-600 text-center px-5 py-2 select-none cursor-pointer rounded-2xl text-white shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]">
                     <i class='bx bx-cloud-upload text-2xl'></i>
                     <span class="ms-2">Add Picture</span>
                 </label>
-                <a class="ms-auto" href="{{ route('data-referensi') }}"><button type="button"
-                        class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Cancel</button></a>
+                <span id="file-name"></span>
+                <a class="ms-auto text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-2xl text-sm sm:w-auto px-5 py-2.5 text-center shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]"
+                    href="{{ route('data-referensi') }}">Cancel</a>
                 <button type="submit"
-                    class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save</button>
-                <button type="button" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]">Save</button>
+                <button type="button"
+                    class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]"
                     id="add-facility">Tambah Fasilitas</button>
             </div>
         </form>
@@ -87,11 +89,11 @@
             var container = document.getElementById("facilities");
 
             var div = document.createElement("div");
-            div.classList.add("flex", "items-center", "mb-2");
+            div.classList.add("flex", "items-center", "mb-2", "gap-2");
 
             var select = document.createElement("select");
             select.setAttribute("name", "fasilitas[nama_fasilitas][]");
-            select.classList.add("form-select", "w-1/2");
+            select.classList.add("h-10", "py-1", "px-2", "focus:outline-none");
             select.innerHTML = `
             <option value="AC">AC</option>
             <option value="Keyboard">Keyboard</option>
@@ -102,11 +104,11 @@
             var inputJumlah = document.createElement("input");
             inputJumlah.setAttribute("type", "number");
             inputJumlah.setAttribute("name", "fasilitas[jumlah][]");
-            inputJumlah.classList.add("form-input", "w-1/2");
+            inputJumlah.classList.add("h-10", "focus:outline-none");
 
             var removeButton = document.createElement("button");
-            removeButton.classList.add("bg-red-500", "hover:bg-red-700", "text-white", "font-bold", "py-1", "px-2",
-                "rounded", "ml-2");
+            removeButton.classList.add("bg-red-500", "hover:bg-red-700", "text-white", "font-bold", "py-2", "px-2",
+                "rounded", "ml-2", "transition-all", "duration-300", "ease-in-out");
             removeButton.textContent = "Hapus";
             removeButton.addEventListener("click", function() {
                 div.remove();
@@ -118,5 +120,17 @@
 
             container.appendChild(div);
         });
+    </script>
+
+    <script>
+        function displayFileName() {
+            const fileInput = document.getElementById('foto');
+            const fileName = document.getElementById('file-name');
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        }
     </script>
 @endsection
