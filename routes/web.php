@@ -30,6 +30,9 @@ Route::get('admin/surat_delete/{id}' , [SuratController::class, 'destroy'])->nam
 Route::get('admin/data-referensi', [RuanganController::class, 'index'])->name('data-referensi');
 Route::get('admin/tambah-referensi', [RuanganController::class, 'create'])->name('tambah_ruangan');
 Route::post('admin/tambah-referensi/store', [RuanganController::class, 'store'])->name('ruangan_store');
+Route::get('admin/edit-referensi/{id}', [RuanganController::class, 'edit'])->name('edit_ruangan');
+Route::put('admin/data-referensi/store/{id}', [RuanganController::class, 'update'])->name('ruangan_update');
+Route::delete('admin/data-referensi/destroy/{id}', [RuanganController::class, 'destroy'])->name('delete_ruangan');
 
 Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kepala_upt');
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');

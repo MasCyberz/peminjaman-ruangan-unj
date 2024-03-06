@@ -81,24 +81,51 @@ class RuanganController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ruangan $ruangan)
+    public function edit($id)
     {
-        //
+        $ruangan = ruangan::findOrFail($id);
+        $fasilitas = fasilitas::where('ruangans_id', $id)->get();
+        return view('admin.ruangan.edit-data-referensi', ['ruanganList' => $ruangan, 'fasilitasList' => $fasilitas]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateruanganRequest $request, ruangan $ruangan)
+    public function update(request $request, $id)
     {
-        //
+        try{
+        $ruangan = ruangan::findOrFail($id);
+
+        $ruangan->nomor_ruang = $request->input('nomor_ruang');
+        $ruangan->nama_ruang = $request->input('nama_ruang');
+        $ruangan->jml_pc = $request->input('jml_pc');
+        $ruangan->kapasitas_orang = $request->input('kapasitas_orang');
+        $ruangan->save();
+        
+        $ruangan->fasilitas()->delete();
+    
+        $fasilitas = $request->input('fasilitas');
+        foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+            fasilitas::create([
+                'nama_fasilitas' => $namaFasilitas,
+                'jumlah' => $fasilitas['jumlah'][$key],
+                'ruangans_id' => $ruangan->id,
+            ]);
+        }
+        return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');
+    }catch (\Exception $e) {
+        return back()->with('error', 'Gagal merubah data. Coba lagi.');
+    }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ruangan $ruangan)
+    public function destroy(ruangan $ruangan, $id)
     {
-        //
+        $ruangan = ruangan::findOrFail($id);
+        $ruangan->fasilitas()->delete();
+        $ruangan->delete();
+        return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil dihapus');
     }
 }

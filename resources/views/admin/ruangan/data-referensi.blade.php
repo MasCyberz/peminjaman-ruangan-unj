@@ -45,7 +45,7 @@
         </a>
 
         @foreach ($ruanganList as $index => $ruang)
-            <div class="my-5 mx-auto rounded-lg shadow-all-side h-[420px] w-[70%] flex flex-col p-3 relative">
+            <div class="my-5 mx-auto rounded-lg shadow-all-side h-[420px] w-[60%] flex flex-col p-3 relative">
 
                 <div class="flex my-auto relative mx-20">
                     <div class="flex flex-col z-10">
@@ -82,14 +82,25 @@
                         </span>
 
                         <div class="flex gap-2 left-[25rem] top-[3rem] relative ">
-                            <button
-                                class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
-                                    class='bx bx-edit me-2'></i>Edit
-                            </button>
-                            <a
-                                class="text-white bg-red-500 hover:bg-red-600  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
-                                <i class='bx bxs-trash me-2'></i>Hapus
+                            <a href="{{ route('edit_ruangan', $ruang->id) }}"><button type="submit"
+                                    class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
+                                        class='bx bx-edit me-2'></i>Edit
+                                </button>
                             </a>
+                            {{-- <form action="{{ route('delete_ruangan', $ruang->id) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit"
+                                    class="text-white bg-red-500 hover:bg-red-600  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
+                                    <i class='bx bxs-trash me-2'></i>Hapus
+                                </button>
+                            </form> --}}
+
+                            <button id="deleteButton" type="button"
+                                class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md">
+                                <i class='bx bxs-trash me-2'></i>Hapus
+                            </button>
+
                         </div>
                     </div>
                     {{-- <div class="right-0 mx-5 -z-0 flex-col w-[20rem]  absolute">
@@ -97,7 +108,8 @@
                             alt="">
                     </div> --}}
 
-                    <div class="bg-slate-300 h-[76%] w-1/2 rounded-3xl mx-auto bg-cover bg-center" style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
+                    <div class="bg-slate-300 h-[76%] w-1/2 rounded-3xl mx-auto bg-cover bg-center"
+                        style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
 
                     </div>
 
@@ -106,7 +118,81 @@
             </div>
         @endforeach
         <br>
+        <div id="modal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-3 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            {{-- <div
+                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <!-- Heroicon name: exclamation -->
+                            </div> --}}
+                            <div class="text-center flex flex-col items-center justify-center">
+                                <svg class="h-12 w-12 mb-4 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.01 5H18a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
+                                    Hapus Ruangan
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        Apakah Anda yakin ingin menghapus ruangan ini? Tindakan ini tidak dapat dibatalkan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 flex justify-end items-end">
+                        @foreach ($ruanganList as $ruang)
+                        <form action="{{ route('delete_ruangan', $ruang->id) }}" method="POST" id="deleteForm">
+                            @csrf
+                            @method('DELETE')
+                            <button id="confirmButton" type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Hapus
+                            </button>
+                        </form>
+                        @endforeach
+                        <button id="cancelButton" type="button"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const modal = document.getElementById('modal');
+          const confirmButton = document.getElementById('confirmButton');
+          const cancelButton = document.getElementById('cancelButton');
+          const deleteForm = document.getElementById('deleteForm');
+      
+          confirmButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            deleteForm.submit();
+          });
+      
+          cancelButton.addEventListener('click', function() {
+            modal.classList.add('hidden');
+          });
+      
+          // Show modal when delete button is clicked
+          document.getElementById('deleteButton').addEventListener('click', function() {
+            modal.classList.remove('hidden');
+          });
+        });
+      </script>
+      
 
 @endsection

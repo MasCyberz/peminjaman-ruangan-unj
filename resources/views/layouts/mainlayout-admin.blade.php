@@ -64,7 +64,7 @@
                     </li>
                     <li class="link flex items-center justify-center">
                         <a href="{{ route('data-referensi') }}"
-                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
+                            class="hover:bg-putihan/[10%] {{ Request::route()->named('data-referensi') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bx-line-chart text-xl mx-1 me-7'></i>
                             <span class="text">Data Referensi</span>
                         </a>
