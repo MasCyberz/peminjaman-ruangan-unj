@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ruangan;
+use App\Models\fasilitas;
 use Illuminate\Http\Request;
 
 class KoordinatorController extends Controller
@@ -16,7 +18,9 @@ class KoordinatorController extends Controller
     }
 
     public function data_referensi(){
-        return view('koordinator.surat.data_referensi-koordinator');
+        $ruangan = ruangan::with('fasilitas')->get();
+        $fasilitas = fasilitas::get();
+        return view('koordinator.surat.data_referensi-koordinator', ['ruanganList' => $ruangan, 'fasilitasList' => $fasilitas]);
     }
 
 
