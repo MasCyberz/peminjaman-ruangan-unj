@@ -6,7 +6,7 @@
 
     <div class="w-[90%] h-[90%] mx-auto flex justify-center pt-3">
         <div class="flex flex-col mx-5">
-            <div class="-m-1.5 overflow-hidden">
+            <div class="-m-1.5">
                 <div class="p-1.5 min-w-full inline-block align-middle">
                     <div class="">
                         <table class="min-w-full divide-y divide-gray-200 border border-gray-400">
@@ -29,7 +29,7 @@
                                         <th
                                             class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-center text-base
                                     @if ($surat->status == 'diterima' || $surat->status == 'ditolak') text-slate-400 font-normal @endif">
-                                            <span>{{ $loop->iteration }}</span>
+                                            <span>{{$loop->iteration + $suratList->firstItem() - 1}}</span>
                                         </th>
                                         <td
                                             class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base
@@ -58,6 +58,9 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="my-5">
+                {{ $suratList->links('pagination::tailwind') }}
             </div>
         </div>
     </div>

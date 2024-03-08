@@ -187,7 +187,6 @@
                                 </div>
 
 
-                                {{ $ruanganList }}
                                 <table class="min-w-full border border-gray-400">
                                     <thead>
                                         <tr>

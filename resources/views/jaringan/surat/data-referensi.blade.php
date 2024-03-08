@@ -41,11 +41,13 @@
                                 @endforeach
                             </ul>
                         </span>
-                        <div class="flex right-0 -z-0 flex-col w-[17.5rem] absolute">
+                        {{-- <div class="flex right-0 -z-0 flex-col w-[17.5rem] absolute">
                             <img class="rounded-[50px]" src="./img/taro-ohtani-1kU3F0v90NY-unsplash.jpg" alt="">
-                        </div>
-
+                        </div> --}}
+                        
                     </div>
+                    <div class="bg-slate-300 h-[80%] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
+                    style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
                 </div>
             </div>
         @endforeach

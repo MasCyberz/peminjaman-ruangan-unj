@@ -19,12 +19,20 @@ class JaringanController extends Controller
     {
         $ruangan = ruangan::get();
 
+        // $ruang_peminjaman = RuangPeminjaman::get('surat_id');
+        
+        $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+
         $limit = $request->input('numero', 10);
-        $surat = surat::where('nomor_surat', 'like', '%' . $request->keyword . '%')
-            ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%')
+        $surat = surat::where('status','diterima')
+        ->whereNotIn('id', $suratIdsPending)
+        ->where(function ($query) use ($request) { // Tambahkan pembungkus untuk query pencarian lainnya
+            $query->where('nomor_surat', 'like', '%' . $request->keyword . '%')
+                ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%');
+        })
             ->orderby('created_at', 'desc')
             ->paginate($limit);
-        return view('jaringan.surat.peminjaman-jaringan', ['suratList' => $surat, 'numero' => $request->input('numero'), 'ruanganList' => $ruangan]);
+        return view('jaringan.surat.peminjaman-jaringan', ['suratList' => $surat, 'numero' => $request->input('numero'), 'ruanganList' => $ruangan, 'peminjaman' => $suratIdsPending]);
     }
 
     public function data_referensi()
@@ -87,4 +95,5 @@ class JaringanController extends Controller
 
         return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil disimpan.');
     }
+
 }

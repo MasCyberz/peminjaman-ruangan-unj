@@ -90,7 +90,7 @@
                             @foreach ($suratList as $surat)
                                 <tr>
                                     <th class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        {{ $loop->iteration }}</th>
+                                        {{$loop->iteration + $suratList->firstItem() - 1}}</th>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
                                         {{ $surat->nomor_surat }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">

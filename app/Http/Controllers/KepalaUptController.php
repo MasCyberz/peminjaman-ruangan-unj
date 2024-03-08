@@ -14,7 +14,8 @@ class KepalaUptController extends Controller
 
     public function peminjaman()
     {
-        $surat = surat::get();
+        $surat = surat::where('status', 'pending')
+                        ->paginate(15);
 
         // dd($surat);
         return view('kepala-upt.surat.surat-pengajuan', ['suratList' => $surat]);
