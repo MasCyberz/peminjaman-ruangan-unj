@@ -43,7 +43,13 @@ Route::get('/jaringan', [ JaringanController::class, 'index'] )->name('home_jari
 Route::get('/jaringan/peminjaman', [JaringanController::class, 'table_peminjaman'])->name('peminjaman_jaringan');
 Route::get('/jaringan/data_referensi', [JaringanController::class, 'data_referensi'])->name('referensi_jaringan');
 Route::get('/jaringan/detail-surat/{id}', [JaringanController::class, 'show_detail'])->name('detail_surat_jaringan');
+Route::get('/jaringan/ajukan-peminjaman/{id}', [JaringanController::class, 'ajukanPeminjaman'])->name('ajukan_peminjaman_jaringan');
+// Route::post('/jaringan/ajukan-peminjaman/{suratId}/store', [JaringanController::class, 'ajukanPeminjamanStore'])->name('ajukan_peminjaman_store');
+Route::post('/jaringan/ajukan-peminjaman/store/{suratId}', [JaringanController::class, 'ajukanPeminjamanStore'])->name('ajukan_peminjaman_store');
+
 
 Route::get('/koordinator', [KoordinatorController::class, 'index'])->name('home_koordinator');
 Route::get('/koordinator/pengajuan', [KoordinatorController::class, 'pengajuan'])->name('pengajuan_koordinator');
+// Route::post('/koordinator/pengajuan/store/{suratId}/{ruanganId}', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
+Route::post('/koordinator/pengajuan/store/{suratId}/', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
 route::get('/koordinator/data_referensi', [KoordinatorController::class, 'data_referensi'])->name('referensi_koordinator');

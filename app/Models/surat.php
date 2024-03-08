@@ -21,4 +21,11 @@ class surat extends Model
         'jml_pc',
         'file_surat',
     ];
+
+
+    public function ruangans()
+    {
+        return $this->belongsToMany(ruangan::class, 'ruang_peminjaman', 'surat_id', 'ruangans_id')
+        ->withPivot('status');
+    }
 }

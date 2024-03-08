@@ -20,6 +20,16 @@ class ruangan extends Model
         'gambar_ruang'
     ];
 
+    public function cekKetersediaan($tanggalMulai, $tanggalSelesai)
+    {
+        $peminjaman = $this->surats()
+            ->wherePivot('mulai_dipinjam', '<=', '$tanggalMulai')
+            ->wherePivot('selesai_dipinjam', '>=', '$tanggalSelesai')
+            ->exists();
+
+        return $peminjaman ? 'tidak tersedia' : 'tersedia';
+    }
+
     /**
      * Get the user that owns the ruangan
      *
@@ -28,5 +38,15 @@ class ruangan extends Model
     public function fasilitas()
     {
         return $this->hasMany(fasilitas::class, 'ruangans_id', 'id');
+    }
+
+    /**
+     * The roles that belong to the ruangan
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function surats()
+    {
+        return $this->belongsToMany(surat::class, 'ruang_peminjaman', 'ruangans_id', 'surat_id');
     }
 }

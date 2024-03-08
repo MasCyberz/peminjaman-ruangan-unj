@@ -6,6 +6,32 @@
     @section('content')
 
         <div class="w-[90%] flex mx-auto px-5 mt-5 pe-4">
+
+            @if (session()->has('success'))
+                <div id="alert-border-3"
+                    class="fixed top-2 right-0 z-50 m-14 w-1/3 flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                        viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <div class="ms-3 text-lg font-medium">
+                        {{ session()->get('success') }}
+                    </div>
+                    <button type="button"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-border-3" aria-label="Close">
+                        <span class="sr-only">Dismiss</span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+            @endif
+
             <div class="flex my-2 gap-2 p-3">
                 <span>Show</span>
                 <div class="">
@@ -28,7 +54,7 @@
                 </div>
                 <span>entries</span>
             </div>
-    
+
             <script>
                 document.getElementById("numero").addEventListener("change", function() {
                     document.getElementById("filterForm").submit();
@@ -44,8 +70,8 @@
                         placeholder="Search" />
                     <button type="submit"
                         class="text-white flex items-center absolute end-0 bottom-0 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-e-full text-sm px-4 py-2 hover:bg-gray-300">
-                        <svg class="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 20 20">
+                        <svg class="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m19 19-4-4m0-7A7 7 0 1 1                 1 8a7 7 0 0 1 14 0Z" />
                         </svg>
@@ -74,14 +100,18 @@
                                 <tbody class="">
                                     @foreach ($suratList as $surat)
                                         <tr class="font-bold text-start">
-                                            <td class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base">
+                                            <td
+                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base">
                                                 <span>{{ $surat->nomor_surat }}</span>
                                                 <span>{{ $surat->asal_surat }}</span>
                                             </td>
                                             <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-red-600 transition-all duration-300 ease-in-out">
+                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center transition-all duration-300 ease-in-out">
                                                 <a href="/jaringan/detail-surat/{{ $surat->id }}"
-                                                    class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Details</a>
+                                                    class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
+                                                <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
+                                                    class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
+                                                    Ruangan</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -97,7 +127,7 @@
                 {{ $suratList->links() }}
             </div> --}}
 
-            
+
             <div class="flex justify-center my-4">
                 <nav class="inline-flex">
                     <ul class="flex items-center">
@@ -108,21 +138,24 @@
                             </li>
                         @else
                             <li>
-                                <a href="{{ $suratList->previousPageUrl() }}" class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&laquo;</a>
+                                <a href="{{ $suratList->previousPageUrl() }}"
+                                    class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&laquo;</a>
                             </li>
                         @endif
-            
+
                         {{-- Loop untuk menampilkan tombol-tombol pagination --}}
                         @foreach ($suratList->getUrlRange(1, $suratList->lastPage()) as $page => $url)
                             <li>
-                                <a href="{{ $url }}" class="{{ $page == $suratList->currentPage() ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black' }} px-2 py-1 mr-1 rounded-md">{{ $page }}</a>
+                                <a href="{{ $url }}"
+                                    class="{{ $page == $suratList->currentPage() ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black' }} px-2 py-1 mr-1 rounded-md">{{ $page }}</a>
                             </li>
                         @endforeach
-            
+
                         {{-- Tombol "Next" --}}
                         @if ($suratList->hasMorePages())
                             <li>
-                                <a href="{{ $suratList->nextPageUrl() }}" class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&raquo;</a>
+                                <a href="{{ $suratList->nextPageUrl() }}"
+                                    class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&raquo;</a>
                             </li>
                         @else
                             <li>
@@ -132,15 +165,29 @@
                     </ul>
                 </nav>
             </div>
-            
 
-            
+
+
             {{-- Table Bawah start --}}
             <div class="w-full h-1/2 mx-auto mt-10">
                 <div class="flex flex-col mx-5">
                     <div class="-m-1.5 overflow-hidden">
                         <div class="p-1.5 min-w-full inline-block align-middle">
                             <div class="overflow-y-auto h-[500px]">
+                                <div class="flex flex-row items-center gap-3 my-3">
+                                    <label for="mulai_dipinjam">Mulai : </label>
+                                    <input type="date" id="mulai_dipinjam" name="mulai_dipinjam">
+
+                                    <p class="font-bold">-</p>
+
+                                    <label for="selesai_dipinjam">Akhir : </label>
+                                    <input type="date" id="selesai_dipinjam" name="selesai_dipinjam">
+
+                                    <button class="py-2 px-2 bg-blue-500 text-white rounded-lg">Filter</button>
+                                </div>
+
+
+                                {{ $ruanganList }}
                                 <table class="min-w-full border border-gray-400">
                                     <thead>
                                         <tr>
@@ -153,9 +200,6 @@
                                             <th rowspan="2" scope="col"
                                                 class="px-6 py-2 whitespace-nowrap border border-gray-400 text-center text-lg font-bold uppercase">
                                                 Status</th>
-                                            <th rowspan="2" scope="col"
-                                                class="px-6 py-2 whitespace-nowrap border border-gray-400 text-center text-lg font-bold uppercase">
-                                                Aksi</th>
                                         </tr>
                                         <tr class="">
                                             <th scope="col" class="border border-gray-400 px-0 mx-0 py-2">Orang</th>
@@ -163,181 +207,42 @@
                                         </tr>
                                     </thead>
                                     <tbody class="">
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                301
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                302
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                303
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                304
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                305
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                306
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr class="font-semibold text-start">
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                307
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                20
-                                            </td>
-                                            <td
-                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                Kosong
-                                            </td>
-                                            <td
-                                                class="px-2 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-white transition-all duration-300 ease-in-out">
-                                                <button
-                                                    class="px-6 py-1.5 bg-green-500 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                                    Ajukan
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        @foreach ($ruanganList as $ruangans)
+                                            <tr class="font-semibold text-start">
+                                                <td
+                                                    class="py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
+                                                    {{ $ruangans->nomor_ruang }}
+                                                </td>
+                                                <td
+                                                    class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
+                                                    {{ $ruangans->kapasitas_orang }}
+                                                </td>
+                                                <td
+                                                    class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
+                                                    {{ $ruangans->jml_pc }}
+                                                </td>
+                                                <td
+                                                    class="px-2 py-4 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
+                                                    {{-- <span class="uppercase bg-green-500 py-2 px-3 rounded-lg text-white">
+                                                        {{ $ruang->status }}
+                                                    </span> --}}
+
+                                                    {{-- @if ($statusRuangan['status'] === 'tersedia')
+                                                        <p>Tersedia</p>
+                                                    @else
+                                                        <p>Tidak Tersedia</p>
+                                                    @endif --}}
+                                                    <span class="uppercase bg-green-500 py-2 px-3 rounded-lg text-white">
+                                                        @if ($ruangans->status == 'tersedia')
+                                                            Tersedia
+                                                        @else
+                                                            Tidak Tersedia
+                                                        @endif
+                                                    </span>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
