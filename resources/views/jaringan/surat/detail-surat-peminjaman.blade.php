@@ -75,33 +75,18 @@
                     <button data-modal-hide="static-modal" type="button"
                         class="bg-gray-300 hover:bg-gray-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center transition-all duration-200 ease-in-out">Surat
                         Pengajuan</button>
-                    <button id="showreason" data-modal-target="reason" data-modal-toggle="reason" type="button"
-                        class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-7 py-2.5 ms-auto text-center transition-all duration-200 ease-in-out">Tolak</button>
-                    <button type="submit"
-                        class="bg-green-500 hover:bg-green-700 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 ms-1.5 text-center transition-all duration-200 ease-in-out">Terima</button>
                 </div>
             </div>
-        </div>
 
-        <div id="reason" aria-hidden="true"
-            class="hidden absolute w-[60%] z-50 h-24 items-center mt-20 bottom-1.5 px-4 mx-w-2xl">
-            <div
-                class="bg-putihan rounded-lg w-full shadow-all-side py-2 px-4 flex flex-col transition-all duration-1000 ease-in-out">
-                <div class="border-b border-gray-400 w-[146px] cursor-default">
-                    <span class="text-base font-medium whitespace-nowrap">Alasan Penolakan</span>
-                </div>
-
-
-                <div class="flex">
-                    <textarea id="message" rows="1"
-                        class="block mt-1.5 p-2.5 w-[85%] text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:outline-none placeholder:text-gray-600"
-                        placeholder="Alasan..."></textarea>
-                    <button type="submit"
-                        class="inline-flex w-[15%] bg-gray-300 hover:bg-gray-400 text-gray-600 rounded-xl ms-1.5 mt-1.5 items-center justify-center">Kirim</button>
-                </div>
-
-            </div>
         </div>
     </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
 
 @endsection
