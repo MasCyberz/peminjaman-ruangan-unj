@@ -12,9 +12,21 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+
     <title>Dashboard | @yield('title')</title>
 </head>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+    <script>
 
+      document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar')
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        })
+        calendar.render()
+      })
+
+    </script>
 <body class="h-screen">
     {{-- Sidebar-start --}}
 
@@ -48,14 +60,14 @@
                 </p>
                 <ul class="">
                     <li class="link flex items-center justify-center">
-                        <a href="{{route('home_kepala_upt')}}"
+                        <a href="{{ route('home_kepala_upt') }}"
                             class="hover:bg-putihan/[10%] {{ Request::route()->named('home_kepala_upt') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-home text-xl mx-1 me-7'></i>
                             <span class="text">Dashboard</span>
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="{{route('peminjaman_kepala_upt')}}"
+                        <a href="{{ route('peminjaman_kepala_upt') }}"
                             class="hover:bg-putihan/[10%] {{ Request::route()->named('peminjaman_kepala_upt') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-envelope text-xl mx-1 me-7'></i>
                             <span class="text">Surat Pengajuan</span>
@@ -88,7 +100,8 @@
                         <span class="text-2xl font-semibold flex items-center">Dashboard</span>
                         <div class="flex ms-auto me-4 rounded-full py-1 shadow-all-side transition-all duration-1000 ease-in-out cursor-pointer"
                             data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                            <img class="rounded-full w-10 h-10 ms-5 my-auto" src="{{asset('img/profilepicturecropped.jpg')}}" alt="">
+                            <img class="rounded-full w-10 h-10 ms-5 my-auto"
+                                src="{{ asset('img/profilepicturecropped.jpg') }}" alt="">
                             <span class="me-5 ms-3 flex items-center font-medium text-lg">Hafidz</span>
                         </div>
                     </div>
