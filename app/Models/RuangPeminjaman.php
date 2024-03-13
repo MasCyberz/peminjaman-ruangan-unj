@@ -18,4 +18,6 @@ class RuangPeminjaman extends Model
         'mulai_dipinjam',
         'selesai_dipinjam',
     ];
+
+    
 }

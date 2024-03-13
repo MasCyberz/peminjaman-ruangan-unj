@@ -33,6 +33,8 @@ Route::post('admin/tambah-referensi/store', [RuanganController::class, 'store'])
 Route::get('admin/edit-referensi/{id}', [RuanganController::class, 'edit'])->name('edit_ruangan');
 Route::put('admin/data-referensi/store/{id}', [RuanganController::class, 'update'])->name('ruangan_update');
 Route::delete('admin/data-referensi/destroy/{id}', [RuanganController::class, 'destroy'])->name('delete_ruangan');
+Route::get('admin/pdf/{surat_id}', [SuratController::class, 'bikinPDF'])->name('pdf');
+Route::view('admin/surat_balasan', 'pdf.surat_balasan')->name('surat_balasan');
 
 Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kepala_upt');
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');

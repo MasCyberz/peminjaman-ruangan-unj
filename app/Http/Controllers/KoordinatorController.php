@@ -28,22 +28,16 @@ class KoordinatorController extends Controller
 
     public function pengajuan_store(Request $request, $suratId)
     {
-        // $peminjaman = RuangPeminjaman::where('surat_id', $suratId)
-        // ->where('ruangans_id', $ruanganId)
-        // ->firstorFail();
-
-
-        // $peminjaman->status = $request->status;
-        // $peminjaman->save();
-
-        // return redirect()->route('pengajuan_koordinator')->with('success', 'Pengajuan ruangan berhasil.');
-
         $status = $request->status; // 'approved' atau 'rejected'
         $surat = Surat::findOrFail($suratId);
 
         // Update status semua ruangan yang terkait dengan surat
         foreach ($surat->ruangans as $ruangan) {
             $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => $status]);
+        }
+
+        if ($status == 'Diterima') {
+            $surat->update(['status' => 'Diterima']);
         }
 
         return back()->with('success', 'Semua ruangan untuk surat ini telah ' . ($status == 'approved' ? 'diterima' : 'ditolak') . '.');

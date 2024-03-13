@@ -38,21 +38,38 @@
                 <div class="mb-4">
                     <label class="block text-sm text-gray-900 font-semibold mb-1.5">Pilih Fasilitas:</label>
                     <div id="facilities">
-                        <div class="inline-flex items-center gap-2">
+                        <div class="inline-flex items-center gap-2 mb-3">
                             <div class=" h-10 inline-flex items-center justify-center">
                                 <select name="fasilitas[nama_fasilitas][]" class="focus:outline-none py-1 px-2 text-start">
-                                    <option value="AC">AC</option>
+                                    <option value="PC">PC</option>
+                                    <option value="Monitor">Monitor</option>
                                     <option value="Keyboard">Keyboard</option>
                                     <option value="Mouse">Mouse</option>
-                                    <!-- Add more options for other facilities -->
+                                    <option value="Headset">Headset</option>
+                                    <option value="AC">AC</option>
+                                    <option value="Papan Tulis">Papan Tulis</option>
+                                    <option value="Lampu">Lampu</option>
+                                    <option value="Speaker">Speaker</option>
+                                    <option value="Screen Proyektor">Screen Proyektor</option>
+                                    <option value="CCTV">CCTV</option>
+                                    <option value="Meja">Meja</option>
+                                    <option value="Kursi">Kursi</option>
+                                    <option value="Stopkontak">Stopkontak</option>
+                                    <option value="Jam Dinding">Jam Dinding</option>
+                                    <option value="Webcam">Webcam</option>
                                 </select>
                             </div>
                             <div class=" h-10 inline-flex items-center justify-center">
                                 <input type="number" name="fasilitas[jumlah][]" class="focus:outline-none py-1">
                             </div>
+                            <button type="button"
+                                class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-lg"
+                                id="add-facility">Tambah Fasilitas</button>
                         </div>
                     </div>
+
                 </div>
+
             </div>
 
 
@@ -76,9 +93,6 @@
                     href="{{ route('data-referensi') }}">Cancel</a>
                 <button type="submit"
                     class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]">Save</button>
-                <button type="button"
-                    class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]"
-                    id="add-facility">Tambah Fasilitas</button>
             </div>
         </form>
     </div>
@@ -95,11 +109,24 @@
             select.setAttribute("name", "fasilitas[nama_fasilitas][]");
             select.classList.add("h-10", "py-1", "px-2", "focus:outline-none");
             select.innerHTML = `
-            <option value="AC">AC</option>
-            <option value="Keyboard">Keyboard</option>
-            <option value="Mouse">Mouse</option>
-            <!-- Add more options for other facilities -->
-        `;
+        <option value="AC">AC</option>
+        <option value="Keyboard">Keyboard</option>
+        <option value="Mouse">Mouse</option>
+        <option value="Headset">Headset</option>
+        <option value="Monitor">Monitor</option>
+        <option value="PC">PC</option>
+        <option value="Papan Tulis">Papan Tulis</option>
+        <option value="Lampu">Lampu</option>
+        <option value="Speaker">Speaker</option>
+        <option value="Screen Proyektor">Screen Proyektor</option>
+        <option value="CCTV">CCTV</option>
+        <option value="Meja">Meja</option>
+        <option value="Kursi">Kursi</option>
+        <option value="Stopkontak">Stopkontak</option>
+        <option value="Jam Dinding">Jam Dinding</option>
+        <option value="Webcam">Webcam</option>
+        <!-- Add more options for other facilities -->
+    `;
 
             var inputJumlah = document.createElement("input");
             inputJumlah.setAttribute("type", "number");

@@ -16,9 +16,9 @@
 
     <div class="w-[90%] flex mx-auto py-2 ps-10 pe-4">
         <!-- <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 my-auto">
-                                                                                                                                                    <i class='bx bx-plus text-2xl'></i>
-                                                                                                                                                    Tambah Data
-                                                                                                                                                </button> -->
+                                                                                                                                                                    <i class='bx bx-plus text-2xl'></i>
+                                                                                                                                                                    Tambah Data
+                                                                                                                                                                </button> -->
         <a href="{{ route('surat_tambah') }}">
             <button data-modal-target="default-modal" data-modal-toggle="default-modal" type="button"
                 class="px-5 py-2.5 text-base font-medium text-center inline-flex items-center text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -90,7 +90,7 @@
                             @foreach ($suratList as $surat)
                                 <tr>
                                     <th class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        {{$loop->iteration + $suratList->firstItem() - 1}}</th>
+                                        {{ $loop->iteration + $suratList->firstItem() - 1 }}</th>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
                                         {{ $surat->nomor_surat }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
@@ -134,9 +134,20 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        <button type="button"
-                                            class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center">Print
-                                            Out</button>
+                                        @php
+                                            $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
+                                                return $ruangan->pivot->status === 'Diterima';
+                                            });
+                                        @endphp
+                                        @if ($statusDiterima)
+                                            {{-- <a href="{{ route('generate_pdf', ['suratId' => $surat->id]) }}"
+                                                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center">Print
+                                                Out</a> --}}
+
+                                            <a href="{{ route('pdf', ['surat_id' => $surat->id]) }}"
+                                                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center"
+                                                target="_blank">Print Out</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -153,4 +164,12 @@
     </div>
     <!-- ContentReal End -->
     </div>
+
+
+    <script>
+        function openPdfPreview(pdfUrl) {
+            window.open(pdfUrl, '_blank');
+        }
+    </script>
+
 @endsection

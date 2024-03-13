@@ -7,6 +7,12 @@
 @section('content')
 
     <div class="rounded-lg shadow-all-side w-[80%] my-5 p-8 mx-auto">
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Whoops!</strong>
+                <span class="block sm:inline">{{ $errors->first('ruangan') }}</span>
+            </div>
+        @endif
         <form class="mx-10" action="/jaringan/ajukan-peminjaman/store/{{ $suratList->id }}" method="POST">
             @csrf
             <div class="flex border-b-2 border-black w-full font-semibold mb-3">
@@ -31,11 +37,10 @@
                 <input type="hidden" id="nama_peminjam" name="nama_peminjam" value="{{ $suratList->nama_peminjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
-                <input  id="mulai_dipinjam" name="mulai_dipinjam" value="{{ $suratList->mulai_dipinjam }}"
+                <input id="mulai_dipinjam" name="mulai_dipinjam" value="{{ $suratList->mulai_dipinjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
-                <input id="selesai_dipinjam" name="selesai_dipinjam"
-                    value="{{ $suratList->selesai_dipinjam }}"
+                <input id="selesai_dipinjam" name="selesai_dipinjam" value="{{ $suratList->selesai_dipinjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
                 <input type="hidden" id="jml_pc" name="jml_pc" value="{{ $suratList->jml_pc }}"

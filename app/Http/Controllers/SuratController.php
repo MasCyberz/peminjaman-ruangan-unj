@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Mpdf\Mpdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Models\surat;
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoresuratRequest;
 use App\Http\Requests\UpdatesuratRequest;
-use Illuminate\Http\Request;
 
 class SuratController extends Controller
 {
@@ -69,6 +74,67 @@ class SuratController extends Controller
     public function respond()
     {
         //
+    }
+
+    public function bikinPDF(Request $request, $suratId)
+    {
+
+        // $surat = Surat::findOrFail($suratId);
+
+        // // Membuat objek Dompdf
+        // $dompdf = new Dompdf();
+
+        // // Mengatur ukuran dan orientasi halaman
+        // $dompdf->setPaper('A4', 'portrait');
+
+        // // Memuat view PDF Blade
+        // $pdfContent = view('pdf.surat_balasan', compact('surat'))->render();
+
+        // // Memuat konten HTML ke Dompdf
+        // $dompdf->loadHtml($pdfContent);
+
+        // // Render PDF
+        // $dompdf->render();
+
+        // $filename = 'surat_balasan_Universitas_Negeri_Jakarta_' . str_replace(' ', '_', $surat->nomor_surat) . '.pdf';
+
+        // return $dompdf->stream($filename);
+
+        // Mengambil data surat berdasarkan $suratId beserta relasinya
+        $surat = Surat::with(['ruangans' => function ($query) {
+            $query->withPivot('mulai_dipinjam', 'selesai_dipinjam'); // Mengambil kolom-kolom tambahan dari pivot table
+        }])->findOrFail($suratId);
+
+        // Menyiapkan data yang diperlukan untuk PDF
+        $nomorSurat = $surat->nomor_surat;
+        $asalSurat = $surat->asal_surat;
+        $namaPeminjam = $surat->nama_peminjam;
+        $jmlPc = $surat->jml_pc;
+        $jmlRuang = $surat->jml_ruang;
+        $status = $surat->status;
+        $tanggal = now()->format('d F Y');
+        $mulaiDipinjam = $surat->ruangans->first()->pivot->mulai_dipinjam;
+        $selesaiDipinjam = $surat->ruangans->first()->pivot->selesai_dipinjam;
+        $ruangans = $surat->ruangans;
+
+        // Membuat objek Dompdf
+        $dompdf = new Dompdf();
+
+        // Mengatur ukuran dan orientasi halaman
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Memuat view PDF Blade dengan data yang telah disiapkan
+        $pdfContent = view('pdf.surat_balasan', compact('status','tanggal','jmlRuang','jmlPc','nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
+
+        // Memuat konten HTML ke Dompdf
+        $dompdf->loadHtml($pdfContent);
+
+        // Render PDF
+        $dompdf->render();
+
+        $filename = 'surat_balasan_Untuk_' . str_replace(' ', '_', $asalSurat) . '.pdf';
+
+        return $dompdf->stream($filename);
     }
 
     /**

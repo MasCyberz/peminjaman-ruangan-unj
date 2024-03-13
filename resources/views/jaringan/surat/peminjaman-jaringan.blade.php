@@ -174,16 +174,20 @@
                     <div class="-m-1.5 overflow-hidden">
                         <div class="p-1.5 min-w-full inline-block align-middle">
                             <div class="overflow-y-auto h-[500px]">
-                                <div class="flex flex-row items-center gap-3 my-3">
-                                    <label for="mulai_dipinjam">Mulai : </label>
-                                    <input type="date" id="mulai_dipinjam" name="mulai_dipinjam">
+                                <div class="">
+                                    <form action="{{ route('peminjaman_jaringan') }}" method="GET" class="flex flex-row items-center gap-3 my-3">
+                                        <label for="mulai_dipinjam">Mulai : </label>
+                                        <input type="date" id="mulai_dipinjam" name="mulai_dipinjam"
+                                            value="{{ $mulaiDipinjam ?? '' }}">
 
-                                    <p class="font-bold">-</p>
+                                        <p class="font-bold">-</p>
 
-                                    <label for="selesai_dipinjam">Akhir : </label>
-                                    <input type="date" id="selesai_dipinjam" name="selesai_dipinjam">
+                                        <label for="selesai_dipinjam">Akhir : </label>
+                                        <input type="date" id="selesai_dipinjam" name="selesai_dipinjam"
+                                            value="{{ $selesaiDipinjam ?? '' }}">
 
-                                    <button class="py-2 px-2 bg-blue-500 text-white rounded-lg">Filter</button>
+                                        <button class="py-2 px-2 bg-blue-500 text-white rounded-lg">Filter</button>
+                                    </form>
                                 </div>
 
 
