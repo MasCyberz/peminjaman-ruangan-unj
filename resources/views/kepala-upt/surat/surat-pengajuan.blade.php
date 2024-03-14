@@ -87,6 +87,18 @@
             </div>
         </div>
     </div>
+    <div id="calendar" class="w-100"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth', // Tampilan awal kalendar
+                events: {!! json_encode($events) !!} // Data acara dari database
+            });
+            calendar.render();
+        });
+    </script>
 
 
     <script>
