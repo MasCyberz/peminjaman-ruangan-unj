@@ -115,9 +115,9 @@
     </header>
     <hr>
     <main>
-        <p style="text-align: right">{{$tanggal}}</p>
+        <p style="text-align: right">{{ $tanggal }}</p>
         <p>Kepada Mahasiswa/Peminjam,</p>
-        <p>{{$namaPeminjam}}</p>
+        <p>{{ $namaPeminjam }}</p>
         <p><strong>Perihal:</strong> Konfirmasi Permohonan Penggunaan Ruang</p>
         <p>Dengan hormat,</p>
         <p>Kami mengucapkan terima kasih atas permohonan Anda untuk menggunakan ruang-ruang di UPT TIK. Setelah
@@ -128,16 +128,37 @@
             <li>Asal Surat: {{ $asalSurat }}</li>
             <li>Jumlah Ruang: {{ $jmlRuang }}</li>
             <li>Jumlah PC: {{ $jmlPc }}</li>
-            <li>Tanggal: {{ \Carbon\Carbon::parse($mulaiDipinjam)->format('d F Y') }} - {{ \Carbon\Carbon::parse($selesaiDipinjam)->format('d F Y') }}</li>
+            <li>Tanggal: {{ \Carbon\Carbon::parse($mulaiDipinjam)->format('d F Y') }} -
+                {{ \Carbon\Carbon::parse($selesaiDipinjam)->format('d F Y') }}</li>
         </ul>
 
-        <p>Dengan segala pertimbangan maka surat tersebut <strong style="text-transform: uppercase;">{{ $status }}</strong>.</p>
-        <p>Berikut rincian untuk ruangnya :</p>
+        {{-- <p>Dengan segala pertimbangan maka surat tersebut <strong
+                style="text-transform: uppercase;">{{ $status }}</strong>.</p> --}}
+
+        @if ($statusSurat === 'diterima')
+            <p>Surat Anda telah <strong style="text-transform: uppercase">diterima</strong>. Anda telah diberikan izin untuk menggunakan ruang-ruang di
+                UPT TIK.</p>
+        @elseif ($statusSurat === 'ditolak')
+            <p>Surat Anda telah <strong style="text-transform: uppercase">ditolak</strong>. Mohon maaf, izin untuk menggunakan ruang-ruang di UPT TIK
+                tidak dapat diberikan.</p>
+            <p>Alasan ditolak : {{ $alasanSurat }}</p>
+        @endif
+
+        @if ($statusDiterima)
+            <p>Selanjutnya, berikut rincian ruang yang telah disetujui untuk penggunaan:</p>
+            <ul>
+                @foreach ($ruangans as $ruangan)
+                    <li>Ruang : {{ $ruangan->nomor_ruang }}</li>
+                @endforeach
+            </ul>
+        @endif
+
+        {{-- <p>Berikut rincian untuk ruangnya :</p>
         <ul>
             @foreach ($ruangans as $ruangan)
                 <li>Ruang : {{ $ruangan->nomor_ruang }}</li>
             @endforeach
-        </ul>
+        </ul> --}}
 
 
         <p>Demikianlah konfirmasi dari kami. Jika Anda memiliki pertanyaan lebih lanjut atau membutuhkan bantuan, jangan

@@ -40,6 +40,7 @@ Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kep
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');
 Route::get('kepala-upt/peminjaman-detail/{id}' , [KepalaUptController::class, 'show_peminjaman'])->name('detail_peminjaman_kepala_upt');
 Route::put('kepala-upt/peminjaman-detail/{id}/respond' , [KepalaUptController::class, 'respond'])->name('respond_kepala_upt');
+Route::get('kepala-upt/kalender', [KepalaUptController::class, 'kalender'])->name('kalender_kepala_upt');
 Route::get('/cobaFullCalendar', [KepalaUptController::class, 'cobaFullCalendar'])->name('cobaFullCalendar');
 
 Route::get('/jaringan', [ JaringanController::class, 'index'] )->name('home_jaringan');

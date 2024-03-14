@@ -44,11 +44,11 @@
                                 <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
                                     method="POST">
                                     @csrf
-                                    <button type="submit" name="status" value="Ditolak"
+                                    <button type="submit" name="status" value="ditolak"
                                         class="bg-red-500 mx-2 px-5 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out">
                                         Tolak
                                     </button>
-                                    <button type="submit" name="status" value="Diterima"
+                                    <button type="submit" name="status" value="diterima"
                                         class="bg-green-500 mx-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
                                         Terima
                                     </button>

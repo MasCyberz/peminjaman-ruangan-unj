@@ -16,17 +16,8 @@
     <title>Dashboard | @yield('title')</title>
 </head>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
-    <script>
+<script src="path/to/fullcalendar/locales/id.js"></script>
 
-      document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar')
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
-        })
-        calendar.render()
-      })
-
-    </script>
 <body class="h-screen">
     {{-- Sidebar-start --}}
 
@@ -69,6 +60,13 @@
                     <li class="link flex items-center justify-center">
                         <a href="{{ route('peminjaman_kepala_upt') }}"
                             class="hover:bg-putihan/[10%] {{ Request::route()->named('peminjaman_kepala_upt') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
+                            <i class='bx bxs-envelope text-xl mx-1 me-7'></i>
+                            <span class="text">Surat Pengajuan</span>
+                        </a>
+                    </li>
+                    <li class="link flex items-center justify-center">
+                        <a href="{{ route('kalender_kepala_upt') }}"
+                            class="hover:bg-putihan/[10%] {{ Request::route()->named('kalender_kepala_upt') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-envelope text-xl mx-1 me-7'></i>
                             <span class="text">Surat Pengajuan</span>
                         </a>

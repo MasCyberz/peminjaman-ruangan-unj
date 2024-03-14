@@ -46,20 +46,37 @@ class SuratController extends Controller
     {
         $namaBaru = '';
 
-        if ($request->file('file')) {
-
-            $request->validate([
+        $request->validate(
+            [
                 'file' => 'required|mimes:pdf|max:2048',
-            ]);
+                'nomor_surat' => 'required',
+                'asal_surat' => 'required',
+                'nama_peminjam' => 'required',
+                'mulai_dipinjam' => 'required',
+                'selesai_dipinjam' => 'required',
+                'jml_ruang' => 'required|numeric',
+                'jml_pc' => 'required|numeric',
 
-            $now = now();
-            $tanggalJam = $now->format('dmY-His');
-            $exstension = $request->file('file')->getClientOriginalExtension();
-            $namaBaru = $request->asal_surat . '-' . $request->nama_peminjam . ' ' . $tanggalJam . '.' . $exstension;
-            $request->file('file')->storeAs('file_surat', $namaBaru, 'public');
+            ],
+            [
+                'required' => ' :attribute harus diisi',
+                'file.mimes' => 'File harus berupa PDF',
+                'jml_pc.required' =>'Jumlah PC harus diisi',
+                'jml_ruang.required' =>'Jumlah Ruang harus diisi',
+            ]
+        );
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            if ($file->isValid()) {
+                $extension = $file->getClientOriginalExtension();
+                $namaBaru = $request->asal_surat . '-' . $request->nama_peminjam . '-' . uniqid() . '.' . $extension;
+                $file->storeAs('file_surat', $namaBaru, 'public');
+            } else {
+                return redirect()->back()->with('error', 'File tidak valid.')->withErrors(['file' => 'File tidak valid']);
+            }
         } else {
-            // Jika file tidak diunggah, berikan pesan kesalahan dan kembalikan pengguna ke halaman sebelumnya
-            return redirect()->back()->with('error', 'File harus diunggah.')->withInput($request->except('file'));
+            return redirect()->back()->with('error', 'File harus diunggah.')->withErrors(['file' => 'File harus diunggah']);
         }
 
         $request['status'] = 'pending';
@@ -81,8 +98,13 @@ class SuratController extends Controller
 
         // Mengambil data surat berdasarkan $suratId beserta relasinya
         $surat = Surat::with(['ruangans' => function ($query) {
-            $query->withPivot('mulai_dipinjam', 'selesai_dipinjam'); // Mengambil kolom-kolom tambahan dari pivot table
+            $query->withPivot('mulai_dipinjam', 'selesai_dipinjam', 'status'); // Mengambil kolom-kolom tambahan dari pivot table
         }])->findOrFail($suratId);
+
+
+        $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
+            return $ruangan->pivot->status === 'Diterima';
+        });
 
         // Menyiapkan data yang diperlukan untuk PDF
         $nomorSurat = $surat->nomor_surat;
@@ -90,10 +112,11 @@ class SuratController extends Controller
         $namaPeminjam = $surat->nama_peminjam;
         $jmlPc = $surat->jml_pc;
         $jmlRuang = $surat->jml_ruang;
-        $status = $surat->status;
+        $statusSurat = $surat->status;
+        $alasanSurat = $surat->alasan_penolakan;
         $tanggal = now()->format('d F Y');
-        $mulaiDipinjam = $surat->ruangans->first()->pivot->mulai_dipinjam;
-        $selesaiDipinjam = $surat->ruangans->first()->pivot->selesai_dipinjam;
+        $mulaiDipinjam = $surat->mulai_dipinjam;
+        $selesaiDipinjam = $surat->selesai_dipinjam;
         $ruangans = $surat->ruangans;
 
         // Membuat objek Dompdf
@@ -103,7 +126,7 @@ class SuratController extends Controller
         $dompdf->setPaper('A4', 'portrait');
 
         // Memuat view PDF Blade dengan data yang telah disiapkan
-        $pdfContent = view('pdf.surat_balasan', compact('status','tanggal','jmlRuang','jmlPc','nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
+        $pdfContent = view('pdf.surat_balasan', compact('alasanSurat','statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
 
         // Memuat konten HTML ke Dompdf
         $dompdf->loadHtml($pdfContent);

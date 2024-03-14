@@ -36,8 +36,8 @@ class KoordinatorController extends Controller
             $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => $status]);
         }
 
-        if ($status == 'Diterima') {
-            $surat->update(['status' => 'Diterima']);
+        if ($status == 'diterima') {
+            $surat->update(['status' => 'diterima']);
         }
 
         return back()->with('success', 'Semua ruangan untuk surat ini telah ' . ($status == 'approved' ? 'diterima' : 'ditolak') . '.');
