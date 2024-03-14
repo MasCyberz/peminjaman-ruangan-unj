@@ -22,7 +22,7 @@
             @csrf
             <div class="mb-2">
                 <label for="nomor_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Nomor Surat</label>
-                <input type="text" id="nomor_surat" name="nomor_surat"
+                <input type="text" id="nomor_surat" name="nomor_surat" value="{{ old('nomor_surat') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 placeholder:text-gray-800"
                     value="" placeholder="***/***-**/***/**/**" />
                 @error('nomor_surat')
@@ -31,7 +31,7 @@
             </div>
             <div class="mb-2">
                 <label for="asal_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Asal Surat</label>
-                <input type="text" id="asal_surat" name="asal_surat"
+                <input type="text" id="asal_surat" name="asal_surat" value="{{ old('asal_surat') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 "
                     placeholder="Masukkan asal surat" />
                 @error('asal_surat')
@@ -40,7 +40,7 @@
             </div>
             <div class="mb-2">
                 <label for="nama_peminjam" class="block mb-2 text-sm text-gray-900 font-semibold">Nama Peminjam</label>
-                <input type="text" id="nama_peminjam" name="nama_peminjam"
+                <input type="text" id="nama_peminjam" name="nama_peminjam" value="{{ old('nama_peminjam') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     placeholder="Masukkan nama peminjam" />
                 @error('nama_peminjam')
@@ -49,7 +49,7 @@
             </div>
             <div class="mb-2">
                 <label for="mulai_dipinjam" class="block mb-2 text-sm text-gray-900 font-semibold">Mulai Dipinjam</label>
-                <input type="date" id="mulai_dipinjam" name="mulai_dipinjam"
+                <input type="date" id="mulai_dipinjam" name="mulai_dipinjam" value="{{ old('mulai_dipinjam') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5" min="{{ date('Y-m-d') }}" />
                     @error('nama_peminjam')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
@@ -57,7 +57,7 @@
             </div>
             <div class="mb-2">
                 <label for="selesai_dipinjam" class="block mb-2 text-sm text-gray-900 font-semibold">Selesai Dipinjam</label>
-                <input type="date" id="selesai_dipinjam" name="selesai_dipinjam"
+                <input type="date" id="selesai_dipinjam" name="selesai_dipinjam" value="{{ old('selesai_dipinjam') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5" min="{{ date('Y-m-d') }}" />
                     @error('nama_peminjam')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
@@ -65,7 +65,7 @@
             </div>
             <div class="mb-2">
                 <label for="jml_ruang" class="block mb-2 text-sm text-gray-900 font-semibold">Jumlah Ruang</label>
-                <input type="number" id="jml_ruang" name="jml_ruang"
+                <input type="number" id="jml_ruang" name="jml_ruang" value="{{ old('jml_ruang') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"placeholder="Masukkan jumlah ruangan yang diinginkan" />
                     @error('nama_peminjam')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
@@ -73,7 +73,7 @@
             </div>
             <div class="mb-2">
                 <label for="jml_pc" class="block mb-2 text-sm text-gray-900 font-semibold">Jumlah PC</label>
-                <input type="number" id="jml_pc" name="jml_pc"
+                <input type="number" id="jml_pc" name="jml_pc" value="{{ old('jml_pc') }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"placeholder="Masukkan jumlah komputer yang diinginkan" />
                     @error('jml_pc')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
@@ -91,9 +91,9 @@
                 @enderror
                 <span id="file-name"></span>
                 <a href="{{ route('peminjaman') }}"
-                    class="text-white ms-auto bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Cancel</a>
+                    class="text-white ms-auto bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Cancel</a>
                 <button type="submit"
-                    class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save</button>
+                    class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save</button>
             </div>
         </form>
     </div>

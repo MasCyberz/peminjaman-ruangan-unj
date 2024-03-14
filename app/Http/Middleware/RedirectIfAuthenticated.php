@@ -21,7 +21,24 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                $role = Auth::user()->RelasiRoles->name;
+
+                switch ($role) {
+                    case 'admin':
+                        return redirect()->route('home');
+                        break;
+                    case 'kepala upt':
+                        return redirect()->route('home_kepala_upt');
+                        break;
+                    case 'jaringan':
+                        return redirect()->route('home_jaringan');
+                        break;
+                    case 'koordinator':
+                        return redirect()->route('home_koordinator');
+                        break;
+                    default:
+                        return redirect()->route('login');
+                }
             }
         }
 

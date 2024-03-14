@@ -48,5 +48,5 @@ class User extends Authenticatable
     public function RelasiRoles(){
         return $this->belongsTo(Role::class, 'role_id');
     }
-    
+
 }

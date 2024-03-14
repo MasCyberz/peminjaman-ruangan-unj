@@ -1,6 +1,7 @@
 @extends('layouts.mainlayout-ka')
 
 @section('title', 'Home')
+@section('page', 'Home')
 
 @section('content')
 
@@ -15,7 +16,7 @@
             <div class="flex flex-col grow tracking-wider my-auto">
                 <span class="font-semibold md:lg:text-2xl sm:text-md">Selamat Datang di Sistem Informasi Peminjaman
                     Ruangan</span>
-                <span class="font-semibold md:lg:text-lg sm:text-sm">saat ini anda login sebagai Kepala UPT TIK</span>
+                    <p class="font-semibold md:lg:text-lg sm:text-sm">saat ini anda login sebagai <span class="font-bold capitalize">{{Auth::user()->RelasiRoles->name}}</span> UPT TIK</p>
             </div>
         </div>
 
@@ -32,7 +33,7 @@
                         <i class='bx bx-list-ul text-[150px]'></i>
                     </div>
                 </div>
-                <a href="SuratPengajuan.html">
+                <a href="{{route('peminjaman_kepala_upt')}}">
                     <div
                         class="bg-red-600 w-full h-8 absolute bottom-0 left-0 flex items-center justify-center rounded-lg cursor-pointer">
                         <span class="my-auto">Selengkapnya</span>

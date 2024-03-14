@@ -1,6 +1,7 @@
 @extends('layouts.mainlayout-ka')
 
 @section('title', 'Detail Surat')
+@section('page', 'Detail Surat')
 
 @section('content')
 
@@ -77,12 +78,13 @@
                             @csrf
                             @method('PUT')
                             <button id="rejectButton" type="button"
-                                class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-7 py-2.5 text-center transition-all duration-200 ease-in-out">Tolak</button>
-                            <div id="alasanPenolakan" class="hidden absolute right-0 top-24 items-center w-full p-10 bg-putihan rounded-lg shadow-all-side">
+                                class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-sm px-7 py-2.5 text-center transition-all duration-200 ease-in-out">Tolak</button>
+                            <div id="alasanPenolakan"
+                                class="hidden absolute right-0 top-24 items-center w-full p-10 bg-putihan rounded-lg shadow-all-side">
                                 <input type="text" name="alasan_penolakan" placeholder="Alasan penolakan"
                                     class="bg-gray-300 px-3 w-[86%] py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
                                 <button type="submit"
-                                    class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-4 py-3 text-center transition-all duration-200 ease-in-out">Kirim</button>
+                                    class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-sm px-4 py-3 text-center transition-all duration-200 ease-in-out">Kirim</button>
                             </div>
                         </form>
 
@@ -92,7 +94,7 @@
                             @csrf
                             @method('PUT')
                             <button type="submit"
-                                class="bg-green-500 hover:bg-green-700 text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 ms-1.5 text-center transition-all duration-200 ease-in-out">Terima</button>
+                                class="bg-green-500 hover:bg-green-700 text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 ms-1.5 text-center transition-all duration-200 ease-in-out">Terima</button>
                         </form>
                     </div>
                 </div>
@@ -119,21 +121,24 @@
 
         </div>
 
-        <script>
-            // document.getElementById('rejectButton').addEventListener('click', function() {
-            //     document.getElementById('alasanPenolakan').classList.remove('hidden');
-            // });
 
-            const rejectButton = document.getElementById('rejectButton');
-            const alasanPenolakan = document.getElementById('alasanPenolakan');
+    </div>
 
-            rejectButton.addEventListener('click', function() {
-                if (alasanPenolakan.classList.contains('hidden')) {
-                    alasanPenolakan.classList.remove('hidden');
-                } else {
-                    alasanPenolakan.classList.add('hidden');
-                }
-            })
-        </script>
+    <script>
+        // document.getElementById('rejectButton').addEventListener('click', function() {
+        //     document.getElementById('alasanPenolakan').classList.remove('hidden');
+        // });
 
-    @endsection
+        const rejectButton = document.getElementById('rejectButton');
+        const alasanPenolakan = document.getElementById('alasanPenolakan');
+
+        rejectButton.addEventListener('click', function() {
+            if (alasanPenolakan.classList.contains('hidden')) {
+                alasanPenolakan.classList.remove('hidden');
+            } else {
+                alasanPenolakan.classList.add('hidden');
+            }
+        })
+    </script>
+
+@endsection

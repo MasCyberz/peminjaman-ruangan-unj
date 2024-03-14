@@ -1,10 +1,12 @@
 @extends('layouts.mainlayout-ka')
 
-@section('title', 'Detail Surat')
+@section('title', 'Kalender')
+@section('page', 'Kalender')
 
 @section('content')
     <div class="w-[90%] h-full mx-auto py-3 px-4 my-10 font-poppins">
         <div id='calendar' class=""></div>
+        <br>
     </div>
 
     <script>

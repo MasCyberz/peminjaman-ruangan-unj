@@ -103,7 +103,7 @@ class SuratController extends Controller
 
 
         $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
-            return $ruangan->pivot->status === 'Diterima';
+            return $ruangan->pivot->status === 'diterima';
         });
 
         // Menyiapkan data yang diperlukan untuk PDF

@@ -38,7 +38,7 @@
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
                 <input id="mulai_dipinjam" name="mulai_dipinjam" value="{{ $suratList->mulai_dipinjam }}"
-                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
+                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 mb-2"
                     readonly />
                 <input id="selesai_dipinjam" name="selesai_dipinjam" value="{{ $suratList->selesai_dipinjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"

@@ -1,6 +1,7 @@
 @extends('layouts.mainlayout-ka')
 
 @section('title', 'Pengajuan Surat')
+@section('page', 'Pengajuan Surat')
 
 @section('content')
 

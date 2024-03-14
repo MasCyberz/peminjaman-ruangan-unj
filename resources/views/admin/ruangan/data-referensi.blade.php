@@ -39,7 +39,7 @@
         @endif
 
         <a href="{{ route('tambah_ruangan') }}"
-            class="relative text-xl left-[11.5rem] mt-2 inline-flex items-center bg-gray-500 hover:bg-slate-600 text-white py-2 px-2 rounded-lg transition-all duration-300 ease-in-out font-semibold focus:outline-none focus: focus:ring-4 focus:ring-slate-600">
+            class="relative text-xl left-[7.6rem] mt-2 inline-flex items-center py-2 px-2 rounded-lg transition-all duration-300 ease-in-out font-semibold text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300">
             <i class='bx bx-plus text-3xl'></i>
             Tambah Data
         </a>
@@ -96,7 +96,7 @@
             </div>
             <div class="inline-flex ms-auto mb-5 mx-3 gap-3">
                 <a href="{{ route('edit_ruangan', $ruang->id) }}"><button type="submit"
-                        class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
+                        class="font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
                             class='bx bx-edit me-2'></i>Edit
                     </button>
                 </a>
@@ -110,7 +110,7 @@
                 </form> --}}
 
                 <button data-modal-target="popup-modal-{{ $ruang->id }}" data-modal-toggle="popup-modal-{{ $ruang->id }}" type="button"
-                    class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]">
+                    class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg inline-flex items-center justify-center sm:w-auto px-2 py-2 text-center text-md shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]">
                     <i class='bx bxs-trash me-2'></i>Hapus
                 </button>
 
@@ -158,7 +158,6 @@
         {{-- modal --}}
 
     </div>
->
 
 
 @endsection

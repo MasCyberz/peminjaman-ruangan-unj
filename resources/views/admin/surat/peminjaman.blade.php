@@ -156,7 +156,7 @@
 
                                             // Memeriksa apakah status surat adalah 'Diterima' di tabel pivot ruangans
                                             $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
-                                                return $ruangan->pivot->status === 'Diterima';
+                                                return $ruangan->pivot->status === 'diterima';
                                             });
                                         @endphp
 

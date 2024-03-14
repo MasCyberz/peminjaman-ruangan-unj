@@ -6,30 +6,32 @@
 @section('content')
 
 
-@if (session()->has('success'))
-<div id="alert-border-3"
-    class="fixed top-2 right-0 z-50 m-14 w-1/3 flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
-    role="alert">
-    <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-        viewBox="0 0 20 20">
-        <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-    </svg>
-    <div class="ms-3 text-lg font-medium">
-        {{ session()->get('success') }}
-    </div>
-    <button type="button"
-        class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-        data-dismiss-target="#alert-border-3" aria-label="Close">
-        <span class="sr-only">Dismiss</span>
-        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-        </svg>
-    </button>
-</div>
-@endif
+    @if (session()->has('success'))
+        <div id="alert-border-3"
+            class="fixed top-2 right-0 z-50 m-14 w-1/3 flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+            role="alert">
+            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 20">
+                <path
+                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <div class="ms-3 text-lg font-medium">
+                {{ session()->get('success') }}
+            </div>
+            <button type="button"
+                class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+                data-dismiss-target="#alert-border-3" aria-label="Close">
+                <span class="sr-only">Dismiss</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+    @endif
+
+
     <div class="flex flex-col mx-[6.25rem] mt-10">
 
         <div class="border-b border-black inline-flex justify-between items-center p-3 text-xl font-medium cursor-default">
@@ -44,33 +46,33 @@
         </div>
 
         <div class="flex my-2 gap-2 p-3">
-          <span>Show</span>
-          <div class="">
-              <form id="filterForm" action="{{ route('management-users') }}" method="GET" class="mx-auto">
-                  <label for="numero"></label>
-                  <select name="numero" id="numero"
-                      class="outline-none py-1 px-2 text-center border border-gray-300 shadow-[0_0px_5px_1px_rgba(0,0,0,0.2)]">
-                      @if ($numero)
-                          <option value="{{ $numero }}">{{ $numero }}</option>
-                      @else
-                          <option value="10">10</option>
-                      @endif
-                      @for ($i = 1; $i <= 10; $i++)
-                          @if ($numero != $i)
-                              <option value={{ $i }}>{{ $i }}</option>
-                          @endif
-                      @endfor
-                  </select>
-              </form>
-          </div>
-          <span>entries</span>
-      </div>
+            <span>Show</span>
+            <div class="">
+                <form id="filterForm" action="{{ route('management-users') }}" method="GET" class="mx-auto">
+                    <label for="numero"></label>
+                    <select name="numero" id="numero"
+                        class="outline-none py-1 px-2 text-center border border-gray-300 shadow-[0_0px_5px_1px_rgba(0,0,0,0.2)]">
+                        @if ($numero)
+                            <option value="{{ $numero }}">{{ $numero }}</option>
+                        @else
+                            <option value="10">10</option>
+                        @endif
+                        @for ($i = 1; $i <= 10; $i++)
+                            @if ($numero != $i)
+                                <option value={{ $i }}>{{ $i }}</option>
+                            @endif
+                        @endfor
+                    </select>
+                </form>
+            </div>
+            <span>entries</span>
+        </div>
 
-      <script>
-        document.getElementById("numero").addEventListener("change", function() {
-            document.getElementById("filterForm").submit();
-        });
-    </script>
+        <script>
+            document.getElementById("numero").addEventListener("change", function() {
+                document.getElementById("filterForm").submit();
+            });
+        </script>
 
 
 
@@ -98,16 +100,17 @@
 
                             @foreach ($Users as $item)
                                 <tr class="odd:bg-gray-200">
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start">{{ $loop->iteration + $Users->firstItem() - 1  }}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start">
+                                        {{ $loop->iteration + $Users->firstItem() - 1 }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-start">{{ $item->name }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-start">{{ $item->email }}</td>
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start capitalize">
                                         {{ $item->RelasiRoles->name }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-start">Aktif</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm gap-2">
                                         <a href="{{ route('management-users-edit', $item->id) }}">
                                             <button type="button"
-                                                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                                                class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
                                                 <i class='bx bx-edit text-lg text-center me-1'></i>
                                                 Edit
                                             </button>
@@ -126,13 +129,12 @@
                         </tbody>
                     </table>
                     <div class="my-5">
-                      {{ $Users->appends(['numero' => $numero])->links('pagination::tailwind') }}
+                        {{ $Users->appends(['numero' => $numero])->links('pagination::tailwind') }}
 
-                  </div>
+                    </div>
 
                     {{-- modal --}}
-                   @foreach ($Users as $item)
-                       
+                    @foreach ($Users as $item)
                         <div id="popup-modal-{{ $item->id }}" tabindex="-1"
                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-md max-h-full">
@@ -155,12 +157,14 @@
                                                 stroke-width="2"
                                                 d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                         </svg>
-                                        <h3 class="text-lg font-normal text-gray-500">Apakah anda ingin menghapus user dengan name : 
+                                        <h3 class="text-lg font-normal text-gray-500">Apakah anda ingin menghapus user
+                                            dengan name :
                                             {{ $item->name }}?</h3>
                                         <p class="text-gray-500 mb-5 text-sm">Data yang terhapus tidak dapat dikembalikan
                                         </p>
 
-                                        <form action="{{ route('management-user-destroy', ['id' => $item->id]) }}" method="POST"
+                                        <form action="{{ route('management-user-destroy', ['id' => $item->id]) }}"
+                                            method="POST"
                                             class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                             @csrf
                                             @method('DELETE')
@@ -174,8 +178,8 @@
                                 </div>
                             </div>
                         </div>
-                      @endforeach
-                  
+                    @endforeach
+
                 </div>
             </div>
         </div>

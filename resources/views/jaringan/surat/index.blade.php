@@ -15,7 +15,7 @@
         <div class="flex flex-col grow tracking-wider my-auto">
             <span class="font-semibold md:lg:text-2xl sm:text-md">Selamat Datang di Sistem Informasi Peminjaman
                 Ruangan</span>
-            <span class="font-semibold md:lg:text-lg sm:text-sm">saat ini anda login sebagai Admin Jaringan</span>
+                <p class="font-semibold md:lg:text-lg sm:text-sm">saat ini anda login sebagai <span class="font-bold capitalize">{{Auth::user()->RelasiRoles->name}}</span> UPT TIK</p>
         </div>
     </div>
 

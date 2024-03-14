@@ -35,7 +35,28 @@ class RuanganController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $validateData = $request->validate([
+            'nomor_ruang' => 'required|integer',
+            'nama_ruang' => 'required|string',
+            'jml_pc' => 'required|integer',
+            'kapasitas_orang' => 'required|integer',
+            'foto' => 'image|mimes:jpeg,png,jpg|max:10240',
+            'fasilitas.nama_fasilitas' => 'required|array',
+            'fasilitas.nama_fasilitas.*' => 'required|string|max:255',
+            'fasilitas.jumlah' => 'required|array',
+            'fasilitas.jumlah.*' => 'required|integer',
+        ],[
+            'nomor_ruang.required' => 'Nomor ruang harus diisi',
+            'nomor_ruang.integer' => 'Nomor ruang harus berupa angka',
+            'nama_ruang.required' => 'Nama ruang harus diisi',
+            'jml_pc.required' => 'Jumlah PC harus diisi',
+            'jml_pc.integer' => 'Jumlah PC harus berupa angka',
+            'kapasitas_orang.required' => 'Kapasitas orang harus diisi',
+            'kapasitas_orang.integer' => 'Kapasitas ruang harus berupa angka',
+            'fasilitas.required' => 'Fasilitas harus diisi',
+            'fasilitas.jumlah.*.required' => 'Jumlah fasilitas harus diisi',
+
+        ]);
         try {
 
             $ruangan = ruangan::create([
@@ -55,7 +76,7 @@ class RuanganController extends Controller
                 $ruangan->save();
             }
 
-            $fasilitas = $request->input('fasilitas');
+            $fasilitas = $validateData['fasilitas'];
             foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
                 fasilitas::create([
                     'nama_fasilitas' => $namaFasilitas,
@@ -101,9 +122,9 @@ class RuanganController extends Controller
         $ruangan->jml_pc = $request->input('jml_pc');
         $ruangan->kapasitas_orang = $request->input('kapasitas_orang');
         $ruangan->save();
-        
+
         $ruangan->fasilitas()->delete();
-    
+
         $fasilitas = $request->input('fasilitas');
         foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
             fasilitas::create([

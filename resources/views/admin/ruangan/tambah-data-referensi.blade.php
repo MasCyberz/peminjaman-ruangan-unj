@@ -5,12 +5,30 @@
 
 @section('content')
     <div class="rounded-lg shadow-all-side w-[80%] my-5 p-8 mx-auto">
+
         <form class="mx-10" action="{{ route('ruangan_store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="flex border-b-2 border-black w-full font-semibold mb-3">
                 <i class='bx bx-laptop text-2xl mx-4'></i>
                 <span class="text-base">Form Input Ruangan</span>
             </div>
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-3 rounded relative" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Periksa kembali!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <div class="mb-2">
                 <label for="nomor_ruang" class="block mb-2 text-sm text-gray-900 font-semibold">Nomor Ruangan</label>

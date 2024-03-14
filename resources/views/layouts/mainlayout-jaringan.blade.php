@@ -15,37 +15,40 @@
         rel="stylesheet">
     <title>Dashboard | @yield('title')</title>
 </head>
+
 <body class="font-poppins h-screen w-screen overflow-x-hidden">
 
     {{-- Sidebar --}}
 
-    <div id="sidebar" class="close z-50 fixed top-0 left-0 h-screen w-72 bg-sidebarunj px-[10px] py-[14px] text-white">
+    <div id="sidebar"
+        class="close z-50 fixed top-0 left-0 h-screen w-72 bg-sidebarunj px-[10px] py-[14px] text-white">
         <header class="relative">
             <div class="flex items-center">
                 <span class="image flex items-center ms-1">
-                    <img src="{{ asset('img/UNJ__Universitas_Negeri_Jakarta__Logo_-_Download_Free_PNG-removebg-preview (1) 1.svg') }}" alt="">
+                    <img src="{{ asset('img/UNJ__Universitas_Negeri_Jakarta__Logo_-_Download_Free_PNG-removebg-preview (1) 1.svg') }}"
+                        alt="">
                 </span>
-                
+
                 <div class="text text-[14px] font-semibold flex flex-col whitespace-nowrap">
                     <span class="name">UPT TIK</span>
                     <span class="profession mt-1">Universitas Negeri Jakarta</span>
                 </div>
             </div>
             <!-- <div id="toggle" class="absolute top-[50%] -right-[25px] -translate-y-1/2 w-[25px] h-[25px] bg-purple-600 rounded-xl flex items-center justify-center">
-                <i class='bx bx-chevron-right'></i>    
+                <i class='bx bx-chevron-right'></i>
             </div> -->
             <hr class="my-4">
         </header>
-        
+
         <div class="mt-5">
             <div class="">
-                <p class="text leading-relaxed text-lg flex items-center justify-center mb-1">Hai,
-                    <span class="mx-1">Admin</span>
-                    UPT TIK
+                <p class="text leading-relaxed text-lg flex items-center justify-center mb-2">
+                    <span id="ucapan" class="capitalize font-bold text-sm"></span>
                 </p>
                 <ul class="">
                     <li class="link flex items-center justify-center">
-                        <a href="{{ route('home_jaringan') }}" class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
+                        <a href="{{ route('home_jaringan') }}"
+                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
                         {{ Request::route()->named('home_jaringan') ? 'active-link' : '' }}
                         ">
                             <i class='bx bxs-home text-xl mx-1 me-7'></i>
@@ -53,7 +56,8 @@
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="{{ route('peminjaman_jaringan') }}" class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
+                        <a href="{{ route('peminjaman_jaringan') }}"
+                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
                         {{ Request::route()->named('peminjaman_jaringan') ? 'active-link' : '' }}
                         ">
                             <i class='bx bxs-spreadsheet text-xl mx-1 me-7'></i>
@@ -61,10 +65,11 @@
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="{{ route('referensi_jaringan') }}" class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
+                        <a href="{{ route('referensi_jaringan') }}"
+                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out
                         {{ Request::route()->named('referensi_jaringan') ? 'active-link' : '' }}
                         ">
-                            <i class='bx bx-line-chart text-xl mx-1 me-7'></i>
+                            <i class='bx bxs-file-find text-xl mx-1 me-7'></i>
                             <span class="text">Data Referensi</span>
                         </a>
                     </li>
@@ -82,28 +87,88 @@
             <div class="flex justify-center items-center">
                 <div class="w-[90%] h-[62px] border-b-2 border-black">
                     <div class="flex ms-4">
-                        <button id="toggle" type="button" class="inline-flex items-center p-2 m-2 text-sm text-black rounded-lg">
-                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+                        <button id="toggle" type="button"
+                            class="inline-flex items-center p-2 m-2 text-sm text-black rounded-lg">
+                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd" fill-rule="evenodd"
+                                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+                                </path>
                             </svg>
                         </button>
                         <span class="text-2xl font-semibold flex items-center">@yield('page')</span>
-                        <div class="flex ms-auto me-4 rounded-full py-1 shadow-all-side transition-all duration-1000 ease-in-out cursor-pointer" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                            <img class="rounded-full w-10 h-10 ms-5 my-auto" src="{{ asset('./img/LupusRex.jpg') }}" alt="">
-                            <span class="me-5 ms-3 flex items-center font-medium text-lg">C-MOON</span>
+                        <div class="flex ms-auto me-4 rounded-full py-1 shadow-all-side transition-all duration-1000 ease-in-out cursor-pointer"
+                            data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                            @if (Auth::user()->image)
+                                <img class="rounded-full w-10 h-10 ms-5"
+                                    src="{{ asset('storage/foto_profile_akun/' . Auth::user()->image) }}"
+                                    alt="">
+                            @else
+                                <img src="{{ asset('./img/default_profile.png') }}" class="rounded-full w-10 h-10 ms-5">
+                            @endif
+                            <span
+                                class="me-5 ms-3 flex items-center font-medium text-lg capitalize">{{ Auth::user()->name }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-     {{-- top nav end  --}}
+            {{-- top nav end  --}}
 
-    {{-- content start --}}
+            {{-- content start --}}
 
-    @yield('content')
+            @yield('content')
 
-    {{-- content end --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    <script src="main.js"></script>
+            {{-- content end --}}
+
+
+            {{-- modal-start --}}
+            <div id="popup-modal" tabindex="-1" data-modal-backdrop="static"
+                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-lg max-h-full">
+                    <div
+                        class="relative bg-white rounded-lg transition-all duration-1000 ease-in-out shadow-all-side p-7">
+                        <div class="p-4 md:p-5 text-center">
+                            <svg class="mx-auto mb-4 text-red-600 w-20 h-20" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <h3 class="mb-5 text-xl font-semibold text-slate-800">Apakah anda yakin ingin keluar?</h3>
+                            <a href="{{ route('logout') }}" data-modal-hide="popup-modal" type="button"
+                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-lg inline-flex items-center px-5 py-2.5 text-center">
+                                Yes
+                            </a>
+                            <button data-modal-hide="popup-modal" type="button"
+                                class="py-2.5 px-5 ms-3 text-lg font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-400 hover:bg-gray-400 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">
+                                No
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- modal-end --}}
+
+            <script>
+                var time = new Date().getHours();
+
+                // Mendapatkan elemen dengan id "greeting"
+                var greetingElement = document.getElementById('ucapan');
+
+                // Mengatur pesan salam berdasarkan waktu
+                if (time < 12) {
+                    greetingElement.textContent = 'Selamat Pagi, {{ Auth::user()->RelasiRoles->name }}';
+                } else if (time < 14) {
+                    greetingElement.textContent = 'Selamat Siang';
+                } else if (time < 19) {
+                    greetingElement.textContent = 'Selamat Sore';
+                } else {
+                    greetingElement.textContent = 'Selamat Malam, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
+                }
+            </script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+            <script src="main.js"></script>
 </body>
+
 </html>

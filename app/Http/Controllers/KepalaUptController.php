@@ -54,7 +54,13 @@ class KepalaUptController extends Controller
 
         $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
             ->get();
+
+        $warna = ['red', 'blue', 'green', 'yellow', 'orange'];
+
         $events = [];
+
+        $indeks = 0;
+
         foreach ($ruangPeminjaman as $ruang) {
             // 'start' => Carbon::parse($ruang->mulai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal mulai
             // 'end' => Carbon::parse($ruang->selesai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal selesai
@@ -73,8 +79,10 @@ class KepalaUptController extends Controller
                 'title' => $title,
                 'start' => $start->format('Y-m-d'),
                 'end' => $end->format('Y-m-d'),
-                'color' => 'red',
+                'color' => $warna[$indeks],
             ];
+
+            $indeks = ($indeks + 1) % count($warna);
         }
 
         return view('kepala-upt.kalender.kalender', compact('events'));

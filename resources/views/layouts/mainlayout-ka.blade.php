@@ -45,9 +45,8 @@
 
         <div class="mt-5">
             <div class="">
-                <p class="text leading-relaxed text-lg flex items-center justify-center mb-1">Hai,
-                    <span class="mx-1">Admin</span>
-                    UPT TIK
+                <p class="text leading-relaxed text-lg flex items-center justify-center mb-2">
+                    <span id="ucapan" class="capitalize font-bold text-sm"></span>
                 </p>
                 <ul class="">
                     <li class="link flex items-center justify-center">
@@ -67,8 +66,8 @@
                     <li class="link flex items-center justify-center">
                         <a href="{{ route('kalender_kepala_upt') }}"
                             class="hover:bg-putihan/[10%] {{ Request::route()->named('kalender_kepala_upt') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
-                            <i class='bx bxs-envelope text-xl mx-1 me-7'></i>
-                            <span class="text">Surat Pengajuan</span>
+                            <i class='bx bx-calendar text-xl mx-1 me-7'></i>
+                            <span class="text">Kalender</span>
                         </a>
                     </li>
                 </ul>
@@ -95,12 +94,18 @@
                                 </path>
                             </svg>
                         </button>
-                        <span class="text-2xl font-semibold flex items-center">Dashboard</span>
+                        <span class="text-2xl font-semibold flex items-center">@yield('page')</span>
                         <div class="flex ms-auto me-4 rounded-full py-1 shadow-all-side transition-all duration-1000 ease-in-out cursor-pointer"
                             data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                            <img class="rounded-full w-10 h-10 ms-5 my-auto"
-                                src="{{ asset('img/profilepicturecropped.jpg') }}" alt="">
-                            <span class="me-5 ms-3 flex items-center font-medium text-lg">Hafidz</span>
+                            @if (Auth::user()->image)
+                                <img class="rounded-full w-10 h-10 ms-5"
+                                    src="{{ asset('storage/foto_profile_akun/' . Auth::user()->image) }}"
+                                    alt="">
+                            @else
+                                <img src="{{ asset('./img/default_profile.png') }}" class="rounded-full w-10 h-10 ms-5">
+                            @endif
+                            <span
+                                class="me-5 ms-3 flex items-center font-medium text-lg capitalize">{{ Auth::user()->name }}</span>
                         </div>
                     </div>
                 </div>
@@ -129,14 +134,12 @@
                                     stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             <h3 class="mb-5 text-xl font-semibold text-slate-800">Apakah anda yakin ingin keluar?</h3>
-                            <a href="login.html">
-                                <button data-modal-hide="popup-modal" type="button"
-                                    class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-lg inline-flex items-center px-5 py-2.5 text-center">
-                                    Yes
-                                </button>
+                            <a href="{{ route('logout') }}" data-modal-hide="popup-modal" type="button"
+                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-lg inline-flex items-center px-5 py-2.5 text-center">
+                                Yes
                             </a>
                             <button data-modal-hide="popup-modal" type="button"
-                                class="py-2.5 px-5 ms-3 text-lg font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-400 hover:bg-gray-400 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                                class="py-2.5 px-5 ms-3 text-lg font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-400 hover:bg-gray-400 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">
                                 No
                             </button>
                         </div>
@@ -145,6 +148,24 @@
             </div>
 
             {{-- pop up logout-end --}}
+
+            <script>
+                var time = new Date().getHours();
+
+                // Mendapatkan elemen dengan id "greeting"
+                var greetingElement = document.getElementById('ucapan');
+
+                // Mengatur pesan salam berdasarkan waktu
+                if (time < 12) {
+                    greetingElement.textContent = 'Selamat Pagi, {{ Auth::user()->RelasiRoles->name }}';
+                } else if (time < 14) {
+                    greetingElement.textContent = 'Selamat Siang';
+                } else if (time < 19) {
+                    greetingElement.textContent = 'Selamat Sore';
+                } else {
+                    greetingElement.textContent = 'Selamat Malam, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
+                }
+            </script>
 </body>
 
 </html>
