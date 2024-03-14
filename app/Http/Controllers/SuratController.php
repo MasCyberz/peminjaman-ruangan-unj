@@ -79,27 +79,6 @@ class SuratController extends Controller
     public function bikinPDF(Request $request, $suratId)
     {
 
-        // $surat = Surat::findOrFail($suratId);
-
-        // // Membuat objek Dompdf
-        // $dompdf = new Dompdf();
-
-        // // Mengatur ukuran dan orientasi halaman
-        // $dompdf->setPaper('A4', 'portrait');
-
-        // // Memuat view PDF Blade
-        // $pdfContent = view('pdf.surat_balasan', compact('surat'))->render();
-
-        // // Memuat konten HTML ke Dompdf
-        // $dompdf->loadHtml($pdfContent);
-
-        // // Render PDF
-        // $dompdf->render();
-
-        // $filename = 'surat_balasan_Universitas_Negeri_Jakarta_' . str_replace(' ', '_', $surat->nomor_surat) . '.pdf';
-
-        // return $dompdf->stream($filename);
-
         // Mengambil data surat berdasarkan $suratId beserta relasinya
         $surat = Surat::with(['ruangans' => function ($query) {
             $query->withPivot('mulai_dipinjam', 'selesai_dipinjam'); // Mengambil kolom-kolom tambahan dari pivot table
