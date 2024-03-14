@@ -70,8 +70,8 @@
                         </a>
                     </li>
                     <li class="link flex items-center justify-center">
-                        <a href="ManagemenUser.html"
-                            class="hover:bg-putihan/[10%] flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
+                        <a href="{{ route('management-users') }}"
+                            class="hover:bg-putihan/[10%] {{ Request::route()->named('management-users') ? 'active-link' : '' }} flex whitespace-nowrap px-5 rounded-lg transition duration-300 ease-in-out">
                             <i class='bx bxs-user-plus text-xl mx-1 me-7'></i>
                             <span class="text">Manajemen User</span>
                         </a>

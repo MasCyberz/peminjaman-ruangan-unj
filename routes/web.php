@@ -1,11 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SuratController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\JaringanController;
 use App\Http\Controllers\KepalaUptController;
 use App\Http\Controllers\KoordinatorController;
-use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,12 @@ Route::put('admin/data-referensi/store/{id}', [RuanganController::class, 'update
 Route::delete('admin/data-referensi/destroy/{id}', [RuanganController::class, 'destroy'])->name('delete_ruangan');
 Route::get('admin/pdf/{surat_id}', [SuratController::class, 'bikinPDF'])->name('pdf');
 Route::view('admin/surat_balasan', 'pdf.surat_balasan')->name('surat_balasan');
+Route::get('admin/users', [UserController::class, 'index'])->name('management-users');
+Route::get('admin/users/create', [UserController::class, 'create'])->name('management-users-create');
+Route::post('admin/users/store', [UserController::class, 'store'])->name('management-users-store');
+Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('management-users-edit');
+Route::put('admin/users/update/{id}', [UserController::class, 'update'])->name('management-users-update');
+Route::delete('admin/user/destroy/{id}', [UserController::class, 'destroy'])->name('management-user-destroy');
 
 Route::get('kepala-upt/', [KepalaUptController::class, 'index'])->name('home_kepala_upt');
 Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');
