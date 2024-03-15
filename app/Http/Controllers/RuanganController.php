@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ruangan;
 use App\Models\fasilitas;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\Foreach_;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreruanganRequest;
 use App\Http\Requests\UpdateruanganRequest;
-use PhpParser\Node\Stmt\Foreach_;
 
 class RuanganController extends Controller
 {
@@ -36,7 +37,7 @@ class RuanganController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'nomor_ruang' => 'required|integer',
+            'nomor_ruang' => 'required|integer|unique:ruangans,nomor_ruang',
             'nama_ruang' => 'required|string',
             'jml_pc' => 'required|integer',
             'kapasitas_orang' => 'required|integer',
@@ -45,7 +46,8 @@ class RuanganController extends Controller
             'fasilitas.nama_fasilitas.*' => 'required|string|max:255',
             'fasilitas.jumlah' => 'required|array',
             'fasilitas.jumlah.*' => 'required|integer',
-        ],[
+        ], [
+            'nomor_ruang.unique' => 'Nomor ruang sudah ada',
             'nomor_ruang.required' => 'Nomor ruang harus diisi',
             'nomor_ruang.integer' => 'Nomor ruang harus berupa angka',
             'nama_ruang.required' => 'Nama ruang harus diisi',
@@ -114,29 +116,51 @@ class RuanganController extends Controller
      */
     public function update(request $request, $id)
     {
-        try{
-        $ruangan = ruangan::findOrFail($id);
+        try {
+            $ruangan = ruangan::findOrFail($id);
 
-        $ruangan->nomor_ruang = $request->input('nomor_ruang');
-        $ruangan->nama_ruang = $request->input('nama_ruang');
-        $ruangan->jml_pc = $request->input('jml_pc');
-        $ruangan->kapasitas_orang = $request->input('kapasitas_orang');
-        $ruangan->save();
+            $ruangan->nomor_ruang = $request->input('nomor_ruang');
+            $ruangan->nama_ruang = $request->input('nama_ruang');
+            $ruangan->jml_pc = $request->input('jml_pc');
+            $ruangan->kapasitas_orang = $request->input('kapasitas_orang');
 
-        $ruangan->fasilitas()->delete();
+            if ($request->hasFile('foto')) {
 
-        $fasilitas = $request->input('fasilitas');
-        foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
-            fasilitas::create([
-                'nama_fasilitas' => $namaFasilitas,
-                'jumlah' => $fasilitas['jumlah'][$key],
-                'ruangans_id' => $ruangan->id,
-            ]);
+                if ($ruangan->gambar_ruang) {
+                    Storage::delete('public/foto_ruangan/' . $ruangan->gambar_ruang);
+                }
+
+                $now = now();
+                $tanggalJam = $now->format('dmY-His');
+                $extension = $request->file('foto')->getClientOriginalExtension();
+                $namaBaru = $request->nomor_ruang . '-' . $tanggalJam . '.' . $extension;
+                $request->file('foto')->storeAs('foto_ruangan', $namaBaru, 'public');
+                $ruangan->gambar_ruang = $namaBaru;
+            }
+
+            $ruangan->save();
+
+
+            $fasilitas = $request->input('fasilitas');
+            foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+                // Cek apakah fasilitas sudah ada, jika iya update, jika tidak buat baru
+                $fasilitasObj = $ruangan->fasilitas()->where('nama_fasilitas', $namaFasilitas)->first();
+                if ($fasilitasObj) {
+                    $fasilitasObj->update([
+                        'jumlah' => $fasilitas['jumlah'][$key],
+                    ]);
+                } else {
+                    Fasilitas::create([
+                        'nama_fasilitas' => $namaFasilitas,
+                        'jumlah' => $fasilitas['jumlah'][$key],
+                        'ruangans_id' => $ruangan->id,
+                    ]);
+                }
+            }
+            return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal merubah data. Coba lagi.');
         }
-        return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');
-    }catch (\Exception $e) {
-        return back()->with('error', 'Gagal merubah data. Coba lagi.');
-    }
     }
 
     /**

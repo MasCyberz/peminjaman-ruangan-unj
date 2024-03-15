@@ -157,11 +157,11 @@
 
                 // Mengatur pesan salam berdasarkan waktu
                 if (time < 12) {
-                    greetingElement.textContent = 'Selamat Pagi, {{ Auth::user()->RelasiRoles->name }}';
+                    greetingElement.textContent = 'Selamat Pagi, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
                 } else if (time < 14) {
-                    greetingElement.textContent = 'Selamat Siang';
+                    greetingElement.textContent = 'Selamat Siang, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
                 } else if (time < 19) {
-                    greetingElement.textContent = 'Selamat Sore';
+                    greetingElement.textContent = 'Selamat Sore, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
                 } else {
                     greetingElement.textContent = 'Selamat Malam, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
                 }

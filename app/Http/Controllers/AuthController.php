@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,11 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+
+            Auth::user()->update([
+                'active' => true
+            ]);
+
             return $this->redirectRole();
         }
 
@@ -45,6 +51,13 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
+
+        if (Auth::check()) {
+            Auth::user()->update([
+                'active' => false
+            ]);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

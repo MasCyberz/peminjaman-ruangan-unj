@@ -106,7 +106,15 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-start">{{ $item->email }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-start capitalize">
                                         {{ $item->RelasiRoles->name }}</td>
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start">Aktif</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-start">
+                                        @if ($item->active == 1)
+                                            <span
+                                                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">Aktif</span>
+                                        @else
+                                            <span
+                                                class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">Tidak Aktif</span>
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm gap-2">
                                         <a href="{{ route('management-users-edit', $item->id) }}">
                                             <button type="button"

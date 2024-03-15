@@ -75,7 +75,7 @@
                                     <span>{{ $fasilitas->nama_fasilitas }}</span>
                                 </li>
                                 @else
-                                -
+
                                 @endif
                                 @endforeach
                             </ul>
@@ -87,14 +87,14 @@
                         alt="">
                     </div> --}}
 
-                    <div class="bg-slate-300 absolute right-0 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
+                    <div class="bg-slate-300 relative -right-20 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
                     style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
 
                 </div>
 
                 {{-- <img src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}" class="bg-slate-300 h-[50%] w-1/2 rounded-3xl mx-auto bg-cover" alt="Deskripsi Gambar"> --}}
             </div>
-            <div class="inline-flex ms-auto mb-5 mx-3 gap-3">
+            <div class="inline-flex ms-auto mb-5 mx-3 mt-5 gap-3">
                 <a href="{{ route('edit_ruangan', $ruang->id) }}"><button type="submit"
                         class="font-medium rounded-lg inline-flex items-center justify-center w-full sm:w-auto px-2 py-2 text-center text-md text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 shadow-[0_3px_4px_1px_rgba(0,0,0,0.3)]"><i
                             class='bx bx-edit me-2'></i>Edit
