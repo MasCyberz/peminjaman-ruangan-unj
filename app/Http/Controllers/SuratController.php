@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoresuratRequest;
 use App\Http\Requests\UpdatesuratRequest;
+use App\Models\User;
 
 class SuratController extends Controller
 {
@@ -19,16 +20,57 @@ class SuratController extends Controller
      */
     public function index()
     {
-        return view('admin.surat.index');
+        $peminjaman = surat::select('status')->where('status', 'pending')->count();
+        $akun = User::count();
+        return view('admin.surat.index', ['peminjaman' => $peminjaman, 'akun' => $akun]);
     }
 
-    public function peminjaman()
+    public function peminjaman(Request $request)
     {
+    //   // Ambil kata kunci pencarian dari form
+    // $search = $request->input('search');
 
-        $surat = surat::orderby('created_at', 'desc')->Paginate(10);
+    // // Jika ada pencarian, simpan kata kunci pencarian ke dalam sesi
+    // if ($search !== null) {
+    //     $request->session()->put('search', $search);
+    // }
 
-        // dd($surat);
-        return view('admin.surat.peminjaman', ['suratList' => $surat]);
+    // // Ambil kata kunci pencarian dari sesi
+    // $search = $request->session()->get('search');
+
+    // // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
+    // $surat = Surat::where(function ($query) use ($search) {
+    //     $query->where('nomor_surat', 'like', '%' . $search . '%')
+    //         ->orWhere('asal_surat', 'like', '%' . $search . '%')
+    //         ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+    // })->orderBy('created_at', 'desc')->paginate(2);
+
+
+    // Ambil kata kunci pencarian dari form
+    $search = $request->input('search');
+
+    // Simpan kata kunci pencarian ke dalam sesi
+    $request->session()->put('search', $search);
+
+    // Ambil kata kunci pencarian dari sesi
+    $search = $request->session()->get('search');
+
+    // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
+    $surat = Surat::where(function ($query) use ($search) {
+        $query->where('nomor_surat', 'like', '%' . $search . '%')
+            ->orWhere('asal_surat', 'like', '%' . $search . '%')
+            ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+    })->orderBy('created_at', 'desc')->paginate(2);
+
+    // Setelah mengambil hasil pencarian, hapus kata kunci pencarian dari sesi
+    $request->session()->forget('search');
+
+    // Tampilkan hasil pencarian ke tampilan
+    return view('admin.surat.peminjaman', ['suratList' => $surat]);
+
+    
+    // Tampilkan hasil pencarian ke tampilan
+    return view('admin.surat.peminjaman', ['suratList' => $surat]);
     }
 
     /**

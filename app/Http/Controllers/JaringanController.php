@@ -12,7 +12,10 @@ class JaringanController extends Controller
 {
     public function index()
     {
-        return view('jaringan.surat.index');
+        $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+        $surat = surat::where('status', 'diterima')
+        ->whereNotIn('id', $suratIdsPending)->count();
+        return view('jaringan.surat.index', ['pengajuan' => $surat]);
     }
 
     public function table_peminjaman(Request $request)

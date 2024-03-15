@@ -13,7 +13,10 @@ class KoordinatorController extends Controller
 
     public function index()
     {
-        return view('koordinator.surat.index');
+        $permintaanRuang = surat::with('ruangans')->whereHas('ruangans', function ($query) {
+            $query->where('ruang_peminjaman.status', 'pending');
+        })->count();
+        return view('koordinator.surat.index', ['permintaanRuang' => $permintaanRuang]);
     }
 
     public function pengajuan()

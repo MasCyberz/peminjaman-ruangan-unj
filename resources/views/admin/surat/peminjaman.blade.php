@@ -45,10 +45,10 @@
 
 
 
-        <form class="max-w-md ms-auto my-auto">
+        <form class="max-w-md ms-auto my-auto" action="" method="GET">
             <label for="default-search" class="text-sm font-medium text-gray-900 sr-only">Search</label>
             <div class="relative">
-                <input type="search" id="default-search"
+                <input type="search" id="default-search" name="search"
                     class="block w-full p-1.5 ps-2 text-base font-medium text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                     placeholder="Search" />
                 <button type="submit"
@@ -178,7 +178,7 @@
 
         </div>
         <div class="my-5">
-            {{ $suratList->links('pagination::tailwind') }}
+            {{ $suratList->withQueryString()->links('pagination::tailwind') }}
         </div>
     </div>
     <!-- ContentReal End -->

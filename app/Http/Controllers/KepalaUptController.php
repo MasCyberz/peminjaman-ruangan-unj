@@ -11,7 +11,8 @@ class KepalaUptController extends Controller
 {
     public function index()
     {
-        return view('kepala-upt.surat.index');
+        $pengajuan = surat::select('status')->where('status', 'pending')->count();
+        return view('kepala-upt.surat.index', ['pengajuan' => $pengajuan]);
     }
 
     public function peminjaman()

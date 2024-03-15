@@ -29,7 +29,7 @@
             class="w-[425px] h-[225px] bg-red-500 rounded-lg relative hover:scale-105 transition-all duration-500 ease-in-out">
             <div class="flex m-5">
                 <div class="w-[65%] h-full my-auto mx-5">
-                    <span class="whitespace-nowrap block text-3xl font-semibold align-middle">0</span>
+                    <span class="whitespace-nowrap block text-3xl font-semibold align-middle">{{ $peminjaman }}</span>
                     <p class="whitespace-nowrap block text-2xl font-semibold align-middle">Peminjaman</p>
                 </div>
                 <div class="w-full h-full flex justify-center items-center mx-5">
@@ -47,8 +47,8 @@
             class="w-[425px] h-[225px] bg-blue-500 rounded-lg relative hover:scale-105 transition-all duration-500 ease-in-out">
             <div class="flex m-5">
                 <div class="w-[65%] h-full my-auto mx-5">
-                    <span class="whitespace-nowrap block text-3xl font-semibold align-middle">0</span>
-                    <span class="whitespace-nowrap block text-2xl font-semibold align-middle">Peminjaman</span>
+                    <span class="whitespace-nowrap block text-3xl font-semibold align-middle">{{ $akun }}</span>
+                    <span class="whitespace-nowrap block text-2xl font-semibold align-middle">Akun</span>
                 </div>
                 <div class="w-full h-full flex justify-center items-center mx-5">
                     <i class='bx bxs-user text-[150px]'></i>
