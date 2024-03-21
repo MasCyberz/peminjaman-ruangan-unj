@@ -41,5 +41,9 @@
     #reason.tutup {
         @apply scale-0;
     }
-}
 
+    input:focus + label,
+	input:not(:placeholder-shown) + label {
+	@apply text-lg font-medium -translate-y-8 scale-100 top-2 px-2;
+	}
+}
