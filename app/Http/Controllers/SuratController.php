@@ -27,50 +27,50 @@ class SuratController extends Controller
 
     public function peminjaman(Request $request)
     {
-    //   // Ambil kata kunci pencarian dari form
-    // $search = $request->input('search');
+        //   // Ambil kata kunci pencarian dari form
+        // $search = $request->input('search');
 
-    // // Jika ada pencarian, simpan kata kunci pencarian ke dalam sesi
-    // if ($search !== null) {
-    //     $request->session()->put('search', $search);
-    // }
+        // // Jika ada pencarian, simpan kata kunci pencarian ke dalam sesi
+        // if ($search !== null) {
+        //     $request->session()->put('search', $search);
+        // }
 
-    // // Ambil kata kunci pencarian dari sesi
-    // $search = $request->session()->get('search');
+        // // Ambil kata kunci pencarian dari sesi
+        // $search = $request->session()->get('search');
 
-    // // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
-    // $surat = Surat::where(function ($query) use ($search) {
-    //     $query->where('nomor_surat', 'like', '%' . $search . '%')
-    //         ->orWhere('asal_surat', 'like', '%' . $search . '%')
-    //         ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
-    // })->orderBy('created_at', 'desc')->paginate(2);
+        // // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
+        // $surat = Surat::where(function ($query) use ($search) {
+        //     $query->where('nomor_surat', 'like', '%' . $search . '%')
+        //         ->orWhere('asal_surat', 'like', '%' . $search . '%')
+        //         ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+        // })->orderBy('created_at', 'desc')->paginate(2);
 
 
-    // Ambil kata kunci pencarian dari form
-    $search = $request->input('search');
+        // Ambil kata kunci pencarian dari form
+        $search = $request->input('search');
 
-    // Simpan kata kunci pencarian ke dalam sesi
-    $request->session()->put('search', $search);
+        // Simpan kata kunci pencarian ke dalam sesi
+        $request->session()->put('search', $search);
 
-    // Ambil kata kunci pencarian dari sesi
-    $search = $request->session()->get('search');
+        // Ambil kata kunci pencarian dari sesi
+        $search = $request->session()->get('search');
 
-    // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
-    $surat = Surat::where(function ($query) use ($search) {
-        $query->where('nomor_surat', 'like', '%' . $search . '%')
-            ->orWhere('asal_surat', 'like', '%' . $search . '%')
-            ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
-    })->orderBy('created_at', 'desc')->paginate(2);
+        // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
+        $surat = Surat::where(function ($query) use ($search) {
+            $query->where('nomor_surat', 'like', '%' . $search . '%')
+                ->orWhere('asal_surat', 'like', '%' . $search . '%')
+                ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+        })->orderBy('created_at', 'desc')->paginate(10);
 
-    // Setelah mengambil hasil pencarian, hapus kata kunci pencarian dari sesi
-    $request->session()->forget('search');
+        // Setelah mengambil hasil pencarian, hapus kata kunci pencarian dari sesi
+        $request->session()->forget('search');
 
-    // Tampilkan hasil pencarian ke tampilan
-    return view('admin.surat.peminjaman', ['suratList' => $surat]);
+        // Tampilkan hasil pencarian ke tampilan
+        return view('admin.surat.peminjaman', ['suratList' => $surat]);
 
-    
-    // Tampilkan hasil pencarian ke tampilan
-    return view('admin.surat.peminjaman', ['suratList' => $surat]);
+
+        // Tampilkan hasil pencarian ke tampilan
+        return view('admin.surat.peminjaman', ['suratList' => $surat]);
     }
 
     /**
@@ -103,8 +103,8 @@ class SuratController extends Controller
             [
                 'required' => ' :attribute harus diisi',
                 'file.mimes' => 'File harus berupa PDF',
-                'jml_pc.required' =>'Jumlah PC harus diisi',
-                'jml_ruang.required' =>'Jumlah Ruang harus diisi',
+                'jml_pc.required' => 'Jumlah PC harus diisi',
+                'jml_ruang.required' => 'Jumlah Ruang harus diisi',
             ]
         );
 
@@ -168,7 +168,7 @@ class SuratController extends Controller
         $dompdf->setPaper('A4', 'portrait');
 
         // Memuat view PDF Blade dengan data yang telah disiapkan
-        $pdfContent = view('pdf.surat_balasan', compact('alasanSurat','statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
+        $pdfContent = view('pdf.surat_balasan', compact('alasanSurat', 'statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
 
         // Memuat konten HTML ke Dompdf
         $dompdf->loadHtml($pdfContent);

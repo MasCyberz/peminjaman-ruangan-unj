@@ -6,10 +6,6 @@
 @section('content')
     <!-- ContentReal Start -->
     <div class="w-[90%] flex mx-auto py-2 ps-10 pe-4">
-        <!-- <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 my-auto">
-                                                                                                                                                                                        <i class='bx bx-plus text-2xl'></i>
-                                                                                                                                                                                        Tambah Data
-                                                                                                                                                                                    </button> -->
         @if (session()->has('success'))
             <div id="alert-border-3"
                 class="fixed top-2 right-0 z-50 m-14 w-1/3 flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"

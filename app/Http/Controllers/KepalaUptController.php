@@ -18,6 +18,7 @@ class KepalaUptController extends Controller
     public function peminjaman()
     {
         $surat = surat::where('status', 'pending')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         // dd($surat);

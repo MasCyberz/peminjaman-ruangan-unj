@@ -12,14 +12,20 @@ class JaringanController extends Controller
 {
     public function index()
     {
+        // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+
+        // Hitung jumlah surat yang telah diterima dan belum dalam proses peminjaman
         $surat = surat::where('status', 'diterima')
-        ->whereNotIn('id', $suratIdsPending)->count();
+            ->whereNotIn('id', $suratIdsPending)->count();
+
+        // Kirim hasil hitungan ke tampilan
         return view('jaringan.surat.index', ['pengajuan' => $surat]);
     }
 
     public function table_peminjaman(Request $request)
     {
+        // Ambil isi yang ada di ruangan
         $ruangan = Ruangan::get();
 
         // Ambil semua ID surat yang sedang dalam proses peminjaman
@@ -40,16 +46,16 @@ class JaringanController extends Controller
             $ruanganTersedia = $ruangan;
         }
 
-        $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
-
+        // Ambil kata kunci pencarian dari form
         $limit = $request->input('numero', 10);
+        // Mengambil dengan status surat = diterima
         $surat = surat::where('status', 'diterima')
             ->whereNotIn('id', $suratIdsPending)
-            ->where(function ($query) use ($request) { // Tambahkan pembungkus untuk query pencarian lainnya
+            ->where(function ($query) use ($request) {
                 $query->where('nomor_surat', 'like', '%' . $request->keyword . '%')
                     ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%');
             })
-            ->orderby('created_at', 'desc')
+            ->orderby('created_at', 'asc')
             ->paginate($limit);
         return view('jaringan.surat.peminjaman-jaringan', [
             'suratList' => $surat,
@@ -85,19 +91,29 @@ class JaringanController extends Controller
 
     public function ajukanPeminjamanStore(Request $request, $suratId)
     {
-
+        // Validasi data yang diterima
         $validatedData = $request->validate([
             'nomor_surat' => 'required',
             'asal_surat' => 'required',
             'ruangan' => 'required|array',
             'ruangan.*' => 'required|distinct|exists:ruangans,id',
+        ], [
+            'required' => ' :attribute harus diisi',
         ]);
 
-
+        // Mencari surat dengan ID yang diberikan
         $surat = Surat::findOrFail($suratId);
 
-        // Logika untuk mengecek jadwal ruangan
+        // Cek apakah jumlah ruang yang dipilih sesuai oleh surat
+        $jml_ruang_surat = $surat->jml_ruang;
+        $jumlah_ruangan_dipilih = count($validatedData['ruangan']);
+        if ($jml_ruang_surat != $jumlah_ruangan_dipilih) {
+            return back()->withErrors(['ruangan' => 'Jumlah ruangan yang dipilih tidak sesuai dengan jumlah ruang yang diperlukan untuk surat ini.']);
+        }
+
+        // Periksa jadwal ruangan untuk setiap ruangan yang dipilih
         foreach ($validatedData['ruangan'] as $ruanganId) {
+            $ruangan = Ruangan::find($ruanganId);
             $konflik = Ruangan::whereHas('surats', function ($query) use ($surat, $ruanganId) {
                 $query->where('ruangans_id', $ruanganId)
                     ->where(function ($query) use ($surat) {
@@ -106,12 +122,13 @@ class JaringanController extends Controller
                     });
             })->exists();
 
+            // Jika ada masalah pada ruangan dengan jadwal. Maka kembalikan dengan pesan kesalahan.
             if ($konflik) {
-                return back()->withErrors(['ruangan' => 'Ruangan dengan ID ' . $ruanganId . ' tidak tersedia pada jadwal yang dipilih.']);
+                return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruangan->nomor_ruang  . ' tidak tersedia pada jadwal yang dipilih.']);
             }
         }
 
-
+        // Menyimpan data peminjaman ruangan ke dalam database
         foreach ($validatedData['ruangan'] as $ruanganId) {
             $surat->ruangans()->attach($ruanganId, [
                 'mulai_dipinjam' => $surat->mulai_dipinjam,
@@ -119,6 +136,6 @@ class JaringanController extends Controller
             ]);
         }
 
-        return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil disimpan.');
+        return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil diajukan.');
     }
 }

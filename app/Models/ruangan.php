@@ -20,16 +20,6 @@ class ruangan extends Model
         'gambar_ruang'
     ];
 
-    public function cekKetersediaan($tanggalMulai, $tanggalSelesai)
-    {
-        $peminjaman = $this->surats()
-            ->wherePivot('mulai_dipinjam', '<=', '$tanggalMulai')
-            ->wherePivot('selesai_dipinjam', '>=', '$tanggalSelesai')
-            ->exists();
-
-        return $peminjaman ? 'tidak tersedia' : 'tersedia';
-    }
-
     /**
      * Get the user that owns the ruangan
      *

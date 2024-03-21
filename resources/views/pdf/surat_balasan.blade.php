@@ -110,7 +110,7 @@
         <div style="text-align: center">
             <h1>Universitas Negeri Jakarta</h1>
             <p>UPT TIK</p>
-            <p>Alamat Universitas</p>
+            <p>Jalan R.Mangun Muka Raya No.11 RT.11 RW.14, Rawamangun Kec.Pulogadung, Jakarta 13220</p>
         </div>
     </header>
     <hr>

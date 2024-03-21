@@ -118,20 +118,20 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="my-5">
+                            {{ $suratList->withQueryString()->links('pagination::tailwind') }}
+                        </div>
                     </div>
                 </div>
             </div>
             {{-- table atas end --}}
 
-            {{-- <div class="my-4">
-                {{ $suratList->links() }}
-            </div> --}}
 
 
-            <div class="flex justify-center my-4">
+            {{-- <div class="flex justify-center my-4">
                 <nav class="inline-flex">
                     <ul class="flex items-center">
-                        {{-- Tombol "Previous" --}}
+                        Tombol "Previous"
                         @if ($suratList->onFirstPage())
                             <li>
                                 <span class="bg-gray-300 px-2 py-1 mr-1 rounded-md cursor-not-allowed">&laquo;</span>
@@ -143,7 +143,7 @@
                             </li>
                         @endif
 
-                        {{-- Loop untuk menampilkan tombol-tombol pagination --}}
+                        Loop untuk menampilkan tombol-tombol pagination
                         @foreach ($suratList->getUrlRange(1, $suratList->lastPage()) as $page => $url)
                             <li>
                                 <a href="{{ $url }}"
@@ -151,7 +151,7 @@
                             </li>
                         @endforeach
 
-                        {{-- Tombol "Next" --}}
+                        Tombol "Next"
                         @if ($suratList->hasMorePages())
                             <li>
                                 <a href="{{ $suratList->nextPageUrl() }}"
@@ -164,7 +164,7 @@
                         @endif
                     </ul>
                 </nav>
-            </div>
+            </div> --}}
 
 
 
