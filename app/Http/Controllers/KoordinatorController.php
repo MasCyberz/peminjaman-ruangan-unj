@@ -7,6 +7,7 @@ use App\Models\surat;
 use App\Models\ruangan;
 use App\Models\fasilitas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class KoordinatorController extends Controller
 {
@@ -31,18 +32,34 @@ class KoordinatorController extends Controller
 
     public function pengajuan_store(Request $request, $suratId)
     {
+        
         $status = $request->status; // 'approved' atau 'rejected'
+        
         $surat = Surat::findOrFail($suratId);
+
+        $fileToDelete = $surat->file_surat ; // Ganti dengan nama file yang ingin dihapus
+        $path = 'public/file_surat/' . $fileToDelete;
 
         // Update status semua ruangan yang terkait dengan surat
         foreach ($surat->ruangans as $ruangan) {
             $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => $status]);
         }
 
+        if($status){
+            if($surat->file_surat){
+                Storage::delete($path);
+            }
+        }
+
+        if($status == 'ditolak'){
+            $surat->update(['status' => 'ditolak']);    
+        }
+
         if ($status == 'diterima') {
             $surat->update(['status' => 'diterima']);
         }
 
+        
         return back()->with('success', 'Semua ruangan untuk surat ini telah ' . ($status == 'approved' ? 'diterima' : 'ditolak') . '.');
     }
 

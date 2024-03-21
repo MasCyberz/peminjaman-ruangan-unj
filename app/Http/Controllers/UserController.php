@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -84,19 +85,54 @@ class UserController extends Controller
             'fotoprofil.image' => 'File harus berupa gambar',
         ]);
 
+        // try {
+        //     $user = User::findOrFail($id);
+
+        //     $user->name = $request->name;
+        //     $user->email = $request->email;
+        //     if ($request->filled('password')) {
+        //         $user->password = Hash::make($request->password);
+        //     }
+        //     $user->role_id = $request->role_id;
+
+            
+        //     // Jika file foto profil dikirimkan, simpan dan update foto profil
+        //     if ($request->hasFile('foto_profil')) {
+        //         $now = now();
+        //         $tanggalJam = $now->format('dmY-His');
+        //         $extension = $request->file('foto_profil')->getClientOriginalExtension();
+        //         $namaBaru = $request->name . '-' . $tanggalJam . '.' . $extension;
+        //         $request->file('foto_profil')->storeAs('foto_profile_akun', $namaBaru, 'public');
+        //         $user->image = $namaBaru;
+        //     }
+
+        //     $user->save();
+
+        //     return redirect()->route('management-users')->with('success', 'Data user berhasil diperbarui');
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->withInput()->withErrors(['error' => 'Gagal memperbarui data user. Silakan coba lagi.']);
+        // }
+
         try {
             $user = User::findOrFail($id);
-
+    
             $user->name = $request->name;
             $user->email = $request->email;
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
             $user->role_id = $request->role_id;
-
-
-            // Jika file foto profil dikirimkan, simpan dan update foto profil
+    
+            // Hapus foto profil lama jika ada
+            $fileToDelete = $user->image ;
+            $path = 'public/foto_profile_akun/' . $fileToDelete;
+    
             if ($request->hasFile('foto_profil')) {
+                if ($fileToDelete) {
+                    Storage::delete($path);
+                }
+    
+                // Simpan foto profil baru
                 $now = now();
                 $tanggalJam = $now->format('dmY-His');
                 $extension = $request->file('foto_profil')->getClientOriginalExtension();
@@ -104,9 +140,9 @@ class UserController extends Controller
                 $request->file('foto_profil')->storeAs('foto_profile_akun', $namaBaru, 'public');
                 $user->image = $namaBaru;
             }
-
+    
             $user->save();
-
+    
             return redirect()->route('management-users')->with('success', 'Data user berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => 'Gagal memperbarui data user. Silakan coba lagi.']);

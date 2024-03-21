@@ -78,7 +78,6 @@
 
 
     {{-- top nav start --}}
-
     <section class="w-[calc(100%-18rem)] relative left-72 home h-screen transition-all duration-[0.7s] ease-in-out">
         <div class="p-4 rounded-lg h-screen">
             <div class="flex justify-center items-center">
@@ -96,12 +95,16 @@
                         <span class="text-2xl font-semibold flex items-center">@yield('page')</span>
                         <div class="flex ms-auto me-4 rounded-full py-2 shadow-all-side h-14 cursor-pointer"
                             data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                            {{-- <img class="rounded-full w-10 h-10 ms-5" src="{{ asset('/img/profilepicturecropped.jpg') }}"
+                                alt=""> --}}
+
                             @if (Auth::user()->image)
                                 <img class="rounded-full w-10 h-10 ms-5"
                                     src="{{ asset('storage/foto_profile_akun/' . Auth::user()->image) }}"
                                     alt="">
                             @else
-                                <img src="{{ asset('./img/default_profile.png') }}" class="rounded-full w-10 h-10 ms-5">
+                                <img src="{{ asset('./img/default_profile.png') }}"
+                                    class="rounded-full w-10 h-10 ms-5">
                             @endif
                             <span
                                 class="me-5 ms-3 flex items-center font-medium text-lg capitalize">{{ Auth::user()->name }}</span>
@@ -110,10 +113,15 @@
                 </div>
             </div>
 
-            {{-- top nav end --}}
+            {{-- profile-end --}}
+
             {{-- Content-start --}}
+
             @yield('content')
+
             {{-- Content-end --}}
+
+            {{-- modal-logout --}}
 
             <!-- modal keluar akun-->
             <div id="popup-modal" tabindex="-1" data-modal-backdrop="static"
@@ -128,7 +136,7 @@
                                     stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             <h3 class="mb-5 text-xl font-semibold text-slate-800">Apakah anda yakin ingin keluar?</h3>
-                            <a href="{{ route('logout') }}" data-modal-hide="popup-modal" type="button"
+                            <a href="{{ route('logout') }}"
                                 class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-lg inline-flex items-center px-5 py-2.5 text-center">
                                 Yes
                             </a>
@@ -140,6 +148,9 @@
                     </div>
                 </div>
             </div>
+
+            {{-- modal-logout --}}
+
 
     </section>
 
