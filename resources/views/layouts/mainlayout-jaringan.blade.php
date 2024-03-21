@@ -97,7 +97,7 @@
                             </svg>
                         </button>
                         <span class="text-2xl font-semibold flex items-center">@yield('page')</span>
-                        <div class="flex ms-auto me-4 rounded-full py-1 shadow-all-side transition-all duration-1000 ease-in-out cursor-pointer"
+                        <div class="flex ms-auto me-4 rounded-full py-2 shadow-all-side h-14 cursor-pointer"
                             data-modal-target="popup-modal" data-modal-toggle="popup-modal">
                             @if (Auth::user()->image)
                                 <img class="rounded-full w-10 h-10 ms-5"

@@ -6,9 +6,24 @@
 @section('content')
 
     <div class="rounded-lg shadow-all-side w-[80%] my-5 p-8 mx-auto">
-        <form class="mx-10" action="{{ route('management-users-update', ['id' => $User->id]) }}" method="POST">
+        <form class="mx-10" action="{{ route('management-users-update', ['id' => $User->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{-- @if (session('error'))
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                    role="alert">
+                    <span class="font-medium text-base">{{ session('error') }}</span>
+                </div>
+            @endif --}}
             <div class="flex border-b-2 border-black w-full font-semibold mb-3">
                 <i class='bx bx-laptop text-2xl mx-4'></i>
                 <span class="text-base">Form Pendaftaran</span>
@@ -41,12 +56,13 @@
                 </select>
             </div>
             <div class="flex gap-2 mt-3">
-                <input type="file" id="uploadfile" class="hidden">
-                <label for="uploadfile"
+                <input type="file" id="foto_profil" class="hidden" name="foto_profil" onchange="displayFileName()">
+                <label for="foto_profil"
                     class="flex items-center text-base bg-gray-500 hover:bg-gray-600 text-center px-5 py-2 select-none cursor-pointer rounded-2xl text-white">
                     <i class='bx bx-cloud-upload text-2xl'></i>
                     <span class="ms-2">Add Picture</span>
                 </label>
+                <span id="file-name" class="w-[40%]"></span>
                 <a class="ms-auto" href="{{ route('management-users') }}"><button type="button"
                         class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Cancel</button></a>
                 <button type="submit"
@@ -54,5 +70,17 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function displayFileName() {
+            const fileInput = document.getElementById('foto_profil');
+            const fileName = document.getElementById('file-name');
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        }
+    </script>
 
 @endsection

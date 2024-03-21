@@ -42,8 +42,8 @@
         @apply scale-0;
     }
 
-    input:focus + label,
-	input:not(:placeholder-shown) + label {
+    .inputlogin:focus + .labellogin,
+	.inputlogin:not(:placeholder-shown) + .labellogin {
 	@apply text-lg font-medium -translate-y-8 scale-100 top-2 px-2;
 	}
 }

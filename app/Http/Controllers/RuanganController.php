@@ -41,7 +41,7 @@ class RuanganController extends Controller
             'nama_ruang' => 'required|string',
             'jml_pc' => 'required|integer',
             'kapasitas_orang' => 'required|integer',
-            'foto' => 'image|mimes:jpeg,png,jpg|max:10240',
+            'foto' => 'image|mimes:png,jpg|max:10240',
             'fasilitas.nama_fasilitas' => 'required|array',
             'fasilitas.nama_fasilitas.*' => 'required|string|max:255',
             'fasilitas.jumlah' => 'required|array',
