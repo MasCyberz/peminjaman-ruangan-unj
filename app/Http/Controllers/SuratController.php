@@ -68,7 +68,6 @@ class SuratController extends Controller
         // Tampilkan hasil pencarian ke tampilan
         return view('admin.surat.peminjaman', ['suratList' => $surat]);
 
-
         // Tampilkan hasil pencarian ke tampilan
         return view('admin.surat.peminjaman', ['suratList' => $surat]);
     }
