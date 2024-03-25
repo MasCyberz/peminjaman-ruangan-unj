@@ -51,7 +51,9 @@
                                 </select>
                             </div>
                             <div class=" h-10 inline-flex items-center justify-center">
-                                <input type="number" name="fasilitas[jumlah][]" class="focus:outline-none py-1">
+
+                                <input type="number" name="fasilitas[jumlah][]" class="focus:outline-none py-1"
+                                    value="">
                             </div>
                             <button type="button"
                                 class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]"
@@ -127,6 +129,15 @@
             div.appendChild(removeButton);
 
             container.appendChild(div);
+
+            var existingFacilities = document.querySelectorAll('select[name^="fasilitas[nama_fasilitas]"]');
+            existingFacilities.forEach(function(facility) {
+                var hiddenInput = document.createElement("input");
+                hiddenInput.setAttribute("type", "hidden");
+                hiddenInput.setAttribute("name", facility.getAttribute("name"));
+                hiddenInput.setAttribute("value", facility.value);
+                div.appendChild(hiddenInput);
+            });
         });
     </script>
 

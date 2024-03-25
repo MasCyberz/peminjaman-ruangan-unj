@@ -141,20 +141,39 @@ class RuanganController extends Controller
             $ruangan->save();
 
 
-            $fasilitas = $request->input('fasilitas');
-            foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
-                // Cek apakah fasilitas sudah ada, jika iya update, jika tidak buat baru
-                $fasilitasObj = $ruangan->fasilitas()->where('nama_fasilitas', $namaFasilitas)->first();
-                if ($fasilitasObj) {
-                    $fasilitasObj->update([
-                        'jumlah' => $fasilitas['jumlah'][$key],
-                    ]);
-                } else {
-                    Fasilitas::create([
-                        'nama_fasilitas' => $namaFasilitas,
-                        'jumlah' => $fasilitas['jumlah'][$key],
-                        'ruangans_id' => $ruangan->id,
-                    ]);
+            // $fasilitas = $request->input('fasilitas');
+            // foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+            //     // Cek apakah fasilitas sudah ada, jika iya update, jika tidak buat baru
+            //     $fasilitasObj = $ruangan->fasilitas()->where('nama_fasilitas', $namaFasilitas)->first();
+            //     if ($fasilitasObj) {
+            //         $fasilitasObj->update([
+            //             'jumlah' => $fasilitas['jumlah'][$key],
+            //         ]);
+            //     } else {
+            //         Fasilitas::create([
+            //             'nama_fasilitas' => $namaFasilitas,
+            //             'jumlah' => $fasilitas['jumlah'][$key],
+            //             'ruangans_id' => $ruangan->id,
+            //         ]);
+            //     }
+            // }
+
+            if ($request->has('fasilitas')) {
+                $fasilitas = $request->input('fasilitas');
+                foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
+                    // Cek apakah fasilitas sudah ada, jika iya update, jika tidak buat baru
+                    $fasilitasObj = $ruangan->fasilitas()->where('nama_fasilitas', $namaFasilitas)->first();
+                    if ($fasilitasObj) {
+                        $fasilitasObj->update([
+                            'jumlah' => $fasilitas['jumlah'][$key],
+                        ]);
+                    } else {
+                        fasilitas::create([
+                            'nama_fasilitas' => $namaFasilitas,
+                            'jumlah' => $fasilitas['jumlah'][$key],
+                            'ruangans_id' => $ruangan->id,
+                        ]);
+                    }
                 }
             }
             return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');
