@@ -39,7 +39,9 @@ Route::middleware(['auth', 'khusus_admin'])->group(function () {
     Route::get('admin/surat_tambah', [SuratController::class, 'create_peminjaman'])->name('surat_tambah');
     Route::post('admin/surat_store', [SuratController::class, 'store_peminjaman'])->name('surat_store');
     Route::get('admin/surat_delete/{id}', [SuratController::class, 'destroy'])->name('surat_delete');
-
+    Route::get('admin/edit_surat/{id}', [SuratController::class, 'edit'])->name('edit_surat');
+    Route::put('admin/surat_update/{id}', [SuratController::class, 'update'])->name('update_surat');
+    
     // Untuk Data Referensi
     Route::get('admin/data-referensi', [RuanganController::class, 'index'])->name('data-referensi');
     Route::get('admin/tambah-referensi', [RuanganController::class, 'create'])->name('tambah_ruangan');

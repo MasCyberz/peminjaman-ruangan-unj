@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Mpdf\Mpdf;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Models\User;
 use App\Models\surat;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoresuratRequest;
 use App\Http\Requests\UpdatesuratRequest;
-use App\Models\User;
 
 class SuratController extends Controller
 {
@@ -193,18 +194,154 @@ class SuratController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(surat $surat)
+    public function edit(request $request, $id)
     {
-        //
+        $surat = surat::findOrFail($id);
+        return view('admin.surat.edit_surat', ['SuratYgDiedit' => $surat]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatesuratRequest $request, surat $surat)
+    public function update(Request $request, $id)
     {
-        //
+        
+        try {
+
+            $surat = surat::findOrFail($id);
+
+            $request->validate([
+                'file' => 'mimes:pdf|max:2048',
+                'nomor_surat' => 'required',
+                'asal_surat' => 'required',
+                'nama_peminjam' => 'required',
+                'mulai_dipinjam' => 'required',
+                'selesai_dipinjam' => 'required',
+                'jml_ruang' => 'required|numeric',
+                'jml_pc' => 'required|numeric',
+            ], [
+                'required' => ' :attribute harus diisi',
+                'file.mimes' => 'File harus berupa PDF',
+                'jml_pc.required' => 'Jumlah PC harus diisi',
+                'jml_ruang.required' => 'Jumlah Ruang harus diisi',
+            ]);
+    
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+    
+                if ($file->isValid()) {
+                    if ($surat->file_surat) {
+                        Storage::delete('public/file_surat/' . $surat->file_surat);
+                    }
+    
+                    $extension = $file->getClientOriginalExtension();
+                    $namaBaru = $request->asal_surat . '-' . $request->nama_peminjam . '-' . uniqid() . '.' . $extension;
+                    $file->storeAs('file_surat', $namaBaru, 'public');
+    
+                    $surat->file_surat = $namaBaru;
+                } else {
+                    return redirect()->back()->with('error', 'File tidak valid.')->withErrors(['file' => 'File tidak valid']);
+                }
+            } else {
+        
+            }
+    
+            $surat->nomor_surat = $request->input('nomor_surat');
+            $surat->asal_surat = $request->input('asal_surat');
+            $surat->nama_peminjam = $request->input('nama_peminjam');
+            $surat->mulai_dipinjam = $request->input('mulai_dipinjam');
+            $surat->selesai_dipinjam = $request->input('selesai_dipinjam');
+            $surat->jml_ruang = $request->input('jml_ruang');
+            $surat->jml_pc = $request->input('jml_pc');
+    
+            $surat->save();
+    
+            return redirect()->route('peminjaman')->with('success', 'Surat berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
+    // {
+    //     try {
+    //         $surat = surat::findOrFail($id);
+
+    //         $request->validate(
+    //             [
+    //                 'file' => 'required|mimes:pdf|max:2048',
+    //                 'nomor_surat' => 'required',
+    //                 'asal_surat' => 'required',
+    //                 'nama_peminjam' => 'required',
+    //                 'mulai_dipinjam' => 'required',
+    //                 'selesai_dipinjam' => 'required',
+    //                 'jml_ruang' => 'required|numeric',
+    //                 'jml_pc' => 'required|numeric',
+    
+    //             ],
+    //             [
+    //                 'required' => ' :attribute harus diisi',
+    //                 'file.mimes' => 'File harus berupa PDF',
+    //                 'jml_pc.required' => 'Jumlah PC harus diisi',
+    //                 'jml_ruang.required' => 'Jumlah Ruang harus diisi',
+    //             ]
+    //         );
+
+    //         $surat->nomor_surat = $request->input('nomor_surat');
+    //         $surat->asal_surat = $request->input('asal_surat');
+    //         $surat->nama_peminjam = $request->input('nama_peminjam');
+    //         $surat->mulai_dipinjam = $request->input('mulai_dipinjam');
+    //         $surat->selesai_dipinjam = $request->input('selesai_dipinjam');
+    //         $surat->jml_ruang = $request->input('jml_ruang');
+    //         $surat->jml_pc = $request->input('jml_pc');
+    //         $surat->file_surat = $request->input('file');
+
+    //         if ($request->hasFile('file')) {
+
+    //             if ($surat->file_surat) {
+    //                 Storage::delete('public/file_surat/' . $surat->file_surat);
+    //             }
+
+    //             $namaBaru = '';
+    //             $file = $request->file('file');
+    //             if ($file->isValid()) {
+    //                 $extension = $file->getClientOriginalExtension();
+    //                 $namaBaru = $request->asal_surat . '-' . $request->nama_peminjam . '-' . uniqid() . '.' . $extension;
+    //                 $file->storeAs('file_surat', $namaBaru, 'public');
+            
+    //             // $now = now();
+    //             // $tanggalJam = $now->format('dmY-His');
+    //             // $extension = $request->file('foto')->getClientOriginalExtension();
+    //             // $namaBaru = $request->nomor_ruang . '-' . $tanggalJam . '.' . $extension;
+    //             // $request->file('foto')->storeAs('foto_ruangan', $namaBaru, 'public');
+    //             // $ruangan->gambar_ruang = $namaBaru;
+    //         }else  {
+    //             return redirect()->back()->with('error', 'File tidak valid.')->withErrors(['file' => 'File tidak valid']);
+    //          }
+
+    //     }else {
+    //         return redirect()->back()->with('error', 'File harus diunggah.')->withErrors(['file' => 'File harus diunggah']);
+    //         }
+
+    //         $request->file_surat = $namaBaru;
+    //     }
+    //         $ruangan->save();
+
+    //         if ($request->has('fasilitas')) {
+    //             $fasilitasInput = $request->input('fasilitas');
+    //             foreach ($fasilitasInput['nama_fasilitas'] as $key => $namaFasilitas) {
+    //                 // Cari fasilitas yang sesuai dengan nama dari input
+    //                 $fasilitas = $ruangan->fasilitas()->firstOrNew(['nama_fasilitas' => $namaFasilitas]);
+    //                 // Perbarui jumlah fasilitas
+    //                 $fasilitas->jumlah = $fasilitasInput['jumlah'][$key];
+    //                 // Simpan fasilitas
+    //                 $ruangan->fasilitas()->save($fasilitas);
+    //             }
+    //         }
+    //         return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');
+    //     } catch (\Exception $e) {
+    //         return back()->with('error', 'Gagal merubah data. Coba lagi.');
+    //     }
+    // }
+    // }
 
     /**
      * Remove the specified resource from storage.

@@ -142,7 +142,7 @@
 
                                             $statusDitolak = $surat->ruangans->contains(function ($ruangan) {
                                                 return $ruangan->pivot->status === 'ditolak';
-                                            })
+                                            });
                                         @endphp
                                         <div
                                             class="w-full h-full px-3 py-2 rounded-full uppercase text-center
@@ -151,14 +151,20 @@
                                         bg-red-100 text-red-800
                                         @else
                                         bg-gray-100 text-gray-500 @endif">
-                                            <span class="font-medium">
-                                                @if ($surat->status == 'diterima' && $statusDiterima)
-                                                    Diterima
-                                                @elseif ($surat->status == 'ditolak' || $statusDitolak)
-                                                    Ditolak
-                                                @elseif ($surat->status == 'pending')
-                                                    {{ $surat->status }}
-                                                @endif
+                                            @php
+                                                $statusText = '';
+                                                if ($surat->status == 'diterima' && $statusDiterima) {
+                                                    $statusText = 'Diterima';
+                                                } elseif ($surat->status == 'ditolak' || $statusDitolak) {
+                                                    $statusText = 'Ditolak';
+                                                } elseif ($surat->status == 'pending') {
+                                                    $statusText = 'Pending';
+                                                } elseif ($surat->status == 'diterima' && $statusDiterima == null) {
+                                                    $statusText = 'pending';
+                                                }
+                                            @endphp
+                                            <span class="font-medium" id="status">
+                                                {{ $statusText }}
                                             </span>
                                         </div>
                                     </td>
@@ -178,8 +184,16 @@
                                             });
                                         @endphp
 
+                                        {{-- Button edit --}}
+                                        @if ($statusText == 'Pending')
+                                            <a href="{{ route('edit_surat', ['id' => $surat->id]) }}"
+                                                class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center">Edit
+                                                Surat</a>
+                                        
+                                        @endif
+
                                         {{-- Menampilkan tombol Print Out jika status sesuai --}}
-                                        @if ($statusSurat === 'ditolak' || $statusDiterima || $statusDitolak)
+                                        @if ($statusText == 'Ditolak' || $statusText == 'Diterima')
                                             <a href="{{ route('pdf', ['surat_id' => $surat->id]) }}"
                                                 class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center"
                                                 target="_blank">Print Out</a>
