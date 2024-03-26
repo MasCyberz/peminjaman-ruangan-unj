@@ -39,4 +39,5 @@ class ruangan extends Model
     {
         return $this->belongsToMany(surat::class, 'ruang_peminjaman', 'ruangans_id', 'surat_id');
     }
+
 }

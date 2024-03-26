@@ -72,14 +72,14 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'nullable',
-            'email' => 'nullable|email|unique:users,email',
-            'password' => 'sometimes|min:5',
+            'email' => 'nullable|email',
+            'password' => 'sometimes',
             'role_id' => 'nullable|exists:roles,id',
             'fotoprofil' => 'nullable|image|mimes:jpeg,png,jpg'
         ], [
-            'password.min' => 'Password minimal 5 karakter',
+            'password.min' => 'Password minimal 3 karakter',
             'role_id.exists' => 'Role tidak ditemukan',
-            'email.unique' => 'Email sudah terdaftar',
+            // 'email.unique' => 'Email sudah terdaftar',
             'email.email' => 'Email harus valid',
             'fotoprofil.mimes' => 'File harus berupa jpeg, png, jpg',
             'fotoprofil.image' => 'File harus berupa gambar',
@@ -95,7 +95,7 @@ class UserController extends Controller
         //     }
         //     $user->role_id = $request->role_id;
 
-            
+
         //     // Jika file foto profil dikirimkan, simpan dan update foto profil
         //     if ($request->hasFile('foto_profil')) {
         //         $now = now();
@@ -115,23 +115,23 @@ class UserController extends Controller
 
         try {
             $user = User::findOrFail($id);
-    
+
             $user->name = $request->name;
             $user->email = $request->email;
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
             $user->role_id = $request->role_id;
-    
+
             // Hapus foto profil lama jika ada
             $fileToDelete = $user->image ;
             $path = 'public/foto_profile_akun/' . $fileToDelete;
-    
+
             if ($request->hasFile('foto_profil')) {
                 if ($fileToDelete) {
                     Storage::delete($path);
                 }
-    
+
                 // Simpan foto profil baru
                 $now = now();
                 $tanggalJam = $now->format('dmY-His');
@@ -140,9 +140,9 @@ class UserController extends Controller
                 $request->file('foto_profil')->storeAs('foto_profile_akun', $namaBaru, 'public');
                 $user->image = $namaBaru;
             }
-    
+
             $user->save();
-    
+
             return redirect()->route('management-users')->with('success', 'Data user berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['error' => 'Gagal memperbarui data user. Silakan coba lagi.']);

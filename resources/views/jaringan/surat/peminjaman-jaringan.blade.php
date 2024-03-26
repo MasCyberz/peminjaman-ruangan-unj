@@ -226,15 +226,6 @@
                                                 </td>
                                                 <td
                                                     class="px-2 py-4 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                    {{-- <span class="uppercase bg-green-500 py-2 px-3 rounded-lg text-white">
-                                                        {{ $ruang->status }}
-                                                    </span> --}}
-
-                                                    {{-- @if ($statusRuangan['status'] === 'tersedia')
-                                                        <p>Tersedia</p>
-                                                    @else
-                                                        <p>Tidak Tersedia</p>
-                                                    @endif --}}
                                                     <span class="uppercase bg-green-500 py-2 px-3 rounded-lg text-white">
                                                         @if ($ruangans->status == 'tersedia')
                                                             Tersedia

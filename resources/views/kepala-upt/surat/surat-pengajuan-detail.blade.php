@@ -26,8 +26,10 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">Nama Peminjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Tanggal Mulai Dipinjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Lama Peminjaman</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Jumlah Ruang Dipinjam</span>
                         </div>
                         <div class="flex flex-col z-10">
+                            <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
@@ -64,6 +66,7 @@
                                     echo 'Invalid Date';
                                 }
                             @endphp
+                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $pengajuanList->jml_ruang }}</span>
                         </div>
                     </div>
                 </div>

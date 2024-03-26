@@ -54,7 +54,9 @@ class KepalaUptController extends Controller
     public function kalender()
     {
 
-        $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
+        $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')
+            ->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
+            ->whereIn('ruang_peminjaman.status', ['pending', 'diterima'])
             ->get();
 
         $warna = ['red', 'blue', 'green', 'yellow', 'orange'];

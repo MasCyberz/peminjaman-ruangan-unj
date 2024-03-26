@@ -135,14 +135,31 @@
                                         {{ $surat->jml_pc }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
+                                        @php
+                                            $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
+                                                return $ruangan->pivot->status === 'diterima';
+                                            });
+
+                                            $statusDitolak = $surat->ruangans->contains(function ($ruangan) {
+                                                return $ruangan->pivot->status === 'ditolak';
+                                            })
+                                        @endphp
                                         <div
                                             class="w-full h-full px-3 py-2 rounded-full uppercase text-center
-                                        @if ($surat->status == 'diterima') bg-green-100 text-green-800
-                                        @elseif ($surat->status == 'ditolak')
+                                        @if ($statusDiterima && $surat->status == 'diterima') bg-green-100 text-green-800
+                                        @elseif ($surat->status == 'ditolak' || $statusDitolak)
                                         bg-red-100 text-red-800
                                         @else
                                         bg-gray-100 text-gray-500 @endif">
-                                            <span class="font-medium">{{ $surat->status }}</span>
+                                            <span class="font-medium">
+                                                @if ($surat->status == 'diterima' && $statusDiterima)
+                                                    Diterima
+                                                @elseif ($surat->status == 'ditolak' || $statusDitolak)
+                                                    Ditolak
+                                                @elseif ($surat->status == 'pending')
+                                                    {{ $surat->status }}
+                                                @endif
+                                            </span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
@@ -154,10 +171,15 @@
                                             $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
                                                 return $ruangan->pivot->status === 'diterima';
                                             });
+
+                                            // Memeriksa apakah status surat adalah 'Ditolak' di tabel pivot ruangans
+                                            $statusDitolak = $surat->ruangans->contains(function ($ruangan) {
+                                                return $ruangan->pivot->status === 'ditolak';
+                                            });
                                         @endphp
 
                                         {{-- Menampilkan tombol Print Out jika status sesuai --}}
-                                        @if ($statusSurat === 'ditolak' || $statusDiterima)
+                                        @if ($statusSurat === 'ditolak' || $statusDiterima || $statusDitolak)
                                             <a href="{{ route('pdf', ['surat_id' => $surat->id]) }}"
                                                 class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-3 py-2 text-center"
                                                 target="_blank">Print Out</a>

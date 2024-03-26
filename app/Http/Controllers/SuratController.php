@@ -20,7 +20,9 @@ class SuratController extends Controller
      */
     public function index()
     {
-        $peminjaman = surat::select('status')->where('status', 'pending')->count();
+        $peminjaman = surat::whereHas('ruangans', function ($query){
+            $query->where('ruang_peminjaman.status', 'pending');
+        })->select('status')->where('status', 'pending')->count();
         $akun = User::count();
         return view('admin.surat.index', ['peminjaman' => $peminjaman, 'akun' => $akun]);
     }
@@ -167,7 +169,7 @@ class SuratController extends Controller
         $dompdf->setPaper('A4', 'portrait');
 
         // Memuat view PDF Blade dengan data yang telah disiapkan
-        $pdfContent = view('pdf.surat_balasan', compact('alasanSurat', 'statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
+        $pdfContent = view('pdf.surat_balasan', compact('surat','alasanSurat', 'statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
 
         // Memuat konten HTML ke Dompdf
         $dompdf->loadHtml($pdfContent);

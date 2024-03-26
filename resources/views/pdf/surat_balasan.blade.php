@@ -1,72 +1,3 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Balasan</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl text-center font-bold mb-2">Surat Balasan</h1>
-        <p class="text-center text-xl mb-5">Dengan ini kami menyatakan untuk surat ini adalah <strong
-                class="uppercase text-bold">{{ $status }}</strong></p>
-
-        <div class="surat-info mb-8">
-            <h2 class="text-xl font-semibold mb-4">Informasi Surat</h2>
-            <table class="w-full border-collapse">
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Nomor Surat</th>
-                    <td class="py-2 px-4 border">{{ $nomorSurat }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Asal Surat</th>
-                    <td class="py-2 px-4 border">{{ $asalSurat }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Nama Peminjam</th>
-                    <td class="py-2 px-4 border">{{ $namaPeminjam }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Jumlah Ruang</th>
-                    <td class="py-2 px-4 border">{{ $jmlRuang }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Jumlah Pc</th>
-                    <td class="py-2 px-4 border">{{ $jmlPc }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Mulai Dipinjam</th>
-                    <td class="py-2 px-4 border">{{ \Carbon\Carbon::parse($mulaiDipinjam)->format('d F Y') }}</td>
-                </tr>
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Selesai Dipinjam</th>
-                    <td class="py-2 px-4 border">{{ \Carbon\Carbon::parse($selesaiDipinjam)->format('d F Y') }}</td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="ruangan-info">
-            <h2 class="text-xl font-semibold mb-4">Informasi Ruangan</h2>
-            <table class="w-full border-collapse">
-                <tr>
-                    <th class="py-2 px-4 bg-gray-200 border">Nomor Ruangan</th>
-                </tr>
-                @foreach ($ruangans as $ruangan)
-                    <tr>
-                        <td class="py-2 px-4 border">{{ $ruangan->nomor_ruang }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
-</body>
-
-</html> --}}
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -135,13 +66,33 @@
         {{-- <p>Dengan segala pertimbangan maka surat tersebut <strong
                 style="text-transform: uppercase;">{{ $status }}</strong>.</p> --}}
 
-        @if ($statusSurat === 'diterima')
-            <p>Surat Anda telah <strong style="text-transform: uppercase">diterima</strong>. Anda telah diberikan izin untuk menggunakan ruang-ruang di
+        @php
+
+            // Memeriksa apakah status surat adalah 'Diterima' di tabel pivot ruangans
+            $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
+                return $ruangan->pivot->status === 'diterima';
+            });
+
+            // Memeriksa apakah status surat adalah 'Ditolak' di tabel pivot ruangans
+            $statusDitolak = $surat->ruangans->contains(function ($ruangan) {
+                return $ruangan->pivot->status === 'ditolak';
+            });
+        @endphp
+
+        @if ($statusDiterima)
+            <p>Surat Anda telah <strong style="text-transform: uppercase">diterima</strong>. Anda telah diberikan izin
+                untuk menggunakan ruang-ruang di
                 UPT TIK.</p>
-        @elseif ($statusSurat === 'ditolak')
-            <p>Surat Anda telah <strong style="text-transform: uppercase">ditolak</strong>. Mohon maaf, izin untuk menggunakan ruang-ruang di UPT TIK
+        @elseif ($statusSurat === 'ditolak' || $statusDitolak)
+            <p>Surat Anda telah <strong style="text-transform: uppercase">ditolak</strong>. Mohon maaf, izin untuk
+                menggunakan ruang-ruang di UPT TIK
                 tidak dapat diberikan.</p>
-            <p>Alasan ditolak : {{ $alasanSurat }}</p>
+                @if ($statusSurat === 'ditolak')
+                <p>Alasan ditolak : {{ $alasanSurat }}</p>
+                @endif
+                @if ($statusDitolak)
+                <p>Alasan Ditolak : Ruangan yang dipilih hilang.</p>
+                @endif
         @endif
 
         @if ($statusDiterima)

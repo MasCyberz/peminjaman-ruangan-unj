@@ -159,21 +159,14 @@ class RuanganController extends Controller
             // }
 
             if ($request->has('fasilitas')) {
-                $fasilitas = $request->input('fasilitas');
-                foreach ($fasilitas['nama_fasilitas'] as $key => $namaFasilitas) {
-                    // Cek apakah fasilitas sudah ada, jika iya update, jika tidak buat baru
-                    $fasilitasObj = $ruangan->fasilitas()->where('nama_fasilitas', $namaFasilitas)->first();
-                    if ($fasilitasObj) {
-                        $fasilitasObj->update([
-                            'jumlah' => $fasilitas['jumlah'][$key],
-                        ]);
-                    } else {
-                        fasilitas::create([
-                            'nama_fasilitas' => $namaFasilitas,
-                            'jumlah' => $fasilitas['jumlah'][$key],
-                            'ruangans_id' => $ruangan->id,
-                        ]);
-                    }
+                $fasilitasInput = $request->input('fasilitas');
+                foreach ($fasilitasInput['nama_fasilitas'] as $key => $namaFasilitas) {
+                    // Cari fasilitas yang sesuai dengan nama dari input
+                    $fasilitas = $ruangan->fasilitas()->firstOrNew(['nama_fasilitas' => $namaFasilitas]);
+                    // Perbarui jumlah fasilitas
+                    $fasilitas->jumlah = $fasilitasInput['jumlah'][$key];
+                    // Simpan fasilitas
+                    $ruangan->fasilitas()->save($fasilitas);
                 }
             }
             return redirect('/admin/data-referensi')->with('success', 'Data ruangan berhasil diperbarui');

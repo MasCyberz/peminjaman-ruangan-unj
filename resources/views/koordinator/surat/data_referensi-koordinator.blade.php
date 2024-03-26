@@ -7,7 +7,7 @@
 
     <div class="w-[calc(100%-8rem)] h-full mx-auto py-3 px-4">
         @foreach ($ruanganList as $index => $ruang)
-            <div class="my-5 mx-auto rounded-lg shadow-all-side h-auto w-[80%] flex flex-col p-5 relative">
+            <div class="my-5 mx-auto rounded-lg shadow-all-side h-auto w-[80%] flex flex-col p-3 relative">
 
                 <div class="flex my-auto relative mx-5">
                     <div class="flex flex-col z-10 whitespace-nowrap">
@@ -37,7 +37,6 @@
                                             <span>{{ $fasilitas->nama_fasilitas }}</span>
                                         </li>
                                     @else
-                                        -
                                     @endif
                                 @endforeach
                             </ul>
@@ -45,11 +44,11 @@
 
                     </div>
                     {{-- <div class="right-0 mx-5 -z-0 flex-col w-[20rem]  absolute">
-                <img class="rounded-[50px]" src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}"
-                alt="">
-                </div> --}}
+                        <img class="rounded-[50px]" src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}"
+                        alt="">
+                    </div> --}}
 
-                    <div class="bg-slate-300 absolute right-0 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
+                    <div class="bg-slate-300 mb-5 relative -right-20 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
                         style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
 
                     </div>

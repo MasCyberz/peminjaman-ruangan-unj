@@ -7,6 +7,7 @@ use App\Models\ruangan;
 use Illuminate\Http\Request;
 use App\Models\fasilitas;
 use App\Models\RuangPeminjaman;
+use Psy\Command\WhereamiCommand;
 
 class JaringanController extends Controller
 {
@@ -39,8 +40,10 @@ class JaringanController extends Controller
                     ->where(function ($query) use ($request) {
                         $query->whereBetween('mulai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam])
                             ->orWhereBetween('selesai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam]);
-                    });
-            })->get();
+                    })
+                    ->where('status', '!=', 'ditolak'); // Hanya ambil yang bukan 'ditolak'
+            })
+                ->get();
         } else {
             // Jika tidak ada filter yang digunakan, tampilkan semua ruangan
             $ruanganTersedia = $ruangan;
@@ -113,28 +116,53 @@ class JaringanController extends Controller
 
         // Periksa jadwal ruangan untuk setiap ruangan yang dipilih
         foreach ($validatedData['ruangan'] as $ruanganId) {
-            $ruangan = Ruangan::find($ruanganId);
-            $konflik = Ruangan::whereHas('surats', function ($query) use ($surat, $ruanganId) {
-                $query->where('ruangans_id', $ruanganId)
-                    ->where(function ($query) use ($surat) {
-                        $query->whereBetween('ruang_peminjaman.mulai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam])
-                            ->orWhereBetween('ruang_peminjaman.selesai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam]);
-                    });
-            })->exists();
+            // $ruangan = Ruangan::find($ruanganId);
+
+            // // Permasalahan jadwal
+            // $konflik = Ruangan::whereHas('surats', function ($query) use ($surat, $ruanganId) {
+            //     $query->where('ruangans_id', $ruanganId)
+            //         ->where(function ($query) use ($surat) {
+            //             $query->whereBetween('ruang_peminjaman.mulai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam])
+            //                 ->orWhereBetween('ruang_peminjaman.selesai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam]);
+            //         });
+            // })->exists();
 
             // Jika ada masalah pada ruangan dengan jadwal. Maka kembalikan dengan pesan kesalahan.
-            if ($konflik) {
-                return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruangan->nomor_ruang  . ' tidak tersedia pada jadwal yang dipilih.']);
-            }
-        }
+            // if ($konflik) {
+            //     $konflikDitolak = RuangPeminjaman::where('ruangans_id', $ruanganId)
+            //         ->where('status', 'ditolak')
+            //         ->where(function ($query) use ($surat) {
+            //             $query->whereBetween('mulai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam])
+            //                 ->orWhereBetween('selesai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam]);
+            //         })
+            //         ->exists();
 
-        // Menyimpan data peminjaman ruangan ke dalam database
-        foreach ($validatedData['ruangan'] as $ruanganId) {
+            //     if ($konflikDitolak) {
+            //         return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruangan->nomor_ruang  . ' tidak tersedia pada jadwal yang dipilih.']);
+            //     }
+            // }
+
+            // Periksa apakah ruangan pernah ditolak
+            $ruanganDitolak = RuangPeminjaman::where('ruangans_id', $ruanganId)
+                ->whereIn('status', ['pending', 'diterima']) // hanya memperhitungkan status pending dan diterima
+                ->where(function ($query) use ($surat) {
+                    $query->whereBetween('mulai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam])
+                        ->orWhereBetween('selesai_dipinjam', [$surat->mulai_dipinjam, $surat->selesai_dipinjam]);
+                })
+                ->exists();
+
+            if ($ruanganDitolak) {
+                // Tambahkan pesan kesalahan jika ruangan sudah dipinjam pada jadwal yang sama
+                return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruanganId . ' sudah dipinjam pada jadwal yang dipilih.']);
+            }
+
+            // Simpan data peminjaman ruangan ke dalam database
             $surat->ruangans()->attach($ruanganId, [
                 'mulai_dipinjam' => $surat->mulai_dipinjam,
                 'selesai_dipinjam' => $surat->selesai_dipinjam
             ]);
         }
+
         // Mengembalikan ke Tampilan
         return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil diajukan.');
     }
