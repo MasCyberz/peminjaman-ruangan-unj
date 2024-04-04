@@ -32,9 +32,9 @@ class KoordinatorController extends Controller
 
     public function pengajuan_store(Request $request, $suratId)
     {
-        
+
         $status = $request->status; // 'approved' atau 'rejected'
-        
+
         $surat = Surat::findOrFail($suratId);
 
         $fileToDelete = $surat->file_surat ; // Ganti dengan nama file yang ingin dihapus
@@ -52,15 +52,15 @@ class KoordinatorController extends Controller
         }
 
         if($status == 'ditolak'){
-            $surat->update(['status' => 'ditolak']);    
+            $surat->update(['status' => 'ditolak']);
         }
 
         if ($status == 'diterima') {
             $surat->update(['status' => 'diterima']);
         }
 
-        
-        return back()->with('success', 'Semua ruangan untuk surat ini telah ' . ($status == 'approved' ? 'diterima' : 'ditolak') . '.');
+
+        return back()->with('success', 'Permintaan Berhasil ' . ($status == 'diterima' ? 'diterima' : 'ditolak') . '.');
     }
 
     public function data_referensi()

@@ -59,7 +59,7 @@ class KepalaUptController extends Controller
             ->whereIn('ruang_peminjaman.status', ['pending', 'diterima'])
             ->get();
 
-        $warna = ['red', 'blue', 'green', 'yellow', 'orange'];
+        $warna = ['red', 'blue', 'green', 'orange'];
 
         $events = [];
 
@@ -90,30 +90,5 @@ class KepalaUptController extends Controller
         }
 
         return view('kepala-upt.kalender.kalender', compact('events'));
-    }
-
-    public function cobaFullCalendar()
-    {
-        // $ruangPeminjaman = RuangPeminjaman::get();
-        // $events = [];
-        // foreach ($ruangPeminjaman as $ruang) {
-        //         // 'start' => Carbon::parse($ruang->mulai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal mulai
-        //         // 'end' => Carbon::parse($ruang->selesai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal selesai
-        //         $start = Carbon::parse($ruang->mulai_dipinjam);
-        //         $end = Carbon::parse($ruang->selesai_dipinjam);
-
-        //         // menghitung durasi berapa lama
-        //         $duration = $end->diffInDays($start);
-        //         $end->addDays($duration);
-
-        //         // memasukkan data ke array
-        //         $events[] = [
-        //             'title' => 'nomor ruang',
-        //             'start' => $start->format('Y-m-d'),
-        //             'end' => $end->format('Y-m-d'),
-        //             'color' => 'red',
-        //         ];
-        // }
-        // return view('kepala-upt.surat.surat-pengajuan', compact('events'));
     }
 }

@@ -47,13 +47,14 @@
                         alt="">
                     </div> --}}
 
-                <div class="bg-slate-300 mb-5 relative -right-20 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
+                {{-- <div class="bg-slate-300 mb-5 relative -right-20 top-2 h-[15rem] w-[45%] rounded-3xl mx-auto bg-cover bg-center"
                     style="background-image: url({{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }})">
 
-                </div>
+                </div> --}}
 
-                {{-- <img src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}" class="bg-slate-300 h-[50%] w-1/2 rounded-3xl mx-auto bg-cover" alt="Deskripsi Gambar"> --}}
+                <img src="{{ asset('storage/foto_ruangan/' . $ruang->gambar_ruang) }}" class="bg-slate-300 absolute right-10 top-2 h-[15rem] w-[30rem] rounded-3xl " alt="Deskripsi Gambar">
             </div>
+            <div class="my-8"></div>
         </div>
     @endforeach
     <br>

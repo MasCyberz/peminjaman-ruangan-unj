@@ -152,8 +152,9 @@ class JaringanController extends Controller
                 ->exists();
 
             if ($ruanganDitolak) {
+                $ruangan = Ruangan::find($ruanganId);
                 // Tambahkan pesan kesalahan jika ruangan sudah dipinjam pada jadwal yang sama
-                return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruanganId . ' sudah dipinjam pada jadwal yang dipilih.']);
+                return back()->withErrors(['ruangan' => 'Ruangan dengan nomor ' . $ruangan->nomor_ruang . ' sudah dipinjam pada jadwal yang dipilih.']);
             }
 
             // Simpan data peminjaman ruangan ke dalam database

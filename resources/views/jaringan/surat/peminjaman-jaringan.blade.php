@@ -178,13 +178,13 @@
                                     <form action="{{ route('peminjaman_jaringan') }}" method="GET" class="flex flex-row items-center gap-3 my-3">
                                         <label for="mulai_dipinjam">Mulai : </label>
                                         <input type="date" id="mulai_dipinjam" name="mulai_dipinjam"
-                                            value="{{ $mulaiDipinjam ?? '' }}" min="{{ date('Y-m-d') }}">
+                                            value="{{ $mulaiDipinjam ?? '' }}">
 
                                         <p class="font-bold">-</p>
 
                                         <label for="selesai_dipinjam">Akhir : </label>
                                         <input type="date" id="selesai_dipinjam" name="selesai_dipinjam"
-                                            value="{{ $selesaiDipinjam ?? '' }}" min="{{ date('Y-m-d') }}">
+                                            value="{{ $selesaiDipinjam ?? '' }}">
 
                                         <button class="py-2 px-2 bg-blue-500 text-white rounded-lg">Filter</button>
                                     </form>
@@ -249,12 +249,6 @@
 
 
         {{-- Modal Tombol Detail start --}}
-
-
-
-
-
-
 
 
 

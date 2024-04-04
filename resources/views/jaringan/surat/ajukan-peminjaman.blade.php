@@ -82,7 +82,7 @@
                             <label
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                                 <input type="checkbox" name="ruangan[]" value="{{ $ruangan->id }}"
-                                    class="mr-3 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                    class="mr-3 text-sidebarunj border-gray-300 rounded focus:ring-sidebarunj">
                                 {{ $ruangan->nomor_ruang }}
                             </label>
                         @endforeach

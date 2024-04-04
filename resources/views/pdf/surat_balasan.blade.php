@@ -91,7 +91,7 @@
                 <p>Alasan ditolak : {{ $alasanSurat }}</p>
                 @endif
                 @if ($statusDitolak)
-                <p>Alasan Ditolak : Ruangan yang dipilih hilang.</p>
+                <p>Alasan Ditolak : Ruangan tidak bisa digunakan.</p>
                 @endif
         @endif
 

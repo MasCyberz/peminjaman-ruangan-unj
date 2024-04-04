@@ -7,7 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Praise&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js', 'resources/css/output3.css'])
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/output3.css') }}">
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js', 'resources/css/output3.css']) --}}
 </head>
 
 <body>
@@ -62,6 +64,9 @@
             </div>
         </div>
     </section>
+
+    <Script src="{{ asset('js/app.js') }}"></Script>
+    <Script src="{{ asset('js/main.js') }}"></Script>
 </body>
 
 </html>

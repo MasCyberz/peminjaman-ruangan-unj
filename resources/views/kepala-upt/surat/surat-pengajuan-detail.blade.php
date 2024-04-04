@@ -85,7 +85,7 @@
                             <div id="alasanPenolakan"
                                 class="hidden absolute right-0 top-24 items-center w-full p-10 bg-putihan rounded-lg shadow-all-side">
                                 <input type="text" name="alasan_penolakan" placeholder="Alasan penolakan"
-                                    class="bg-gray-300 px-3 w-[86%] py-2 rounded-md focus:border-none focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
+                                    class="bg-gray-300 px-3 w-[86%] py-2 rounded-md focus:border-none focus:outline-none focus:ring-2 focus:ring-sidebarunj mr-2" required>
                                 <button type="submit"
                                     class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-sm px-4 py-3 text-center transition-all duration-200 ease-in-out">Kirim</button>
                             </div>

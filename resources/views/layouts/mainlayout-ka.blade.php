@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js', 'resources/css/output3.css'])
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -102,7 +104,8 @@
                                     src="{{ asset('storage/foto_profile_akun/' . Auth::user()->image) }}"
                                     alt="">
                             @else
-                                <img src="{{ asset('./img/default_profile.png') }}" class="rounded-full w-10 h-10 ms-5">
+                                <img src="{{ asset('./img/default_profile.png') }}"
+                                    class="rounded-full w-10 h-10 ms-5">
                             @endif
                             <span
                                 class="me-5 ms-3 flex items-center font-medium text-lg capitalize">{{ Auth::user()->name }}</span>
@@ -149,6 +152,8 @@
 
             {{-- pop up logout-end --}}
 
+
+
             <script>
                 var time = new Date().getHours();
 
@@ -166,6 +171,8 @@
                     greetingElement.textContent = 'Selamat Malam, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
                 }
             </script>
+
+
 </body>
 
 </html>

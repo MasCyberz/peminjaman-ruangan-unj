@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/main.js', 'resources/css/output3.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+
+
+    {{-- @vite(['public/css/app.css', 'resources/js/app.js', 'public/js/main.js', 'public/css/output3.css']) --}}
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -175,6 +179,7 @@
             greetingElement.textContent = 'Selamat Malam, {{ Auth::user()->RelasiRoles->name }} UPT TIK';
         }
     </script>
+
 
 
 
