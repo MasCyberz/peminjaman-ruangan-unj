@@ -40,6 +40,6 @@ class SuratSeeder extends Seeder
         //     surat::create($peminjamanData);
         // }
 
-        surat::factory()->count(100)->create();
+        // surat::factory()->count(100)->create();
     }
 }
