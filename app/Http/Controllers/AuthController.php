@@ -21,12 +21,14 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-
-            Auth::user()->update([
-                'active' => true
-            ]);
-
-            return $this->redirectRole();
+            if (Auth::user()->active) {
+                return $this->redirectRole();
+            } else {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->with('loginError', 'Akun anda tidak aktif');
+            }
         }
 
         return back()->with('loginError', 'Email atau password salah.');
@@ -51,12 +53,6 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-
-        if (Auth::check()) {
-            Auth::user()->update([
-                'active' => false
-            ]);
-        }
 
         Auth::logout();
         $request->session()->invalidate();

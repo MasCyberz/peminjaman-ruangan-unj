@@ -41,7 +41,7 @@ Route::middleware(['auth', 'khusus_admin'])->group(function () {
     Route::get('admin/surat_delete/{id}', [SuratController::class, 'destroy'])->name('surat_delete');
     Route::get('admin/edit_surat/{id}', [SuratController::class, 'edit'])->name('edit_surat');
     Route::put('admin/surat_update/{id}', [SuratController::class, 'update'])->name('update_surat');
-    
+
     // Untuk Data Referensi
     Route::get('admin/data-referensi', [RuanganController::class, 'index'])->name('data-referensi');
     Route::get('admin/tambah-referensi', [RuanganController::class, 'create'])->name('tambah_ruangan');
@@ -61,6 +61,8 @@ Route::middleware(['auth', 'khusus_admin'])->group(function () {
     Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('management-users-edit');
     Route::put('admin/users/update/{id}', [UserController::class, 'update'])->name('management-users-update');
     Route::delete('admin/user/destroy/{id}', [UserController::class, 'destroy'])->name('management-user-destroy');
+    Route::post('admin/users/{id}/aktif', [UserController::class, 'aktifUser'])->name('aktif.user');
+    Route::post('admin/users/{id}/nonaktif', [UserController::class, 'nonAktifUser'])->name('nonaktif.user');
 });
 
 Route::middleware(['auth', 'khusus_ka'])->group(function () {

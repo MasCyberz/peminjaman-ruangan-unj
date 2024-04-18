@@ -155,4 +155,18 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('management-users')->with('success', 'Data user berhasil dihapus');
     }
+
+    public function aktifUser($id){
+        $user = User::find($id);
+        $user->active = true;
+        $user->save();
+        return redirect()->route('management-users')->with('success', 'User berhasil diaktifkan');
+    }
+
+    public function nonAktifUser($id){
+        $user = User::find($id);
+        $user->active = false;
+        $user->save();
+        return redirect()->route('management-users')->with('success', 'User berhasil dinonaktifkan');
+    }
 }

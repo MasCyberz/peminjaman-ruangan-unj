@@ -115,7 +115,7 @@
                                                 class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">Tidak Aktif</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm gap-2">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm">
                                         <a href="{{ route('management-users-edit', $item->id) }}">
                                             <button type="button"
                                                 class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
@@ -129,6 +129,19 @@
                                             <i class='bx bx-trash text-lg text-center me-1'></i>
                                             Hapus
                                         </button>
+                                        @if ($item->active)
+                                            <form action="{{ route('nonaktif.user', $item->id) }}" method="POST">
+                                                @csrf
+                                                <button class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">Non-Aktif</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('aktif.user', $item->id) }}" method="POST">
+                                                @csrf
+                                                <button  class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                                                    Aktif
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
