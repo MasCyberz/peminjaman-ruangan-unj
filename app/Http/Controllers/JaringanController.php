@@ -29,43 +29,47 @@ class JaringanController extends Controller
         // Ambil isi yang ada di ruangan
         $ruangan = Ruangan::get();
 
-        // Ambil semua ID surat yang sedang dalam proses peminjaman
+        // // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
 
         // Ambil ruangan-ruangan yang tersedia (tidak ada dalam ruang_peminjaman) jika filter digunakan
-        if ($request->has('mulai_dipinjam') && $request->has('selesai_dipinjam')) {
-            $ruanganTersedia = Ruangan::whereNotIn('id', function ($query) use ($request) {
-                $query->select('ruangans_id')
-                    ->from('ruang_peminjaman')
-                    ->where(function ($query) use ($request) {
-                        $query->whereBetween('mulai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam])
-                            ->orWhereBetween('selesai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam]);
-                    })
-                    ->where('status', '!=', 'ditolak'); // Hanya ambil yang bukan 'ditolak'
-            })
-                ->get();
-        } else {
-            // Jika tidak ada filter yang digunakan, tampilkan semua ruangan
-            $ruanganTersedia = $ruangan;
-        }
+        // if ($request->has('mulai_dipinjam') && $request->has('selesai_dipinjam')) {
+        //     $ruanganTersedia = Ruangan::whereNotIn('id', function ($query) use ($request) {
+        //         $query->select('ruangans_id')
+        //             ->from('ruang_peminjaman')
+        //             ->where(function ($query) use ($request) {
+        //                 $query->whereBetween('mulai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam])
+        //                     ->orWhereBetween('selesai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam]);
+        //             })
+        //             ->where('status', '!=', 'ditolak'); // Hanya ambil yang bukan 'ditolak'
+        //     })
+        //         ->get();
+        // } else {
+        //     // Jika tidak ada filter yang digunakan, tampilkan semua ruangan
+        //     $ruanganTersedia = $ruangan;
+        // }
 
         // Ambil kata kunci pencarian dari form
         $limit = $request->input('numero', 10);
+
+        $suratSelesai = RuangPeminjaman::pluck('surat_id');
+
         // Mengambil dengan status surat = diterima
-        $surat = surat::where('status', 'diterima')
-            ->whereNotIn('id', $suratIdsPending)
-            ->where(function ($query) use ($request) {
+        $surat = surat::where('status', 'diterima')     
+
+        ->where(function ($query) use ($request) {
                 $query->where('nomor_surat', 'like', '%' . $request->keyword . '%')
                     ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%');
             })
-            ->orderby('created_at', 'asc')
+            ->orderByRaw("FIELD(id, " . implode(',', $suratIdsPending) . ") ASC, created_at ASC")
             ->paginate($limit);
         return view('jaringan.surat.peminjaman-jaringan', [
             'suratList' => $surat,
             'numero' => $request->input('numero'),
-            // 'ruanganList' => $ruangan,
             'peminjaman' => $suratIdsPending,
-            'ruanganList' => $ruanganTersedia
+            'suratSelesai' => $suratSelesai
+            // 'ruanganList' => $ruanganTersedia,
+            // 'ruanganList' => $ruangan,
         ]);
     }
 
