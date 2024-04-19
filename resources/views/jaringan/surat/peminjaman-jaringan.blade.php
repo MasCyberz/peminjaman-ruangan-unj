@@ -92,14 +92,17 @@
                                         <th scope="col"
                                             class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
                                             Surat Peminjaman</th>
-                                        <th scope="col"
-                                            class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
-                                            Aksi</th>
-                                    </tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                                Aksi</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                                Status</th>
+                                        </tr>
                                 </thead>
                                 <tbody class="">
                                     @foreach ($suratList as $surat)
-                                        <tr class="font-bold text-start">
+                                        <tr class="font-bold text-start {{  in_array($surat->id, $peminjaman) ? 'font-bold text-slate-400' : '' }}">
                                             <td
                                                 class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base">
                                                 <span>{{ $surat->nomor_surat }}</span>
@@ -109,9 +112,24 @@
                                                 class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center transition-all duration-300 ease-in-out">
                                                 <a href="/jaringan/detail-surat/{{ $surat->id }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
+                                                @if (!in_array($surat->id, $peminjaman))
                                                 <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
-                                                    Ruangan</a>
+                                                    Ruangan</a>   
+                                                @endif
+                                                
+                                            </td>
+                                            <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
+                                                @if ($suratSelesai->contains($surat->id))
+                                                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                    Tdk bisa diubah.
+                                               </div>
+
+                                               @else
+                                               <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
+                                                    Diterima Oleh KA.
+                                               </div>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -169,83 +187,7 @@
 
 
             {{-- Table Bawah start --}}
-            <div class="w-full h-1/2 mx-auto mt-10">
-                <div class="flex flex-col mx-5">
-                    <div class="-m-1.5 overflow-hidden">
-                        <div class="p-1.5 min-w-full inline-block align-middle">
-                            <div class="overflow-y-auto h-[500px]">
-                                <div class="">
-                                    <form action="{{ route('peminjaman_jaringan') }}" method="GET" class="flex flex-row items-center gap-3 my-3">
-                                        <label for="mulai_dipinjam">Mulai : </label>
-                                        <input type="date" id="mulai_dipinjam" name="mulai_dipinjam"
-                                            value="{{ $mulaiDipinjam ?? '' }}">
-
-                                        <p class="font-bold">-</p>
-
-                                        <label for="selesai_dipinjam">Akhir : </label>
-                                        <input type="date" id="selesai_dipinjam" name="selesai_dipinjam"
-                                            value="{{ $selesaiDipinjam ?? '' }}">
-
-                                        <button class="py-2 px-2 bg-blue-500 text-white rounded-lg">Filter</button>
-                                    </form>
-                                </div>
-
-
-                                <table class="min-w-full border border-gray-400">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2" scope="col"
-                                                class="px-0 mx-0 py-2 whitespace-nowrap border border-gray-400 text-center text-lg font-bold uppercase">
-                                                Nomor Ruangan</th>
-                                            <th colspan="2" scope="col"
-                                                class="px-6 py-2 whitespace-nowrap border border-gray-400 text-center text-lg font-bold uppercase">
-                                                Kapasitas</th>
-                                            <th rowspan="2" scope="col"
-                                                class="px-6 py-2 whitespace-nowrap border border-gray-400 text-center text-lg font-bold uppercase">
-                                                Status</th>
-                                        </tr>
-                                        <tr class="">
-                                            <th scope="col" class="border border-gray-400 px-0 mx-0 py-2">Orang</th>
-                                            <th scope="col" class="border border-gray-400 mx-0 px-0 py-2">PC</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="">
-                                        @foreach ($ruanganList as $ruangans)
-                                            <tr class="font-semibold text-start">
-                                                <td
-                                                    class="py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                    {{ $ruangans->nomor_ruang }}
-                                                </td>
-                                                <td
-                                                    class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                    {{ $ruangans->kapasitas_orang }}
-                                                </td>
-                                                <td
-                                                    class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                    {{ $ruangans->jml_pc }}
-                                                </td>
-                                                <td
-                                                    class="px-2 py-4 border-b whitespace-nowrap border-x border-gray-400 text-base text-center">
-                                                    <span class="uppercase bg-green-500 py-2 px-3 rounded-lg text-white">
-                                                        @if ($ruangans->status == 'tersedia')
-                                                            Tersedia
-                                                        @else
-                                                            Tidak Tersedia
-                                                        @endif
-                                                    </span>
-                                                </td>
-
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- table bawah end --}}
-        </div>
+            
 
 
         {{-- Modal Tombol Detail start --}}

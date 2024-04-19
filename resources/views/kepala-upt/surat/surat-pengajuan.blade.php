@@ -38,13 +38,13 @@
                             <thead>
                                 <tr>
                                     <th scope="col"
-                                        class="px-6 py-3 sticky top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                        class="px-6 py-3 top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
                                         No .</th>
                                     <th scope="col"
-                                        class="px-6 py-3 sticky top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                        class="px-6 py-3 top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
                                         Surat Peminjaman</th>
                                     <th scope="col"
-                                        class="px-6 py-3 sticky top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                        class="px-6 py-3 top-0 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
                                         Aksi</th>
                                 </tr>
                             </thead>

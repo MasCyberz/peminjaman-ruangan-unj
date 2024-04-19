@@ -17,10 +17,12 @@ class KepalaUptController extends Controller
 
     public function peminjaman()
     {
+        // Mengambil data dari table RuangPeminjaman. mengecek apakah surat_id ada atau tidak di table RuangPeminjaman
+        $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+
         $surat = surat::with('detailPeminjaman')
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        ->orderByRaw("FIELD(id, " . implode(',', $suratIdsPending) . ") ASC, created_at ASC")
+        ->paginate(15);
 
         // dd($surat);
 
