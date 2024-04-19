@@ -20,12 +20,16 @@ class KepalaUptController extends Controller
         // Mengambil data dari table RuangPeminjaman. mengecek apakah surat_id ada atau tidak di table RuangPeminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
 
-        $surat = surat::with('detailPeminjaman')
-        ->orderByRaw("FIELD(id, " . implode(',', $suratIdsPending) . ") ASC, created_at ASC")
-        ->paginate(15);
-
-        // dd($surat);
-
+        if (!empty($suratIdsPending)) {
+            $surat = surat::with('detailPeminjaman')
+                ->whereIn('status', $suratIdsPending)
+                ->orderByRaw("FIELD(id, " . implode(',', $suratIdsPending) . ") ASC, created_at ASC")
+                ->paginate(15);
+        } else{
+            $surat = surat::with('detailPeminjaman')
+            ->orderBy('created_at', 'ASC')
+            ->paginate(15);
+        }
 
         return view('kepala-upt.surat.surat-pengajuan',  ['suratList' => $surat]);
     }
@@ -34,7 +38,11 @@ class KepalaUptController extends Controller
     {
         $pengajuan = surat::with('detailPeminjaman')->FindOrFail($id);
 
-        return view('kepala-upt.surat.surat-pengajuan-detail', ['pengajuanList' => $pengajuan]);
+        if ($pengajuan) {
+            return view('kepala-upt.surat.surat-pengajuan-detail', ['pengajuanList' => $pengajuan]);
+        } else{
+            abort(404);
+        }
     }
 
     public function respond(Request $request, $id)

@@ -84,7 +84,11 @@
                 </div>
             </div>
             <div class="my-5">
+                @if ($suratList)
                 {{ $suratList->links('pagination::tailwind') }}
+                @else
+
+                @endif
             </div>
         </div>
     </div>
