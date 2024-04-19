@@ -24,12 +24,10 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">Nomor Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Asal Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Nama Peminjam</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">Tanggal Mulai Dipinjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Lama Peminjaman</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">Jumlah Ruang Dipinjam</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Detail Pinjaman</span>
                         </div>
                         <div class="flex flex-col z-10">
-                            <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
@@ -40,33 +38,16 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">{{ $pengajuanList->nomor_surat }}</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">{{ $pengajuanList->asal_surat }}</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">{{ $pengajuanList->nama_peminjam }}</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">
-                                @php
-                                    try {
-                                        $tanggal = \Carbon\Carbon::parse($pengajuanList->mulai_dipinjam);
-                                        echo $tanggal->format('d F Y', 'Asia/Jakarta');
-                                    } catch (\Exception $e) {
-                                        echo 'Invalid Date';
-                                    }
-                                @endphp
+                            <span class='block mt-3 mx-3 text-base font-semibold'>
+                                {{ $pengajuanList->jml_hari . ' hari' }}
                             </span>
-                            @php
-                                try {
-                                    $mulai = \Carbon\Carbon::parse($pengajuanList->mulai_dipinjam);
-                                    $selesai = \Carbon\Carbon::parse($pengajuanList->selesai_dipinjam);
-
-                                    // Menghitung selisih waktu dalam hitungan hari
-                                    $selisihHari = $selesai->diffInDays($mulai);
-
-                                    // Menambahkan jumlah hari peminjaman ke selisih hari
-                                    $hariPeminjaman = $selisihHari + 1; // ditambah 1 karena hari mulai juga dihitung
-
-                                    echo "<span class='block mt-3 mx-3 text-base font-semibold'> $hariPeminjaman hari </span>";
-                                } catch (\Exception $e) {
-                                    echo 'Invalid Date';
-                                }
-                            @endphp
-                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $pengajuanList->jml_ruang }}</span>
+                            <span class="block mt-3 mx-8 text-base font-semibold">
+                                @foreach ($pengajuanList->detailPeminjaman as $tgl )
+                                    <ul class="list-disc">
+                                        <li>{{ \Carbon\Carbon::parse($tgl->tanggal_peminjaman)->format('d F Y') . ' - ' . ($tgl->jml_ruang) . ' ruang.' }}</li>
+                                    </ul>
+                                @endforeach
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -85,7 +66,8 @@
                             <div id="alasanPenolakan"
                                 class="hidden absolute right-0 top-24 items-center w-full p-10 bg-putihan rounded-lg shadow-all-side">
                                 <input type="text" name="alasan_penolakan" placeholder="Alasan penolakan"
-                                    class="bg-gray-300 px-3 w-[86%] py-2 rounded-md focus:border-none focus:outline-none focus:ring-2 focus:ring-sidebarunj mr-2" required>
+                                    class="bg-gray-300 px-3 w-[86%] py-2 rounded-md focus:border-none focus:outline-none focus:ring-2 focus:ring-sidebarunj mr-2"
+                                    required>
                                 <button type="submit"
                                     class="bg-red-500 hover:bg-red-700 text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-sm px-4 py-3 text-center transition-all duration-200 ease-in-out">Kirim</button>
                             </div>

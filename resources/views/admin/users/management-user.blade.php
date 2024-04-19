@@ -79,7 +79,7 @@
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="odd:bg-white">
                                 <th scope="col"
@@ -115,7 +115,7 @@
                                                 class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">Tidak Aktif</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-2 whitespace-nowrap text-sm">
+                                    <td class="px-6 py-2">
                                         <a href="{{ route('management-users-edit', $item->id) }}">
                                             <button type="button"
                                                 class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
@@ -130,14 +130,14 @@
                                             Hapus
                                         </button>
                                         @if ($item->active)
-                                            <form action="{{ route('nonaktif.user', $item->id) }}" method="POST">
+                                            <form action="{{ route('nonaktif.user', $item->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">Non-Aktif</button>
                                             </form>
                                         @else
-                                            <form action="{{ route('aktif.user', $item->id) }}" method="POST">
+                                            <form action="{{ route('aktif.user', $item->id) }}" method="POST" class="inline">
                                                 @csrf
-                                                <button  class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                                                <button  class="text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
                                                     Aktif
                                                 </button>
                                             </form>

@@ -80,10 +80,10 @@
                                     Nama Peminjam</th>
                                 <th scope="col"
                                     class="px-6 py-3 whitespace-nowrap border border-black text-center text-xs font-medium uppercase">
-                                    Tanggal Peminjam</th>
+                                    Lama Peminjam</th>
                                 <th scope="col"
                                     class="px-6 py-3 whitespace-nowrap border border-black text-center text-xs font-medium uppercase">
-                                    Lama Peminjam</th>
+                                    Tanggal Peminjam</th>
                                 <th scope="col"
                                     class="px-6 py-3 whitespace-nowrap border border-black text-center text-xs font-medium uppercase">
                                     Jumlah Ruang</th>
@@ -102,7 +102,7 @@
                             @foreach ($suratList as $surat)
                                 <tr>
                                     <th class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        {{ $loop->iteration + $suratList->firstItem() - 1 }}</th>
+                                        {{ $loop->iteration }}</th>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
                                         {{ $surat->nomor_surat }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
@@ -110,29 +110,34 @@
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
                                         {{ $surat->nama_peminjam }}</td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        @php
-                                            try {
-                                                $tanggal = \Carbon\Carbon::parse($surat->mulai_dipinjam);
-                                                echo $tanggal->format('d-F-Y', 'Asia/Jakarta');
-                                            } catch (\Exception $e) {
-                                                echo 'Invalid Date';
-                                            }
-                                        @endphp
+                                        {{ $surat->jml_hari . ' hari' }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        @php
-                                            try {
-                                                $tanggal = \Carbon\Carbon::parse($surat->selesai_dipinjam);
-                                                echo $tanggal->format('d-F-Y', 'Asia/Jakarta');
-                                            } catch (\Exception $e) {
-                                                echo 'Invalid Date';
-                                            }
-                                        @endphp
+                                        @foreach ($surat->detailPeminjaman as $tanggal)
+                                            <ul class="list-disc">
+                                                <li>
+                                                    {{ $tanggal->tanggal_peminjaman }}
+                                                </li>
+                                            </ul>
+                                        @endforeach
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        {{ $surat->jml_ruang }}</td>
+                                        @foreach ($surat->detailPeminjaman as $ruang)
+                                            <ul class="list-disc">
+                                                <li>
+                                                    {{ $ruang->jml_ruang }}
+                                                </li>
+                                            </ul>
+                                        @endforeach
+                                    </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
-                                        {{ $surat->jml_pc }}
+                                        @foreach ($surat->detailPeminjaman as $pc)
+                                            <ul class="list-disc">
+                                                <li>
+                                                    {{ $pc->jml_pc }}
+                                                </li>
+                                            </ul>
+                                        @endforeach
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap border-x border-black text-sm">
                                         @php
@@ -189,7 +194,6 @@
                                             <a href="{{ route('edit_surat', ['id' => $surat->id]) }}"
                                                 class="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-2 text-center">Edit
                                                 Surat</a>
-                                        
                                         @endif
 
                                         {{-- Menampilkan tombol Print Out jika status sesuai --}}
@@ -210,7 +214,7 @@
 
         </div>
         <div class="my-5">
-            {{ $suratList->withQueryString()->links('pagination::tailwind') }}
+            {{-- {{ $suratList->withQueryString()->links('pagination::tailwind') }} --}}
         </div>
     </div>
     <!-- ContentReal End -->

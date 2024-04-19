@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Egulias\EmailValidator\Result\Reason\DetailedReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,11 +16,10 @@ class surat extends Model
         'nomor_surat',
         'asal_surat',
         'nama_peminjam',
-        'mulai_dipinjam',
-        'selesai_dipinjam',
-        'jml_ruang',
-        'jml_pc',
+        'jml_hari',
         'file_surat',
+        'status',
+        'alasan_penolakan'
     ];
 
 
@@ -27,5 +27,9 @@ class surat extends Model
     {
         return $this->belongsToMany(ruangan::class, 'ruang_peminjaman', 'surat_id', 'ruangans_id')
         ->withPivot('status');
+    }
+
+    public function detailPeminjaman(){
+        return $this->hasMany(DetailPeminjaman::class, 'surat_id', 'id');
     }
 }

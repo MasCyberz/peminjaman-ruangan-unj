@@ -43,12 +43,13 @@
                     readonly />
                 <label for="asal_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Selesai Dipinjam</label>
                 <input id="selesai_dipinjam" name="selesai_dipinjam" value="{{ $suratList->selesai_dipinjam }}"
-                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
+                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 mb-2"
                     readonly />
                 <input type="hidden" id="jml_pc" name="jml_pc" value="{{ $suratList->jml_pc }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
-                <input type="hidden" id="jml_ruang" name="jml_ruang" value="{{ $suratList->jml_ruang }}"
+                <label for="asal_surat" class="block mb-2   text-sm text-gray-900 font-semibold">Jumlah Ruang</label>
+                <input id="jml_ruang" name="jml_ruang" value="{{ $suratList->jml_ruang }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
                 <input type="hidden" id="status" name="status" value="{{ $suratList->status }}"

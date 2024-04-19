@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPeminjaman;
 use Dompdf\Dompdf;
 use App\Models\User;
 use App\Models\surat;
+use App\Models\TanggalPeminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,30 +32,35 @@ class SuratController extends Controller
 
     public function peminjaman(Request $request)
     {
+
+        $surat = surat::with(['detailPeminjaman'])->get();
+
+
+        return view('admin.surat.peminjaman', ['suratList' => $surat]);
         // Ambil kata kunci pencarian dari form
-        $search = $request->input('search');
+        // $search = $request->input('search');
 
         // Simpan kata kunci pencarian ke dalam sesi
-        $request->session()->put('search', $search);
+        // $request->session()->put('search', $search);
 
         // Ambil kata kunci pencarian dari sesi
-        $search = $request->session()->get('search');
+        // $search = $request->session()->get('search');
 
         // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
-        $surat = Surat::where(function ($query) use ($search) {
-            $query->where('nomor_surat', 'like', '%' . $search . '%')
-                ->orWhere('asal_surat', 'like', '%' . $search . '%')
-                ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
-        })->orderBy('created_at', 'desc')->paginate(10);
+        // $surat = Surat::where(function ($query) use ($search) {
+        //     $query->where('nomor_surat', 'like', '%' . $search . '%')
+        //         ->orWhere('asal_surat', 'like', '%' . $search . '%')
+        //         ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+        // })->orderBy('created_at', 'desc')->paginate(10);
 
         // Setelah mengambil hasil pencarian, hapus kata kunci pencarian dari sesi
-        $request->session()->forget('search');
+        // $request->session()->forget('search');
 
         // Tampilkan hasil pencarian ke tampilan
-        return view('admin.surat.peminjaman', ['suratList' => $surat]);
+        // return view('admin.surat.peminjaman', ['suratList' => $surat]);
 
         // Tampilkan hasil pencarian ke tampilan
-        return view('admin.surat.peminjaman', ['suratList' => $surat]);
+        // return view('admin.surat.peminjaman', ['suratList' => $surat]);
     }
 
     /**
@@ -69,27 +76,26 @@ class SuratController extends Controller
      */
     public function store_peminjaman(Request $request)
     {
-        $namaBaru = '';
+        // $namaBaru = '';
 
-        $request->validate(
-            [
-                'file' => 'required|mimes:pdf|max:2048',
-                'nomor_surat' => 'required',
-                'asal_surat' => 'required',
-                'nama_peminjam' => 'required',
-                'mulai_dipinjam' => 'required',
-                'selesai_dipinjam' => 'required',
-                'jml_ruang' => 'required|numeric',
-                'jml_pc' => 'required|numeric',
-
-            ],
-            [
-                'required' => ' :attribute harus diisi',
-                'file.mimes' => 'File harus berupa PDF',
-                'jml_pc.required' => 'Jumlah PC harus diisi',
-                'jml_ruang.required' => 'Jumlah Ruang harus diisi',
-            ]
-        );
+        $validatedData = $request->validate([
+            'file' => 'required|mimes:pdf|max:2048',
+            'nomor_surat' => 'required',
+            'asal_surat' => 'required',
+            'nama_peminjam' => 'required',
+            'jml_ruang' => 'required|min:1',
+            'jml_pc' => 'required|min:1',
+            'jml_hari' => 'required|min:1',
+            'tanggal_peminjaman' => 'required',
+        ],[
+            'required' => ' :attribute harus diisi',
+            'file.mimes' => 'File harus berupa PDF',
+            'file.max' => 'File maksimal 2 MB',
+            'jml_pc.min' => 'Jumlah PC harus lebih dari 0',
+            'jml_ruang.min' => 'Jumlah Ruang harus lebih dari 0',
+            'jml_hari.min' => 'Jumlah Hari harus lebih dari 0',
+            'jml_hari.required' => 'Jumlah Hari harus diisi',
+        ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -104,12 +110,26 @@ class SuratController extends Controller
             return redirect()->back()->with('error', 'File harus diunggah.')->withErrors(['file' => 'File harus diunggah']);
         }
 
-        $request['status'] = 'pending';
+        $surat = surat::create([
+            'nomor_surat' => $validatedData['nomor_surat'],
+            'asal_surat' => $validatedData['asal_surat'],
+            'nama_peminjam' => $validatedData['nama_peminjam'],
+            'jml_hari' => $validatedData['jml_hari'],
+            'file_surat' => $namaBaru,
+            'status' => 'pending',
+        ]);
 
-        $request['file_surat'] = $namaBaru;
+        foreach ($request->tanggal_peminjaman as $index => $tanggal) {
+            $ruangan = $request->jml_ruang[$index];
+            $pc = $request->jml_pc[$index];
 
-        $surat = surat::create($request->all());
-
+            DetailPeminjaman::create([
+                'surat_id' => $surat->id,
+                'tanggal_peminjaman' => $tanggal,
+                'jml_ruang' => $ruangan,
+                'jml_pc' => $pc,
+            ]);
+        }
         return redirect('/admin/peminjaman')->with('success', 'Surat Berhasil Ditambahkan');
     }
 

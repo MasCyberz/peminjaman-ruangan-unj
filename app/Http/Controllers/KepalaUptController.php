@@ -17,7 +17,8 @@ class KepalaUptController extends Controller
 
     public function peminjaman()
     {
-        $surat = surat::where('status', 'pending')
+        $surat = surat::with('detailPeminjaman')
+            ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
@@ -29,7 +30,7 @@ class KepalaUptController extends Controller
 
     public function show_peminjaman($id)
     {
-        $pengajuan = surat::FindOrFail($id);
+        $pengajuan = surat::with('detailPeminjaman')->FindOrFail($id);
 
         return view('kepala-upt.surat.surat-pengajuan-detail', ['pengajuanList' => $pengajuan]);
     }

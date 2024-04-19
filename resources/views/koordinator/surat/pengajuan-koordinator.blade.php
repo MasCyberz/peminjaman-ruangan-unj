@@ -214,8 +214,11 @@
                     <div class="flex items-center justify-center py-3 px-5 border-t border-gray-200 rounded-b">
                         <div class="bg-yellow-200 px-3 py-2 rounded-lg">
                             <span class="">Status :
-                                <span class="uppercase">{{ $ruangan->pivot->status }}
+                                @if ($ruangan->pivot->status == 'pending')
+                                <span class="uppercase">
+                                    Pending
                                 </span>
+                                @endif
                             </span>
                         </div>
 
