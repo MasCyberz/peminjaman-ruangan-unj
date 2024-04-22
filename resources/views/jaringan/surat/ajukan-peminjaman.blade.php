@@ -12,7 +12,7 @@
             @if ($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-2" role="alert">
                     <strong class="font-bold">Whoops!</strong>
-                    <span class="block sm:inline">{{ $errors}}</span>
+                    <span class="block sm:inline">{{ $errors->first() }}</span>
                 </div>
             @endif
             <div class="flex border-b-2 border-black w-full font-semibold mb-3">
@@ -55,8 +55,8 @@
 
             @foreach ($suratList->detailPeminjaman as $surat)
                 <div class="mb-4">
+                    <input type="hidden" name="tanggal_peminjaman[]" value="{{ $surat->tanggal_peminjaman }}">
                     <h3 class="text-lg font-semibold mb-2">Tanggal: {{ \Carbon\Carbon::parse($surat->tanggal_peminjaman)->format('d F Y') }}</h3>
-                    <input type="hidden" id="tanggal_peminjaman" name="tanggal_peminjaman[{{ $surat->tanggal_peminjaman }}]" value="{{ $surat->tanggal_peminjaman }}">
 
 
                     <!-- Dropdown Component -->
@@ -94,12 +94,12 @@
                     </div>
                     <div class="mt-2">
                         <label for="jml_ruang" class="block text-gray-700 font-semibold mb-2">Jumlah Ruangan:</label>
-                        <input type="number" name="jml_ruang" id="jml_ruang" value="{{ $surat->jml_ruang }}"
+                        <input type="number" name="jml_ruang[{{ $surat->tanggal_peminjaman }}][]" id="jml_ruang" value="{{ $surat->jml_ruang }}"
                             class="w-full px-4 py-2 border rounded-md" readonly>
                     </div>
                     <div>
                         <label for="jml_pc" class="block text-gray-700 font-semibold mb-2">Jumlah PC:</label>
-                        <input type="number" name="jml_pc" value="{{ $surat->jml_pc }}" readonly id="jml_pc"
+                        <input type="number" name="jml_pc[{{ $surat->tanggal_peminjaman }}][]" value="{{ $surat->jml_pc }}" readonly id="jml_pc"
                             class="w-full px-4 py-2 border rounded-md">
                     </div>
                 </div>

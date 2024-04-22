@@ -15,9 +15,8 @@ class RuangPeminjaman extends Model
     protected $fillable = [
         'surat_id',
         'ruangans_id',
-        'mulai_dipinjam',
-        'selesai_dipinjam',
+        'tanggal_peminjaman'
     ];
 
-    
+
 }

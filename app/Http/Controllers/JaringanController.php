@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\surat;
 use App\Models\ruangan;
-use Illuminate\Http\Request;
 use App\Models\fasilitas;
+use Illuminate\Http\Request;
 use App\Models\RuangPeminjaman;
-use Psy\Command\WhereamiCommand;
+use App\Models\DetailPeminjaman;
+use Illuminate\Validation\Validator;
+use Illuminate\Auth\Events\Validated;
 
 class JaringanController extends Controller
 {
@@ -166,31 +168,35 @@ class JaringanController extends Controller
         //         ]);
         //     }
         // }
-// Validasi data yang dikirimkan
+        // Validasi data yang dikirimkan
 
-
-        // Validasi request
-        $request->validate([
-            'ruangan.*' => 'required|array',
+        $validatedData = $request->validate([
+            'ruangan.*' => 'required|exists:ruangans,id',
+            'ruangan' => 'array',
+            'tanggal_peminjaman.*' => 'required|date',
         ]);
 
-        // Ambil data dari request
-        $tanggalPeminjaman = $request->input('tanggal_peminjaman');
-        $ruangan = $request->input('ruangan');
+        foreach ($request->tanggal_peminjaman as $index => $tanggal_peminjaman) {
+            $ruanganIds = $request->ruangan[$tanggal_peminjaman];
+            $totalRuanganDipinjam = count($ruanganIds); // Menghitung jumlah ruangan yang dipinjam
 
-        // Looping untuk setiap tanggal peminjaman
-        foreach ($tanggalPeminjaman as $tanggal => $ruanganPeminjaman) {
-            // Looping untuk setiap ruangan yang dipilih pada tanggal tertentu
-            foreach ($ruanganPeminjaman as $ruanganId) {
-                // Simpan data ke dalam tabel pivot
-                RuangPeminjaman::create([
-                    'surat_id' => $suratId,
-                    'ruangans_id' => $ruanganId,
-                    'tanggal_peminjaman' => $tanggal,
-                ]);
+            $detailPeminjaman = DetailPeminjaman::where('tanggal_peminjaman', $tanggal_peminjaman)->first();
+            $jumlah_ruangan_diminta = $detailPeminjaman->jml_ruang; // Mengambil jumlah ruangan yang diminta pada tanggal tertentu
+
+            if ($totalRuanganDipinjam !== $jumlah_ruangan_diminta) {
+                // Jumlah ruangan yang dipinjam tidak sesuai dengan yang diminta pada tanggal ini
+                // Anda dapat menampilkan pesan error atau melakukan tindakan lain sesuai kebutuhan
+                return redirect()->back()->withErrors('Jumlah ruangan yang dipilih tidak sesuai dengan jumlah ruang yang diperlukan untuk surat ini.');
+            }
+
+            foreach ($ruanganIds as $ruanganId) {
+                $ruangPeminjaman = new RuangPeminjaman();
+                $ruangPeminjaman->surat_id = $suratId; // sesuaikan dengan nama input yang sesuai
+                $ruangPeminjaman->ruangans_id = $ruanganId;
+                $ruangPeminjaman->tanggal_peminjaman = $tanggal_peminjaman;
+                $ruangPeminjaman->save();
             }
         }
-
         // Mengembalikan ke Tampilan
         return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil diajukan.');
     }

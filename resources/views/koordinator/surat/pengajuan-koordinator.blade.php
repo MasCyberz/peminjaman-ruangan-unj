@@ -54,7 +54,6 @@
                     </tr>
                 </tbody>
             </table> --}}
-
             @foreach ($permintaanRuang as $surat)
                 <table class="text-gray-900 w-[90%] table-fixed">
                     <tbody class="border-y border-gray-400 text-left">
@@ -202,10 +201,11 @@
 
                     <div class="py-1.5 px-5 space-y-4">
                         <div class="flex gap-2">
-                            <h2 class="text-lg whitespace-nowrap">Ruangan yang di request :</h2>
+                            <h2 class="text-lg whitespace-nowrap">Detail Pengajuan :</h2>
                             <div class="text-lg space-y-4 flex flex-col mx-2">
                                 @foreach ($surat->ruangans as $ruangan)
                                     <span>Ruangan : {{ $ruangan->nomor_ruang }}</span>
+
                                 @endforeach
                             </div>
                         </div>

@@ -14,18 +14,20 @@ class KoordinatorController extends Controller
 
     public function index()
     {
-        $permintaanRuang = surat::with('ruangans')->whereHas('ruangans', function ($query) {
-            $query->where('ruang_peminjaman.status', 'pending');
-        })->count();
+        $permintaanRuang = surat::with('ruangans')
+            ->whereHas('ruangans', function ($query) {
+                $query->where('ruang_peminjaman.status', 'pending');
+            })->count();
         return view('koordinator.surat.index', ['permintaanRuang' => $permintaanRuang]);
     }
 
     public function pengajuan()
     {
-
-        $permintaanRuang = surat::with('ruangans')->whereHas('ruangans', function ($query) {
+        $permintaanRuang = surat::with(['ruangans', 'detailPeminjaman'])->whereHas('ruangans', function ($query) {
             $query->where('ruang_peminjaman.status', 'pending');
         })->get();
+
+        dd($permintaanRuang);
 
         return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $permintaanRuang]);
     }
@@ -37,7 +39,7 @@ class KoordinatorController extends Controller
 
         $surat = Surat::findOrFail($suratId);
 
-        $fileToDelete = $surat->file_surat ; // Ganti dengan nama file yang ingin dihapus
+        $fileToDelete = $surat->file_surat; // Ganti dengan nama file yang ingin dihapus
         $path = 'public/file_surat/' . $fileToDelete;
 
         // Update status semua ruangan yang terkait dengan surat
@@ -45,13 +47,13 @@ class KoordinatorController extends Controller
             $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => $status]);
         }
 
-        if($status){
-            if($surat->file_surat){
+        if ($status) {
+            if ($surat->file_surat) {
                 Storage::delete($path);
             }
         }
 
-        if($status == 'ditolak'){
+        if ($status == 'ditolak') {
             $surat->update(['status' => 'ditolak']);
         }
 
