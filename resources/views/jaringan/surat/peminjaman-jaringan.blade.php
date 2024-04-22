@@ -92,17 +92,18 @@
                                         <th scope="col"
                                             class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
                                             Surat Peminjaman</th>
-                                            <th scope="col"
-                                                class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
-                                                Aksi</th>
-                                            <th scope="col"
-                                                class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
-                                                Status</th>
-                                        </tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                            Aksi</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 whitespace-nowrap border border-gray-400 text-center text-lg font-semibold uppercase">
+                                            Status</th>
+                                    </tr>
                                 </thead>
                                 <tbody class="">
                                     @foreach ($suratList as $surat)
-                                        <tr class="font-bold text-start {{  in_array($surat->id, $peminjaman) ? 'font-bold text-slate-400' : '' }}">
+                                        <tr
+                                            class="font-bold text-start {{ in_array($surat->id, $peminjaman) ? 'font-bold text-slate-400' : '' }}">
                                             <td
                                                 class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base">
                                                 <span>{{ $surat->nomor_surat }}</span>
@@ -113,22 +114,23 @@
                                                 <a href="/jaringan/detail-surat/{{ $surat->id }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
                                                 @if (!in_array($surat->id, $peminjaman))
-                                                <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
-                                                    class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
-                                                    Ruangan</a>   
+                                                    <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
+                                                        class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
+                                                        Ruangan</a>
                                                 @endif
-                                                
+
                                             </td>
                                             <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
                                                 @if ($suratSelesai->contains($surat->id))
-                                                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
-                                                    Tdk bisa diubah.
-                                               </div>
-
-                                               @else
-                                               <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
-                                                    Diterima Oleh KA.
-                                               </div>
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                        Tdk bisa diubah.
+                                                    </div>
+                                                @else
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
+                                                        Diterima Oleh KA.
+                                                    </div>
                                                 @endif
                                             </td>
                                         </tr>
@@ -187,11 +189,11 @@
 
 
             {{-- Table Bawah start --}}
-            
-
-
-        {{-- Modal Tombol Detail start --}}
 
 
 
-    @endsection
+            {{-- Modal Tombol Detail start --}}
+
+
+
+        @endsection

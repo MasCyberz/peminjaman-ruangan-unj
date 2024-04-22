@@ -24,12 +24,10 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">Nomor Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Asal Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Nama Peminjam</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">Tanggal Peminjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Lama Peminjaman</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">Jumlah Ruang</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Detail Peminjaman</span>
                         </div>
                         <div class="flex flex-col z-10">
-                            <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
@@ -42,40 +40,22 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->asal_surat }}</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->nama_peminjam }}</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">
-                                @php
-                                    try {
-                                        $tanggal = \Carbon\Carbon::parse($suratList->mulai_dipinjam);
-                                        echo $tanggal->format('d F Y', 'Asia/Jakarta');
-                                    } catch (\Exception $e) {
-                                        echo 'Invalid Date';
-                                    }
-                                @endphp
-
+                                {{ $suratList->jml_hari . ' hari' }}
                             </span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">
-                                @php
-                                    try {
-                                        $mulai = \Carbon\Carbon::parse($suratList->mulai_dipinjam);
-                                        $selesai = \Carbon\Carbon::parse($suratList->selesai_dipinjam);
-
-                                        // Menghitung selisih waktu dalam hitungan hari
-                                        $selisihHari = $selesai->diffInDays($mulai);
-
-                                        // Menambahkan jumlah hari peminjaman ke selisih hari
-                                        $hariPeminjaman = $selisihHari + 1; // ditambah 1 karena hari mulai juga dihitung
-
-                                        echo $hariPeminjaman . ' hari';
-                                    } catch (\Exception $e) {
-                                        echo 'Invalid Date';
-                                    }
-                                @endphp
+                            <span class="block mt-3 mx-8 text-base font-semibold">
+                                @foreach ($suratList->detailPeminjaman as $tgl)
+                                    <ul class="list-disc">
+                                        <li>{{ \Carbon\Carbon::parse($tgl->tanggal_peminjaman)->format('d F Y') . ' - ' . $tgl->jml_ruang . ' ruang.' }}
+                                        </li>
+                                    </ul>
+                                @endforeach
                             </span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->jml_ruang }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center ps-8 p-4 rounded-b">
-                    <a href="{{ asset('storage/file_surat/' . $suratList->file_surat) }}" data-modal-hide="static-modal" type="button" target="_blank"
+                    <a href="{{ asset('storage/file_surat/' . $suratList->file_surat) }}" data-modal-hide="static-modal"
+                        type="button" target="_blank"
                         class="bg-gray-300 hover:bg-gray-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center transition-all duration-200 ease-in-out">Surat
                         Pengajuan</a>
                 </div>
@@ -88,8 +68,8 @@
 
 
 
-        </div>
     </div>
-</div>
+    </div>
+    </div>
 
 @endsection

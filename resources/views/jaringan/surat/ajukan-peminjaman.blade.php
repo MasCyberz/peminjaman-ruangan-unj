@@ -12,7 +12,7 @@
             @if ($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-2" role="alert">
                     <strong class="font-bold">Whoops!</strong>
-                    <span class="block sm:inline">{{ $errors->first('ruangan') }}</span>
+                    <span class="block sm:inline">{{ $errors}}</span>
                 </div>
             @endif
             <div class="flex border-b-2 border-black w-full font-semibold mb-3">
@@ -34,15 +34,11 @@
             </div>
 
             <div class="mb-2">
-                <input type="hidden" id="nama_peminjam" name="nama_peminjam" value="{{ $suratList->nama_peminjam }}"
+                {{-- <input type="hidden" id="nama_peminjam" name="nama_peminjam" value="{{ $suratList->nama_peminjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
-                <label for="asal_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Mulai Dipinjam</label>
+                <label for="asal_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Tanggal Peminjaman</label>
                 <input id="mulai_dipinjam" name="mulai_dipinjam" value="{{ $suratList->mulai_dipinjam }}"
-                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 mb-2"
-                    readonly />
-                <label for="asal_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Selesai Dipinjam</label>
-                <input id="selesai_dipinjam" name="selesai_dipinjam" value="{{ $suratList->selesai_dipinjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5 mb-2"
                     readonly />
                 <input type="hidden" id="jml_pc" name="jml_pc" value="{{ $suratList->jml_pc }}"
@@ -54,42 +50,60 @@
                     readonly />
                 <input type="hidden" id="status" name="status" value="{{ $suratList->status }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
-                    readonly />
+                    readonly /> --}}
             </div>
 
-            <!-- Dropdown Component -->
-            <div x-data="{ open: false }" @click.away="open = false" class="relative">
-                <!-- Trigger -->
-                <button @click="open = !open" type="button"
-                    class="px-4 py-2 mt-5 flex items-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    Pilih Ruangan
-                    <!-- Icon -->
-                    <svg :class="{ 'rotate-180': open }" class="w-4 h-4 ml-2 transform transition-transform"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <!-- Dropdown Body -->
-                <div x-show="open" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-95"
-                    class="absolute z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <div class="py-1">
-                        <!-- Options -->
-                        @foreach ($ruanganTersedia as $ruangan)
-                            <label
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                                <input type="checkbox" name="ruangan[]" value="{{ $ruangan->id }}"
-                                    class="mr-3 text-sidebarunj border-gray-300 rounded focus:ring-sidebarunj">
-                                {{ $ruangan->nomor_ruang }}
-                            </label>
-                        @endforeach
+            @foreach ($suratList->detailPeminjaman as $surat)
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Tanggal: {{ \Carbon\Carbon::parse($surat->tanggal_peminjaman)->format('d F Y') }}</h3>
+                    <input type="hidden" id="tanggal_peminjaman" name="tanggal_peminjaman[{{ $surat->tanggal_peminjaman }}]" value="{{ $surat->tanggal_peminjaman }}">
+
+
+                    <!-- Dropdown Component -->
+                    <div x-data="{ open: false }" @click.away="open = false" class="relative">
+                        <!-- Trigger -->
+                        <button @click="open = !open" type="button"
+                            class="px-4 py-2 mt-5 flex items-center bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            Pilih Ruangan
+                            <!-- Icon -->
+                            <svg :class="{ 'rotate-180': open }" class="w-4 h-4 ml-2 transform transition-transform"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown Body -->
+                        <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <!-- Options -->
+                                @foreach ($ruanganTersedia as $ruangan)
+                                    <label
+                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                        <input type="checkbox" name="ruangan[{{ $surat->tanggal_peminjaman }}][]" value="{{ $ruangan->id }}"
+                                            class="mr-3 text-sidebarunj border-gray-300 rounded focus:ring-sidebarunj">
+                                        {{ $ruangan->nomor_ruang }}
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label for="jml_ruang" class="block text-gray-700 font-semibold mb-2">Jumlah Ruangan:</label>
+                        <input type="number" name="jml_ruang" id="jml_ruang" value="{{ $surat->jml_ruang }}"
+                            class="w-full px-4 py-2 border rounded-md" readonly>
+                    </div>
+                    <div>
+                        <label for="jml_pc" class="block text-gray-700 font-semibold mb-2">Jumlah PC:</label>
+                        <input type="number" name="jml_pc" value="{{ $surat->jml_pc }}" readonly id="jml_pc"
+                            class="w-full px-4 py-2 border rounded-md">
                     </div>
                 </div>
-            </div>
+            @endforeach
 
             <div class="flex gap-2 mt-3 items-center">
                 <a class="ms-auto text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-2xl text-sm sm:w-auto px-5 py-2.5 text-center shadow-[0_4px_4px_1px_rgba(0,0,0,0.3)]"
@@ -109,8 +123,8 @@
                             data-modal-hide="ajukan-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
