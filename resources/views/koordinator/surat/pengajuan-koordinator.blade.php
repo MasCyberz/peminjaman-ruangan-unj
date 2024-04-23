@@ -216,7 +216,7 @@
                             <span class="">Status :
                                 @if ($ruangan->pivot->status == 'pending')
                                 <span class="uppercase">
-                                    Pending
+                                    Disetujui oleh KA dan Jaringan
                                 </span>
                                 @endif
                             </span>

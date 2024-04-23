@@ -46,7 +46,7 @@
     </header>
     <hr>
     <main>
-        <p style="text-align: right">{{ $tanggal }}</p>
+        <p style="text-align: right">{{ $tanggalNow }}</p>
         <p>Kepada Mahasiswa/Peminjam,</p>
         <p>{{ $namaPeminjam }}</p>
         <p><strong>Perihal:</strong> Konfirmasi Permohonan Penggunaan Ruang</p>
@@ -59,8 +59,13 @@
             <li>Asal Surat: {{ $asalSurat }}</li>
             <li>Jumlah Ruang: {{ $jmlRuang }}</li>
             <li>Jumlah PC: {{ $jmlPc }}</li>
-            <li>Tanggal: {{ \Carbon\Carbon::parse($mulaiDipinjam)->format('d F Y') }} -
-                {{ \Carbon\Carbon::parse($selesaiDipinjam)->format('d F Y') }}</li>
+            {{-- <li>Tanggal:
+                @foreach ($tgglPeminjaman as $item)
+                <ul>
+                    <li>{{ \Carbon\Carbon::parse($item)->format('d F Y') }}</li>
+                </ul>
+                @endforeach
+            </li> --}}
         </ul>
 
         {{-- <p>Dengan segala pertimbangan maka surat tersebut <strong
@@ -87,19 +92,24 @@
             <p>Surat Anda telah <strong style="text-transform: uppercase">ditolak</strong>. Mohon maaf, izin untuk
                 menggunakan ruang-ruang di UPT TIK
                 tidak dapat diberikan.</p>
-                @if ($statusSurat === 'ditolak')
+            @if ($statusSurat === 'ditolak')
                 <p>Alasan ditolak : {{ $alasanSurat }}</p>
-                @endif
-                @if ($statusDitolak)
+            @endif
+            @if ($statusDitolak)
                 <p>Alasan Ditolak : Ruangan tidak bisa digunakan.</p>
-                @endif
+            @endif
         @endif
 
         @if ($statusDiterima)
             <p>Selanjutnya, berikut rincian ruang yang telah disetujui untuk penggunaan:</p>
             <ul>
-                @foreach ($ruangans as $ruangan)
-                    <li>Ruang : {{ $ruangan->nomor_ruang }}</li>
+                @foreach ($peminjamanruang as $item => $value)
+                    <li>{{ \Carbon\Carbon::parse($item)->format('d F Y') }}</li>
+                    <ul>
+                        @foreach ($value as $t)
+                            <li>{{ $t }}</li>
+                        @endforeach
+                    </ul>
                 @endforeach
             </ul>
         @endif

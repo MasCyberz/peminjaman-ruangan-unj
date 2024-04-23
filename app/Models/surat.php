@@ -26,7 +26,7 @@ class surat extends Model
     public function ruangans()
     {
         return $this->belongsToMany(ruangan::class, 'ruang_peminjaman', 'surat_id', 'ruangans_id')
-        ->withPivot('status');
+        ->withPivot('status', 'tanggal_peminjaman');
     }
 
     public function detailPeminjaman(){

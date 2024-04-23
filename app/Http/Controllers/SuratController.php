@@ -142,10 +142,11 @@ class SuratController extends Controller
     {
 
         // Mengambil data surat berdasarkan $suratId beserta relasinya
-        $surat = Surat::with(['ruangans' => function ($query) {
-            $query->withPivot('mulai_dipinjam', 'selesai_dipinjam', 'status'); // Mengambil kolom-kolom tambahan dari pivot table
-        }])->findOrFail($suratId);
+        // $surat = Surat::with(['ruangans', 'detailPeminjaman' => function ($query) {
+        //     $query->withPivot('tanggal_peminjaman', 'status'); // Mengambil kolom-kolom tambahan dari pivot table
+        // }])->findOrFail($suratId);
 
+        $surat = Surat::with(['ruangans', 'detailPeminjaman'])->findOrFail($suratId);
 
         $statusDiterima = $surat->ruangans->contains(function ($ruangan) {
             return $ruangan->pivot->status === 'diterima';
@@ -155,15 +156,20 @@ class SuratController extends Controller
         $nomorSurat = $surat->nomor_surat;
         $asalSurat = $surat->asal_surat;
         $namaPeminjam = $surat->nama_peminjam;
-        $jmlPc = $surat->jml_pc;
-        $jmlRuang = $surat->jml_ruang;
+        $jmlPc = $surat->detailPeminjaman->sum('jml_pc');
+        $jmlRuang = $surat->detailPeminjaman->sum('jml_ruang');
         $statusSurat = $surat->status;
         $alasanSurat = $surat->alasan_penolakan;
-        $tanggal = now()->format('d F Y');
-        $mulaiDipinjam = $surat->mulai_dipinjam;
-        $selesaiDipinjam = $surat->selesai_dipinjam;
+        $tanggalNow = now()->format('d F Y');
+        $tgglPeminjaman = $surat->detailPeminjaman->pluck('tanggal_peminjaman');
         $ruangans = $surat->ruangans;
 
+        $peminjamanruang = [];
+        foreach ($surat->ruangans as $ruangan) {
+            $peminjamanruang[$ruangan->pivot->tanggal_peminjaman][] = $ruangan->nomor_ruang;
+        }
+
+        
         // Membuat objek Dompdf
         $dompdf = new Dompdf();
 
@@ -171,8 +177,7 @@ class SuratController extends Controller
         $dompdf->setPaper('A4', 'portrait');
 
         // Memuat view PDF Blade dengan data yang telah disiapkan
-        $pdfContent = view('pdf.surat_balasan', compact('surat','alasanSurat', 'statusDiterima', 'statusSurat', 'tanggal', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'mulaiDipinjam', 'selesaiDipinjam', 'ruangans'))->render();
-
+        $pdfContent = view('pdf.surat_balasan', compact('surat','alasanSurat', 'statusDiterima', 'statusSurat', 'tanggalNow', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'tgglPeminjaman', 'ruangans','peminjamanruang'))->render();
         // Memuat konten HTML ke Dompdf
         $dompdf->loadHtml($pdfContent);
 
