@@ -19,13 +19,13 @@ class SuratController extends Controller
     {
         $peminjaman = surat::where(function ($query) {
             $query->where('status', 'pending')
-            ->orWhere('status', 'ditolak');
+                ->orWhere('status', 'ditolak');
         })
-        ->whereDoesntHave('ruangans', function ($query) {
-            $query->where('ruang_peminjaman.status', 'diterima')
-                ->orWhere('ruang_peminjaman.status', 'ditolak');
-        })
-        ->count();
+            ->whereDoesntHave('ruangans', function ($query) {
+                $query->where('ruang_peminjaman.status', 'diterima')
+                    ->orWhere('ruang_peminjaman.status', 'ditolak');
+            })
+            ->count();
         $akun = User::count();
         return view('admin.surat.index', ['peminjaman' => $peminjaman, 'akun' => $akun]);
     }
@@ -33,34 +33,32 @@ class SuratController extends Controller
     public function peminjaman(Request $request)
     {
 
-        $surat = surat::with(['detailPeminjaman'])->get();
+        // $surat = surat::with(['detailPeminjaman'])->get();
 
 
-        return view('admin.surat.peminjaman', ['suratList' => $surat]);
+        // return view('admin.surat.peminjaman', ['suratList' => $surat]);
         // Ambil kata kunci pencarian dari form
-        // $search = $request->input('search');
+        $search = $request->input('search');
 
         // Simpan kata kunci pencarian ke dalam sesi
-        // $request->session()->put('search', $search);
+        $request->session()->put('search', $search);
 
         // Ambil kata kunci pencarian dari sesi
-        // $search = $request->session()->get('search');
+        $search = $request->session()->get('search');
 
         // Bangun kueri pencarian untuk mencari surat berdasarkan kata kunci
-        // $surat = Surat::where(function ($query) use ($search) {
-        //     $query->where('nomor_surat', 'like', '%' . $search . '%')
-        //         ->orWhere('asal_surat', 'like', '%' . $search . '%')
-        //         ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
-        // })->orderBy('created_at', 'desc')->paginate(10);
+        $surat = Surat::with(['detailPeminjaman'])
+            ->where(function ($query) use ($search) {
+                $query->where('nomor_surat', 'like', '%' . $search . '%')
+                    ->orWhere('asal_surat', 'like', '%' . $search . '%')
+                    ->orWhere('nama_peminjam', 'like', '%' . $search . '%');
+            })->orderBy('created_at', 'desc')->paginate(10);
 
         // Setelah mengambil hasil pencarian, hapus kata kunci pencarian dari sesi
-        // $request->session()->forget('search');
+        $request->session()->forget('search');
 
         // Tampilkan hasil pencarian ke tampilan
-        // return view('admin.surat.peminjaman', ['suratList' => $surat]);
-
-        // Tampilkan hasil pencarian ke tampilan
-        // return view('admin.surat.peminjaman', ['suratList' => $surat]);
+        return view('admin.surat.peminjaman', ['suratList' => $surat]);
     }
 
     /**
@@ -87,7 +85,7 @@ class SuratController extends Controller
             'jml_pc' => 'required|min:1',
             'jml_hari' => 'required|min:1',
             'tanggal_peminjaman' => 'required',
-        ],[
+        ], [
             'required' => ' :attribute harus diisi',
             'file.mimes' => 'File harus berupa PDF',
             'file.max' => 'File maksimal 2 MB',
@@ -169,7 +167,7 @@ class SuratController extends Controller
             $peminjamanruang[$ruangan->pivot->tanggal_peminjaman][] = $ruangan->nomor_ruang;
         }
 
-        
+
         // Membuat objek Dompdf
         $dompdf = new Dompdf();
 
@@ -177,7 +175,7 @@ class SuratController extends Controller
         $dompdf->setPaper('A4', 'portrait');
 
         // Memuat view PDF Blade dengan data yang telah disiapkan
-        $pdfContent = view('pdf.surat_balasan', compact('surat','alasanSurat', 'statusDiterima', 'statusSurat', 'tanggalNow', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'tgglPeminjaman', 'ruangans','peminjamanruang'))->render();
+        $pdfContent = view('pdf.surat_balasan', compact('surat', 'alasanSurat', 'statusDiterima', 'statusSurat', 'tanggalNow', 'jmlRuang', 'jmlPc', 'nomorSurat', 'asalSurat', 'namaPeminjam', 'tgglPeminjaman', 'ruangans', 'peminjamanruang'))->render();
         // Memuat konten HTML ke Dompdf
         $dompdf->loadHtml($pdfContent);
 
@@ -202,7 +200,7 @@ class SuratController extends Controller
      */
     public function edit(request $request, $id)
     {
-        $surat = surat::findOrFail($id);
+        $surat = surat::with('detailPeminjaman')->findOrFail($id);
         return view('admin.surat.edit_surat', ['SuratYgDiedit' => $surat]);
     }
 
@@ -214,22 +212,19 @@ class SuratController extends Controller
 
         try {
 
-            $surat = surat::findOrFail($id);
+            $surat = surat::with('detailPeminjaman')->findOrFail($id);
 
             $request->validate([
                 'file' => 'mimes:pdf|max:2048',
-                'nomor_surat' => 'required',
-                'asal_surat' => 'required',
-                'nama_peminjam' => 'required',
-                'mulai_dipinjam' => 'required',
-                'selesai_dipinjam' => 'required',
-                'jml_ruang' => 'required|numeric',
-                'jml_pc' => 'required|numeric',
+                'jml_ruang' => 'min:1',
+                'jml_pc' => 'min:1',
+                'jml_hari' => 'min:1',
             ], [
-                'required' => ' :attribute harus diisi',
                 'file.mimes' => 'File harus berupa PDF',
-                'jml_pc.required' => 'Jumlah PC harus diisi',
-                'jml_ruang.required' => 'Jumlah Ruang harus diisi',
+                'file.max' => 'File maksimal 2 MB',
+                'jml_pc.min' => 'Jumlah PC harus lebih dari 0',
+                'jml_ruang.min' => 'Jumlah Ruang harus lebih dari 0',
+                'jml_hari.min' => 'Jumlah Hari harus lebih dari 0',
             ]);
 
             if ($request->hasFile('file')) {
@@ -243,24 +238,34 @@ class SuratController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $namaBaru = $request->asal_surat . '-' . $request->nama_peminjam . '-' . uniqid() . '.' . $extension;
                     $file->storeAs('file_surat', $namaBaru, 'public');
-
-                    $surat->file_surat = $namaBaru;
                 } else {
                     return redirect()->back()->with('error', 'File tidak valid.')->withErrors(['file' => 'File tidak valid']);
                 }
             } else {
-
             }
 
-            $surat->nomor_surat = $request->input('nomor_surat');
-            $surat->asal_surat = $request->input('asal_surat');
-            $surat->nama_peminjam = $request->input('nama_peminjam');
-            $surat->mulai_dipinjam = $request->input('mulai_dipinjam');
-            $surat->selesai_dipinjam = $request->input('selesai_dipinjam');
-            $surat->jml_ruang = $request->input('jml_ruang');
-            $surat->jml_pc = $request->input('jml_pc');
+            $surat->update([
+                'nomor_surat' => $request->nomor_surat,
+                'asal_surat' => $request->asal_surat,
+                'nama_peminjam' => $request->nama_peminjam,
+                'jml_ruang' => $request->jml_ruang,
+                'file_surat' => $namaBaru ?? $surat->file_surat,
+                'status' => 'pending',
+            ]);
 
-            $surat->save();
+            $surat->detailPeminjaman()->delete();
+
+            foreach ($request->tanggal_peminjaman as $index => $tanggal) {
+                $ruangan = $request->jml_ruang[$index];
+                $pc = $request->jml_pc[$index];
+
+                DetailPeminjaman::create([
+                    'surat_id' => $surat->id,
+                    'tanggal_peminjaman' => $tanggal,
+                    'jml_ruang' => $ruangan,
+                    'jml_pc' => $pc,
+                ]);
+            }
 
             return redirect()->route('peminjaman')->with('success', 'Surat berhasil diperbarui.');
         } catch (\Exception $e) {

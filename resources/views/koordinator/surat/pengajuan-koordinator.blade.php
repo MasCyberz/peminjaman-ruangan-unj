@@ -203,9 +203,19 @@
                         <div class="flex gap-2">
                             <h2 class="text-lg whitespace-nowrap">Detail Pengajuan :</h2>
                             <div class="text-lg space-y-4 flex flex-col mx-2">
-                                @foreach ($surat->ruangans as $ruangan)
+                                {{-- @foreach ($surat->ruangans as $ruangan)
                                     <span>Ruangan : {{ $ruangan->nomor_ruang }}</span>
 
+                                @endforeach --}}
+                                @foreach ($groupedRuangans as $tanggalPeminjaman => $ruangans)
+                                    <ul class="">
+                                        <span class="font-medium">Tanggal :
+                                            {{ \Carbon\Carbon::parse($tanggalPeminjaman)->format('d F Y') }}</span>
+                                        <span></span>
+                                        @foreach ($ruangans as $ruang)
+                                            <li class="list-disc mx-4">{{ 'Ruangan : ' . $ruang->nomor_ruang }}</li>
+                                        @endforeach
+                                    </ul>
                                 @endforeach
                             </div>
                         </div>
@@ -214,10 +224,11 @@
                     <div class="flex items-center justify-center py-3 px-5 border-t border-gray-200 rounded-b">
                         <div class="bg-yellow-200 px-3 py-2 rounded-lg">
                             <span class="">Status :
-                                @if ($ruangan->pivot->status == 'pending')
-                                <span class="uppercase">
-                                    Disetujui oleh KA dan Jaringan
-                                </span>
+                                @if ($surat->status == 'pending')
+                                    <span class="uppercase">
+                                        Disetujui oleh KA dan Jaringan
+                                    </span>
+                                @else
                                 @endif
                             </span>
                         </div>

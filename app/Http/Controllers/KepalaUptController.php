@@ -21,14 +21,17 @@ class KepalaUptController extends Controller
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
 
         if (!empty($suratIdsPending)) {
-            $surat = surat::with('detailPeminjaman')
-                ->whereIn('status', $suratIdsPending)
+            $surat = Surat::with('detailPeminjaman')
+                ->where(function ($query) use ($suratIdsPending) {
+                    $query->whereIn('id', $suratIdsPending)
+                        ->orWhereNotIn('id', $suratIdsPending); // Menambahkan kondisi untuk menampilkan semua surat jika tidak ada surat_id di RuangPeminjaman
+                })
                 ->orderByRaw("FIELD(id, " . implode(',', $suratIdsPending) . ") ASC, created_at ASC")
                 ->paginate(15);
-        } else{
-            $surat = surat::with('detailPeminjaman')
-            ->orderBy('created_at', 'ASC')
-            ->paginate(15);
+        } else {
+            $surat = Surat::with('detailPeminjaman')
+                ->orderBy('created_at', 'ASC')
+                ->paginate(15);
         }
 
         return view('kepala-upt.surat.surat-pengajuan',  ['suratList' => $surat]);
@@ -40,7 +43,7 @@ class KepalaUptController extends Controller
 
         if ($pengajuan) {
             return view('kepala-upt.surat.surat-pengajuan-detail', ['pengajuanList' => $pengajuan]);
-        } else{
+        } else {
             abort(404);
         }
     }

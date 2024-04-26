@@ -101,30 +101,17 @@ class JaringanController extends Controller
         // Tanggal peminjaman yang sudah ada untuk setiap ruangan
         $tanggalPeminjamanRuangan = [];
 
-        // Ambil tanggal peminjaman ruangan yang sudah ada pada setiap ruangan
+        // Ambil tanggal peminjaman ruangan yang sudah ada
         foreach ($ruanganTersedia as $ruangan) {
             $tanggalPeminjamanRuangan[$ruangan->id] = RuangPeminjaman::where('ruangans_id', $ruangan->id)
-                ->where('status', 'Disetujui') // hanya peminjaman yang sudah disetujui
+                ->where('tanggal_peminjaman', $surat->detailPeminjaman->pluck('tanggal_peminjaman')->toArray())
                 ->pluck('tanggal_peminjaman')
                 ->toArray();
         }
 
-        // Filter nomor ruangan yang belum dipinjam pada tanggal yang diminta
+        // Filter ruangan yang belum dipinjam pada tanggal yang diminta
         $ruanganTersedia = $ruanganTersedia->filter(function ($ruangan) use ($tanggalPeminjamanRuangan) {
-            // Ambil tanggal peminjaman ruangan pada ruangan tertentu
-            $tanggalPeminjaman = $tanggalPeminjamanRuangan[$ruangan->id] ?? [];
-
-            // Jika tidak ada tanggal peminjaman atau tidak ada tanggal yang cocok
-            if (empty($tanggalPeminjaman)) {
-                return true;
-            }
-
-            // Jika tanggal yang diminta tidak ada dalam tanggal peminjaman ruangan
-            if (!in_array(request('tanggal_peminjaman'), $tanggalPeminjaman)) {
-                return true;
-            }
-
-            return false;
+            return empty($tanggalPeminjamanRuangan[$ruangan->id]);
         });
 
         return view('jaringan.surat.ajukan-peminjaman', ['suratList' => $surat, 'ruanganTersedia' => $ruanganTersedia]);

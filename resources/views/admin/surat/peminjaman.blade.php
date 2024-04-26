@@ -116,7 +116,7 @@
                                         @foreach ($surat->detailPeminjaman as $tanggal)
                                             <ul class="list-disc">
                                                 <li>
-                                                    {{ $tanggal->tanggal_peminjaman }}
+                                                    {{ \Carbon\Carbon::parse($tanggal->tanggal_peminjaman)->format('d F Y') }}
                                                 </li>
                                             </ul>
                                         @endforeach

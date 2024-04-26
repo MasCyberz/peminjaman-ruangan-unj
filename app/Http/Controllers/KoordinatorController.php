@@ -23,22 +23,24 @@ class KoordinatorController extends Controller
 
     public function pengajuan()
     {
-        
-        $permintaanRuang = surat::with(['ruangans', 'detailPeminjaman'])->whereHas('ruangans', function ($query) {
-            $query->where('ruang_peminjaman.status', 'pending');
-        })->get();
 
-        $surat = Surat::with('ruangans');
+        // $permintaanRuang = surat::with(['ruangans', 'detailPeminjaman'])->whereHas('ruangans', function ($query) {
+        //     $query->where('ruang_peminjaman.status', 'pending');
+        // })->get();
 
-        $peminjamanRuang = [];
+        $permintaanRuang = Surat::with(['ruangans'])->get();
 
-        foreach ($surat as $ruangan) {
-            $peminjamanRuang[$ruangan->pivot->tanggal_peminjaman][] = $ruangan->nomor_ruang;
-        }
+        // Kelompokkan ruangan-ruangan berdasarkan tanggal peminjaman
+        $groupedRuangans = $permintaanRuang->flatMap(function ($surat) {
+            return $surat->ruangans->mapToGroups(function ($ruangan) {
+                return [$ruangan->pivot->tanggal_peminjaman => $ruangan];
+            });
+        });
+
 
         // dd($permintaanRuang);
 
-        return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $permintaanRuang, 'peminjamanRuang' => $peminjamanRuang]);
+        return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $permintaanRuang, 'groupedRuangans' => $groupedRuangans]);
     }
 
     public function pengajuan_store(Request $request, $suratId)
