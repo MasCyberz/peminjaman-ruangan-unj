@@ -28,19 +28,37 @@ class KoordinatorController extends Controller
         //     $query->where('ruang_peminjaman.status', 'pending');
         // })->get();
 
-        $permintaanRuang = Surat::with(['ruangans'])->get();
+        // $permintaanRuang = Surat::with(['ruangans'])->get();
 
+        $suratIsPending = RuangPeminjaman::where('status', 'pending')->pluck('surat_id')->toArray();
+
+        if (!empty($suratIsPending)) {
+            // Jika ada surat pending, gunakan FIELD untuk mengurutkan
+            $surat = Surat::with('detailPeminjaman')
+                ->orderByRaw("FIELD(id, " . implode(',', $suratIsPending) . ") DESC, created_at DESC")
+                ->paginate(15);
+        } else {
+            // Jika tidak ada surat pending, urutkan berdasarkan created_at atau kriteria lain
+            $surat = Surat::with('detailPeminjaman')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(15);
+        }
         // Kelompokkan ruangan-ruangan berdasarkan tanggal peminjaman
-        $groupedRuangans = $permintaanRuang->flatMap(function ($surat) {
+        // $groupedRuangans = $permintaanRuang->flatMap(function ($surat) {
+        //     return $surat->ruangans->mapToGroups(function ($ruangan) {
+        //         return [$ruangan->pivot->tanggal_peminjaman => $ruangan];
+        //     });
+        // });
+
+        $groupedRuangans = $surat->flatMap(function ($surat) {
             return $surat->ruangans->mapToGroups(function ($ruangan) {
                 return [$ruangan->pivot->tanggal_peminjaman => $ruangan];
             });
         });
 
-
         // dd($permintaanRuang);
 
-        return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $permintaanRuang, 'groupedRuangans' => $groupedRuangans]);
+        return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $surat, 'groupedRuangans' => $groupedRuangans]);
     }
 
     public function pengajuan_store(Request $request, $suratId)

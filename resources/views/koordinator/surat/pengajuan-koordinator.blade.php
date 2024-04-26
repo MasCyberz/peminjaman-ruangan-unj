@@ -57,30 +57,39 @@
             @foreach ($permintaanRuang as $surat)
                 <table class="text-gray-900 w-[90%] table-fixed">
                     <tbody class="border-y border-gray-400 text-left">
-                        <tr class="">
+                        <tr
+                            class="{{ $surat->ruangans->first()->pivot->status == 'pending' ? '' : 'text-slate-600 bg-slate-200' }}">
                             <th class="px-6 py-2 border-s border-e border-gray-400 leading-loose font-medium">
                                 Nomor Surat : {{ $surat->nomor_surat }}
                             </th>
                             <td class="px-6 py-2 border-e border-gray-400 text-white flex items-center">
-                                <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    <button type="button" data-modal-target="tolak-modal{{ $surat->id }}"
-                                        data-modal-toggle="tolak-modal{{ $surat->id }}"
-                                        class="bg-red-500 mx-2 px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out">
-                                        Tolak
+                                @if ($surat->ruangans->first()->pivot->status == 'pending')
+                                    <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <button type="button" data-modal-target="tolak-modal{{ $surat->id }}"
+                                            data-modal-toggle="tolak-modal{{ $surat->id }}"
+                                            class="bg-red-500 mx-2 px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out">
+                                            Tolak
+                                        </button>
+                                    </form>
+                                    <button type="button" data-modal-target="terima-modal{{ $surat->id }}"
+                                        data-modal-toggle="terima-modal{{ $surat->id }}"
+                                        class="bg-green-500 mx-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
+                                        Terima
                                     </button>
-                                </form>
-                                <button type="button" data-modal-target="terima-modal{{ $surat->id }}"
-                                    data-modal-toggle="terima-modal{{ $surat->id }}"
-                                    class="bg-green-500 mx-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">
-                                    Terima
-                                </button>
-                                <button data-modal-target="detail-modal{{ $surat->id }}"
-                                    data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
-                                    class="px-4 py-2 mx-2 rounded-lg bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">
-                                    Details
-                                </button>
+                                    <button data-modal-target="detail-modal{{ $surat->id }}"
+                                        data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
+                                        class="px-4 py-2 mx-2 rounded-lg bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">
+                                        Details
+                                    </button>
+                                @else
+                                    <button data-modal-target="detail-modal{{ $surat->id }}"
+                                        data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
+                                        class="px-4 py-2 mx-2 rounded-lg bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">
+                                        Details
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     </tbody>
@@ -222,20 +231,25 @@
                     </div>
 
                     <div class="flex items-center justify-center py-3 px-5 border-t border-gray-200 rounded-b">
-                        <div class="bg-yellow-200 px-3 py-2 rounded-lg">
-                            <span class="">Status :
-                                @if ($surat->status == 'pending')
+                        @if ($surat->ruangans->first()->pivot->status == 'pending')
+                            <div class="bg-yellow-200 px-3 py-2 rounded-lg">
+                                <span class="">Status :
                                     <span class="uppercase">
                                         Disetujui oleh KA dan Jaringan
                                     </span>
                                 @else
-                                @endif
-                            </span>
-                        </div>
-
+                                    <div class="bg-green-200 px-3 py-2 rounded-lg">
+                                        <span class="uppercase">
+                                            Selesai Disetujui Oleh Koordinator.
+                                        </span>
+                                    </div>
+                        @endif
+                        </span>
                     </div>
+
                 </div>
             </div>
+        </div>
         </div>
     @endforeach
 
