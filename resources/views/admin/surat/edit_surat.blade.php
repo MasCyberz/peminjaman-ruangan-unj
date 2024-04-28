@@ -62,13 +62,14 @@
 
             <div id="peminjamanFields">
                 @foreach ($SuratYgDiedit->detailPeminjaman as $index => $detailPeminjaman)
-                    <div class="peminjaman">
+                    <div class="peminjaman" id="peminjaman_{{ $index }}">
                         <div>
                             <label for="tanggal_{{ $index }}" class="block">Tanggal Peminjaman</label>
                             <input type="date" id="tanggal_{{ $index }}" name="tanggal_peminjaman[]"
                                 class="mt-1 p-2 border border-gray-300 rounded-md" min="{{ date('Y-m-d') }}"
                                 value="{{ $detailPeminjaman->tanggal_peminjaman }}">
-                            <button type="button" class="text-red-500 font-semibold mt-1" onclick="hapusPeminjaman(this)">
+                            <button type="button" class="text-red-500 font-semibold mt-1"
+                                onclick="hapusPeminjaman('{{ $index }}')">
                                 Hapus
                             </button>
                         </div>
@@ -88,8 +89,7 @@
                         <div>
                             <label for="jml_pc_{{ $index }}" class="block">Jumlah PC</label>
                             <input type="number" id="jml_pc_{{ $index }}" name="jml_pc[]"
-                                class="mt-1 p-2 border border-gray-300 rounded-md"
-                                value="{{ $detailPeminjaman->jml_pc }}">
+                                class="mt-1 p-2 border border-gray-300 rounded-md" value="{{ $detailPeminjaman->jml_pc }}">
                         </div>
                         @error('jml_pc')
                             <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
@@ -139,15 +139,15 @@
                 peminjamanField.innerHTML = `
                     <div>
                         <label for="tanggal_${peminjamanIndex}" class="block">Tanggal Peminjaman</label>
-                        <input type="date" id="tanggal_${peminjamanIndex}" name="tanggal_peminjaman[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full" min="{{ date('Y-m-d') }}">
+                        <input type="date" id="tanggal_${peminjamanIndex}" name="tanggal_peminjaman[]" class="mt-1 p-2 border border-gray-300 rounded-md" min="{{ date('Y-m-d') }}">
                     </div>
                     <div>
                         <label for="jml_ruang_${peminjamanIndex}" class="block">Jumlah Ruangan</label>
-                        <input type="number" id="jml_ruang_${peminjamanIndex}" name="jml_ruang[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                        <input type="number" id="jml_ruang_${peminjamanIndex}" name="jml_ruang[]" class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
                     <div>
                         <label for="jml_pc_${peminjamanIndex}" class="block">Jumlah PC</label>
-                        <input type="number" id="jml_pc_${peminjamanIndex}" name="jml_pc[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                        <input type="number" id="jml_pc_${peminjamanIndex}" name="jml_pc[]" class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
                 `;
 
@@ -156,6 +156,15 @@
                 peminjamanIndex++;
             });
         });
+    </script>
+
+    <script>
+        function hapusPeminjaman(index) {
+            // Dapatkan div peminjaman berdasarkan id
+            var peminjamanDiv = document.getElementById('peminjaman_' + index);
+            // Hapus div peminjaman dari parent form
+            peminjamanDiv.remove();
+        }
     </script>
 
 

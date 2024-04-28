@@ -98,6 +98,7 @@ Route::middleware(['auth', 'khusus_koordinator'])->group(function () {
 
     // Penerima/Penolakan Ruangan
     Route::get('/koordinator/pengajuan', [KoordinatorController::class, 'pengajuan'])->name('pengajuan_koordinator');
+    Route::get('/koordinator/pengajuan-detail/{suratId}', [KoordinatorController::class, 'getRuangPeminjamanDetail'])->name('detail_peminjaman_koordinator');
     // Route::post('/koordinator/pengajuan/store/{suratId}/{ruanganId}', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
     Route::post('/koordinator/pengajuan/store/{suratId}/', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
     route::get('/koordinator/data_referensi', [KoordinatorController::class, 'data_referensi'])->name('referensi_koordinator');

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RuangPeminjaman;
+use Carbon\Carbon;
 use App\Models\surat;
 use App\Models\ruangan;
 use App\Models\fasilitas;
 use Illuminate\Http\Request;
+use App\Models\RuangPeminjaman;
 use Illuminate\Support\Facades\Storage;
 
 class KoordinatorController extends Controller
@@ -24,10 +25,6 @@ class KoordinatorController extends Controller
     public function pengajuan()
     {
 
-        // $permintaanRuang = surat::with(['ruangans', 'detailPeminjaman'])->whereHas('ruangans', function ($query) {
-        //     $query->where('ruang_peminjaman.status', 'pending');
-        // })->get();
-
         $permintaanRuang = Surat::with(['ruangans'])->get();
 
         // Kelompokkan ruangan-ruangan berdasarkan tanggal peminjaman
@@ -36,11 +33,33 @@ class KoordinatorController extends Controller
                 return [$ruangan->pivot->tanggal_peminjaman => $ruangan];
             });
         });
-
-
         // dd($permintaanRuang);
 
         return view('koordinator.surat.pengajuan-koordinator', ['permintaanRuang' => $permintaanRuang, 'groupedRuangans' => $groupedRuangans]);
+    }
+
+    public function getRuangPeminjamanDetail($suratId){
+        // Mengambil data ruang_peminjaman berdasarkan surat_id
+        $ruangPeminjaman = RuangPeminjaman::where('surat_id', $suratId)->get();
+
+        // Mengelompokkan data ruang_peminjaman berdasarkan tanggal_peminjaman
+        $groupedRuangPeminjaman = $ruangPeminjaman->groupBy('tanggal_peminjaman');
+
+        // Format data untuk ditampilkan pada view
+        $formattedData = [];
+        foreach ($groupedRuangPeminjaman as $tanggalPeminjaman => $ruangPeminjamans) {
+            $formattedRuangPeminjaman = [];
+            foreach ($ruangPeminjamans as $ruangPeminjaman) {
+                $formattedRuangPeminjaman[] = [
+                    'nomor_ruang' => $ruangPeminjaman->ruangan->nomor_ruang,
+                    'tanggal_peminjaman' => Carbon::parse($ruangPeminjaman->tanggal_peminjaman)->format('d F Y'),
+                ];
+            }
+            $formattedData[] = [
+                'tanggal_peminjaman' => $tanggalPeminjaman,
+                'ruang_peminjaman' => $formattedRuangPeminjaman,
+            ];
+        }
     }
 
     public function pengajuan_store(Request $request, $suratId)
