@@ -22,7 +22,7 @@ class KepalaUptController extends Controller
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
 
         if (!empty($suratIdsPending)) {
-            $surat = Surat::with('detailPeminjaman')
+            $surat = Surat::with('detailPeminjaman', 'ruangans')
                 ->where(function ($query) use ($suratIdsPending) {
                     $query->whereIn('id', $suratIdsPending)
                         ->orWhereNotIn('id', $suratIdsPending); // Menambahkan kondisi untuk menampilkan semua surat jika tidak ada surat_id di RuangPeminjaman
@@ -64,6 +64,28 @@ class KepalaUptController extends Controller
 
         $surat->save();
         return redirect('/kepala-upt/peminjaman')->with('success', $message);
+    }
+
+    public function terimaTolakanKoordinator(Request $request, $id)
+    {
+
+        $surat = Surat::findOrFail($id);
+
+        if ($request->response == 'accept') {
+            // Ambil semua ruangan yang terkait dengan surat
+            $ruangans = $surat->ruangans;
+
+            // Ubah status pada pivot tabel ruang_peminjaman
+            foreach ($ruangans as $ruangan) {
+                // Hapus ruangan yang dipinjam oleh surat dari pivot tabel
+                $surat->ruangans()->detach($ruangan->id);
+            }
+
+            $surat->status = 'ditolak';
+        }
+
+        $surat->save();
+        return redirect('/kepala-upt/peminjaman')->with('success', 'Berhasil menyetujui penolakan dari Koordinator dan Jaringan');
     }
 
     // public function kalender()

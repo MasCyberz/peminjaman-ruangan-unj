@@ -22,8 +22,14 @@ class JaringanController extends Controller
         $surat = surat::where('status', 'diterima')
             ->whereNotIn('id', $suratIdsPending)->count();
 
+        $suratDitolakKoordinator = Surat::whereHas('ruangans', function ($query) {
+            $query->where('ruang_peminjaman.status', 'ditolak koordinator');
+        })->count();
+
+        $totalSurat = $surat + $suratDitolakKoordinator;
+
         // Kirim hasil hitungan ke tampilan
-        return view('jaringan.surat.index', ['pengajuan' => $surat]);
+        return view('jaringan.surat.index', ['pengajuan' => $totalSurat]);
     }
 
     public function table_peminjaman(Request $request)
@@ -34,30 +40,18 @@ class JaringanController extends Controller
         // // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
 
-        // Ambil ruangan-ruangan yang tersedia (tidak ada dalam ruang_peminjaman) jika filter digunakan
-        // if ($request->has('mulai_dipinjam') && $request->has('selesai_dipinjam')) {
-        //     $ruanganTersedia = Ruangan::whereNotIn('id', function ($query) use ($request) {
-        //         $query->select('ruangans_id')
-        //             ->from('ruang_peminjaman')
-        //             ->where(function ($query) use ($request) {
-        //                 $query->whereBetween('mulai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam])
-        //                     ->orWhereBetween('selesai_dipinjam', [$request->mulai_dipinjam, $request->selesai_dipinjam]);
-        //             })
-        //             ->where('status', '!=', 'ditolak'); // Hanya ambil yang bukan 'ditolak'
-        //     })
-        //         ->get();
-        // } else {
-        //     // Jika tidak ada filter yang digunakan, tampilkan semua ruangan
-        //     $ruanganTersedia = $ruangan;
-        // }
-
         // Ambil kata kunci pencarian dari form
         $limit = $request->input('numero', 10);
 
         $suratSelesai = RuangPeminjaman::pluck('surat_id');
 
         // Mengambil dengan status surat = diterima
-        $surat = surat::where('status', 'diterima')
+        $surat = surat::where(function ($query) use ($request) {
+            $query->where('status', 'diterima')
+                ->orWhereHas('ruangans', function ($query) {
+                    $query->where('ruang_peminjaman.status', 'ditolak koordinator');
+                });
+        })
             ->where(function ($query) use ($request) {
                 $query->where('nomor_surat', 'like', '%' . $request->keyword . '%')
                     ->orWhere('asal_surat', 'like', '%' . $request->keyword . '%');
@@ -157,34 +151,84 @@ class JaringanController extends Controller
         // }
         // Validasi data yang dikirimkan
 
-        $validatedData = $request->validate([
-            'ruangan.*' => 'required|exists:ruangans,id',
-            'ruangan' => 'array',
-            'tanggal_peminjaman.*' => 'required|date',
+        // $validatedData = $request->validate([
+        //     'ruangan.*' => 'required|exists:ruangans,id',
+        //     'ruangan' => 'array',
+        //     'tanggal_peminjaman.*' => 'required|date',
+        // ]);
+
+        // foreach ($request->tanggal_peminjaman as $index => $tanggal_peminjaman) {
+        //     $ruanganIds = $request->ruangan[$index];
+        //     $detailPeminjaman = DetailPeminjaman::where('tanggal_peminjaman', $tanggal_peminjaman)->first();
+
+        //     if (!$detailPeminjaman) {
+        //         // Handle jika detail peminjaman tidak ditemukan
+        //         return redirect()->back()->withErrors('Detail peminjaman tidak ditemukan untuk tanggal ini.');
+        //     }
+
+        //     $jumlah_ruangan_diminta = $detailPeminjaman->jml_ruang; // Ambil jumlah ruangan yang diminta dari tabel detail_peminjaman
+
+        //     $totalRuanganDipinjam = count($ruanganIds); // Menghitung jumlah ruangan yang dipinjam
+
+        //     if ($totalRuanganDipinjam !== $jumlah_ruangan_diminta) {
+        //         // Jumlah ruangan yang dipinjam tidak sesuai dengan jumlah yang diminta untuk tanggal ini
+        //         return redirect()->back()->withErrors('Jumlah ruangan yang dipilih tidak sesuai dengan jumlah ruang yang diperlukan untuk surat ini pada tanggal ' . $tanggal_peminjaman . '.');
+        //     }
+
+        //     foreach ($ruanganIds as $ruanganId) {
+        //         $ruangPeminjaman = new RuangPeminjaman();
+        //         $ruangPeminjaman->surat_id = $suratId; // Sesuaikan dengan nama input yang sesuai
+        //         $ruangPeminjaman->ruangans_id = $ruanganId;
+        //         $ruangPeminjaman->tanggal_peminjaman = $tanggal_peminjaman;
+        //         $ruangPeminjaman->save();
+        //     }
+        // }
+
+        $request->validate([
+            'ruangan' => 'required|array',
+            'ruangan.*' => 'required|array',
+            'ruangan.*.*' => 'required|exists:ruangans,id', // Pastikan ruangan yang dipilih ada dalam database
         ]);
 
-        foreach ($request->tanggal_peminjaman as $index => $tanggal_peminjaman) {
-            $ruanganIds = $request->ruangan[$tanggal_peminjaman];
-            $totalRuanganDipinjam = count($ruanganIds); // Menghitung jumlah ruangan yang dipinjam
+        $ruangan = $request->ruangan;
+        $surat = Surat::findOrFail($suratId);
 
-            $detailPeminjaman = DetailPeminjaman::where('tanggal_peminjaman', $tanggal_peminjaman)->first();
-            $jumlah_ruangan_diminta = $detailPeminjaman->jml_ruang; // Mengambil jumlah ruangan yang diminta pada tanggal tertentu
+        foreach ($ruangan as $tanggal => $ruangans) {
+            // Cek apakah surat memiliki detail peminjaman pada tanggal tertentu
+            $detailPeminjaman = $surat->detailPeminjaman()->where('tanggal_peminjaman', $tanggal)->first();
 
-            if ($totalRuanganDipinjam !== $jumlah_ruangan_diminta) {
-                // Jumlah ruangan yang dipinjam tidak sesuai dengan yang diminta pada tanggal ini
-                // Anda dapat menampilkan pesan error atau melakukan tindakan lain sesuai kebutuhan
-                return redirect()->back()->withErrors('Jumlah ruangan yang dipilih tidak sesuai dengan jumlah ruang yang diperlukan untuk surat ini.');
-            }
+            if ($detailPeminjaman) {
+                // Validasi jumlah ruangan yang dipilih
+                if (count($ruangans) != $detailPeminjaman->jml_ruang) {
+                    return back()->withErrors('Jumlah ruang yang dipilih tidak sesuai dengan yang dibutuhkan surat.');
+                }
 
-            foreach ($ruanganIds as $ruanganId) {
-                $ruangPeminjaman = new RuangPeminjaman();
-                $ruangPeminjaman->surat_id = $suratId; // sesuaikan dengan nama input yang sesuai
-                $ruangPeminjaman->ruangans_id = $ruanganId;
-                $ruangPeminjaman->tanggal_peminjaman = $tanggal_peminjaman;
-                $ruangPeminjaman->save();
+                // Proses penyimpanan ruangan ke tabel pivot
+                foreach ($ruangans as $ruanganId) {
+                    $surat->ruangans()->attach($ruanganId, ['tanggal_peminjaman' => $tanggal]);
+                }
+            } else {
+                return redirect()->back()->withErrors('Detail peminjaman tidak ditemukan untuk tanggal ini.');
             }
         }
+
         // Mengembalikan ke Tampilan
         return redirect()->route('peminjaman_jaringan')->with('success', 'Peminjaman ruangan berhasil diajukan.');
+    }
+
+    public function terimaTolakanKoordinator(Request $request, $suratId)
+    {
+        $surat = Surat::findOrFail($suratId);
+
+        // Ambil semua ruangan yang terkait dengan surat
+        $ruangans = $surat->ruangans;
+
+        // Ubah status pada pivot tabel ruang_peminjaman menjadi 'jaringan menerima tolakan koordinator'
+        foreach ($ruangans as $ruangan) {
+            $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'jaringan menerima tolakan koordinator']);
+        }
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Status tolakan koordinator berhasil diterima.');
     }
 }

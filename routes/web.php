@@ -73,6 +73,7 @@ Route::middleware(['auth', 'khusus_ka'])->group(function () {
     Route::get('kepala-upt/peminjaman', [KepalaUptController::class, 'peminjaman'])->name('peminjaman_kepala_upt');
     Route::get('kepala-upt/peminjaman-detail/{id}', [KepalaUptController::class, 'show_peminjaman'])->name('detail_peminjaman_kepala_upt');
     Route::put('kepala-upt/peminjaman-detail/{id}/respond', [KepalaUptController::class, 'respond'])->name('respond_kepala_upt');
+    Route::put('kepala-upt/peminjaman-detail/{id}/tolak', [KepalaUptController::class, 'terimaTolakanKoordinator'])->name('terima_tolak_kepala_upt');
 
     // Kalender
     Route::get('kepala-upt/kalender', [KepalaUptController::class, 'kalender'])->name('kalender_kepala_upt');
@@ -90,6 +91,7 @@ Route::middleware(['auth', 'khusus_jaringan'])->group(function () {
     Route::get('/jaringan/ajukan-peminjaman/{id}', [JaringanController::class, 'ajukanPeminjaman'])->name('ajukan_peminjaman_jaringan');
     // Route::post('/jaringan/ajukan-peminjaman/{suratId}/store', [JaringanController::class, 'ajukanPeminjamanStore'])->name('ajukan_peminjaman_store');
     Route::post('/jaringan/ajukan-peminjaman/store/{suratId}', [JaringanController::class, 'ajukanPeminjamanStore'])->name('ajukan_peminjaman_store');
+    Route::post('/jaringan/response-tolakan/{suratId}', [JaringanController::class, 'terimaTolakanKoordinator'])->name('tolak_peminjaman_jaringan');
 });
 
 Route::middleware(['auth', 'khusus_koordinator'])->group(function () {
@@ -98,6 +100,7 @@ Route::middleware(['auth', 'khusus_koordinator'])->group(function () {
 
     // Penerima/Penolakan Ruangan
     Route::get('/koordinator/pengajuan', [KoordinatorController::class, 'pengajuan'])->name('pengajuan_koordinator');
+    Route::get('/koordinator/pengajuan-detail/{suratId}', [KoordinatorController::class, 'getRuangPeminjamanDetail'])->name('detail_peminjaman_koordinator');
     // Route::post('/koordinator/pengajuan/store/{suratId}/{ruanganId}', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
     Route::post('/koordinator/pengajuan/store/{suratId}/', [KoordinatorController::class, 'pengajuan_store'])->name('pengajuan_store_koordinator');
     route::get('/koordinator/data_referensi', [KoordinatorController::class, 'data_referensi'])->name('referensi_koordinator');

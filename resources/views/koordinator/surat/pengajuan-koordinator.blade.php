@@ -90,6 +90,7 @@
                                         <span class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
                                     </button>
                                 @endif
+                                <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}">test</a>
                             </td>
                         </tr>
                     </tbody>
@@ -169,6 +170,10 @@
                         <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
                             method="POST">
                             @csrf
+
+                            <textarea id="alasan_penolakan" name="alasan_penolakan" rows="4"
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+                                placeholder="Tulis alasan penolakan di sini..."></textarea>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="button"
                                 class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Kembali</button>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="submit" name="status"
@@ -212,20 +217,11 @@
                         <div class="flex gap-2">
                             <h2 class="text-lg whitespace-nowrap">Detail Pengajuan :</h2>
                             <div class="text-lg space-y-4 flex flex-col mx-2">
-                                {{-- @foreach ($surat->ruangans as $ruangan)
-                                    <span>Ruangan : {{ $ruangan->nomor_ruang }}</span>
-
-                                @endforeach --}}
-                                @foreach ($groupedRuangans as $tanggalPeminjaman => $ruangans)
-                                    <ul class="">
-                                        <span class="font-medium">Tanggal :
-                                            {{ \Carbon\Carbon::parse($tanggalPeminjaman)->format('d F Y') }}</span>
-                                        <span></span>
-                                        @foreach ($ruangans as $ruang)
-                                            <li class="list-disc mx-4">{{ 'Ruangan : ' . $ruang->nomor_ruang }}</li>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
+                                {{-- <ul>
+                                        <span class="font-medium">Tanggal:
+                                            {{ \Carbon\Carbon::parse($data['tanggal_peminjaman'])->format('d F Y') }}</span>
+                                            <li class="list-disc mx-4">{{ 'Ruangan : ' . $ruang['nomor_ruang'] }}</li>
+                                    </ul> --}}
                             </div>
                         </div>
                     </div>
@@ -252,6 +248,4 @@
         </div>
         </div>
     @endforeach
-
-
 @endsection

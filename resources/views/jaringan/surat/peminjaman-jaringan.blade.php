@@ -107,6 +107,7 @@
                                             <td
                                                 class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base">
                                                 <span>{{ $surat->nomor_surat }}</span>
+                                                <span> | </span>
                                                 <span>{{ $surat->asal_surat }}</span>
                                             </td>
                                             <td
@@ -114,22 +115,41 @@
                                                 <a href="/jaringan/detail-surat/{{ $surat->id }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
                                                 @if (!in_array($surat->id, $peminjaman))
-                                                    <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
-                                                        class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
-                                                        Ruangan</a>
                                                 @endif
+                                                <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
+                                                    class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
+                                                    Ruangan</a>
+                                                <form
+                                                    action="{{ route('tolak_peminjaman_jaringan', $surat->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <button type="submit">Terima tolakan koordinator</button>
+                                                </form>
 
                                             </td>
                                             <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
                                                 @if ($suratSelesai->contains($surat->id))
                                                     <div
                                                         class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
-                                                        Tdk bisa diubah.
+                                                        Sedang ditinjau Koordinator.
                                                     </div>
-                                                @else
+                                                @elseif ($surat->status == 'diterima')
                                                     <div
                                                         class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
                                                         Diterima Oleh KA.
+                                                    </div>
+                                                @elseif ($surat->ruangans->contains('status', 'ditolak koordinator'))
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-red-100 text-red-800">
+                                                        Ditolak oleh Koordinator.
+                                                        <form action="{{ route('terima_tolakan', $surat->id) }}"
+                                                            method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                class="text-green-600 hover:text-green-900">
+                                                                Terima
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 @endif
                                             </td>
@@ -145,55 +165,4 @@
                 </div>
             </div>
             {{-- table atas end --}}
-
-
-
-            {{-- <div class="flex justify-center my-4">
-                <nav class="inline-flex">
-                    <ul class="flex items-center">
-                        Tombol "Previous"
-                        @if ($suratList->onFirstPage())
-                            <li>
-                                <span class="bg-gray-300 px-2 py-1 mr-1 rounded-md cursor-not-allowed">&laquo;</span>
-                            </li>
-                        @else
-                            <li>
-                                <a href="{{ $suratList->previousPageUrl() }}"
-                                    class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&laquo;</a>
-                            </li>
-                        @endif
-
-                        Loop untuk menampilkan tombol-tombol pagination
-                        @foreach ($suratList->getUrlRange(1, $suratList->lastPage()) as $page => $url)
-                            <li>
-                                <a href="{{ $url }}"
-                                    class="{{ $page == $suratList->currentPage() ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black' }} px-2 py-1 mr-1 rounded-md">{{ $page }}</a>
-                            </li>
-                        @endforeach
-
-                        Tombol "Next"
-                        @if ($suratList->hasMorePages())
-                            <li>
-                                <a href="{{ $suratList->nextPageUrl() }}"
-                                    class="bg-blue-500 text-white px-2 py-1 mr-1 rounded-md">&raquo;</a>
-                            </li>
-                        @else
-                            <li>
-                                <span class="bg-gray-300 px-2 py-1 mr-1 rounded-md cursor-not-allowed">&raquo;</span>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div> --}}
-
-
-
-            {{-- Table Bawah start --}}
-
-
-
-            {{-- Modal Tombol Detail start --}}
-
-
-
         @endsection

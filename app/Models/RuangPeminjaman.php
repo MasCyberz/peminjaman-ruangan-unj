@@ -18,5 +18,10 @@ class RuangPeminjaman extends Model
         'tanggal_peminjaman'
     ];
 
+    public function ruangan()
+    {
+        return $this->belongsTo(Ruangan::class, 'ruangans_id', 'id');
+    }
+
 
 }

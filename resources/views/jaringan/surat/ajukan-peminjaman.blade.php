@@ -55,7 +55,6 @@
 
             @foreach ($suratList->detailPeminjaman as $surat)
                 <div class="mb-4">
-                    <input type="hidden" name="tanggal_peminjaman[]" value="{{ $surat->tanggal_peminjaman }}">
                     <h3 class="text-lg font-semibold mb-2">Tanggal: {{ \Carbon\Carbon::parse($surat->tanggal_peminjaman)->format('d F Y') }}</h3>
 
 
@@ -93,14 +92,10 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <label for="jml_ruang" class="block text-gray-700 font-semibold mb-2">Jumlah Ruangan:</label>
-                        <input type="number" name="jml_ruang[{{ $surat->tanggal_peminjaman }}][]" id="jml_ruang" value="{{ $surat->jml_ruang }}"
-                            class="w-full px-4 py-2 border rounded-md" readonly>
+                        <span> Jumlah Ruang Dipinjam : {{ $surat->jml_ruang }}</span>
                     </div>
                     <div>
-                        <label for="jml_pc" class="block text-gray-700 font-semibold mb-2">Jumlah PC:</label>
-                        <input type="number" name="jml_pc[{{ $surat->tanggal_peminjaman }}][]" value="{{ $surat->jml_pc }}" readonly id="jml_pc"
-                            class="w-full px-4 py-2 border rounded-md">
+                        <span>Jumlah Pc Dipinjam : {{ $surat->jml_pc }}</span>
                     </div>
                 </div>
             @endforeach
