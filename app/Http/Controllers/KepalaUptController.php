@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ruangan;
 use Carbon\Carbon;
 use App\Models\surat;
 use Illuminate\Http\Request;
@@ -65,44 +66,90 @@ class KepalaUptController extends Controller
         return redirect('/kepala-upt/peminjaman')->with('success', $message);
     }
 
+    // public function kalender()
+    // {
+
+    //     // $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')
+    //     //     ->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
+    //     //     ->whereIn('ruang_peminjaman.status', ['pending', 'diterima'])
+    //     //     ->get();
+
+    //     $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')
+    //         ->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
+    //         ->where('ruang_peminjaman.status', 'diterima')
+    //         ->get();
+
+
+    //     $warna = ['red', 'blue', 'green', 'orange'];
+
+    //     $events = [];
+
+    //     $indeks = 0;
+
+    //     foreach ($ruangPeminjaman as $ruang) {
+    //         // 'start' => Carbon::parse($ruang->mulai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal mulai
+    //         // 'end' => Carbon::parse($ruang->selesai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal selesai
+    //         $tanggal = Carbon::parse($ruang->tanggal_peminjaman);
+
+    //         // // menghitung durasi berapa lama
+    //         // $duration = $end->diffInDays($start);
+    //         // $end->addDay();
+
+
+    //         $title = $ruang->nomor_ruang ? ' Ruang ' . $ruang->nomor_ruang : 'Peminjaman Ruang Tidak Diketahui';
+
+    //         // memasukkan data ke array
+    //         $events[] = [
+    //             'title' => $title,
+    //             'start' => $tanggal->format('Y-m-d'),
+    //             'end' => $tanggal->format('Y-m-d'),
+    //             'color' => $warna[$indeks],
+    //         ];
+
+    //         $indeks = ($indeks + 1) % count($warna);
+    //     }
+
+    //     return view('kepala-upt.kalender.kalender', compact('events'));
+    // }
+
     public function kalender()
     {
+        $events = [];
+        $warna = ['red', 'green', 'blue', 'orange'];
+        $indeks = 0;
 
         $ruangPeminjaman = RuangPeminjaman::select('ruang_peminjaman.*', 'ruangans.nomor_ruang')
             ->join('ruangans', 'ruang_peminjaman.ruangans_id', '=', 'ruangans.id')
-            ->whereIn('ruang_peminjaman.status', ['pending', 'diterima'])
+            ->where('ruang_peminjaman.status', 'diterima')
             ->get();
 
-        $warna = ['red', 'blue', 'green', 'orange'];
-
-        $events = [];
-
-        $indeks = 0;
+        $totalRuangan = ruangan::count();
+        // Membuat array asosiatif untuk menyimpan jumlah ruangan yang terpakai pada setiap tanggal
+        $ruanganTerpakaiPerTanggal = [];
 
         foreach ($ruangPeminjaman as $ruang) {
-            // 'start' => Carbon::parse($ruang->mulai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal mulai
-            // 'end' => Carbon::parse($ruang->selesai_dipinjam)->format('Y-m-d'), // Sesuaikan format tanggal selesai
-            $start = Carbon::parse($ruang->mulai_dipinjam);
-            $end = Carbon::parse($ruang->selesai_dipinjam);
+            $tanggal = Carbon::parse($ruang->tanggal_peminjaman)->format('Y-m-d');
 
-            // menghitung durasi berapa lama
-            $duration = $end->diffInDays($start);
-            $end->addDay();
-
-
-            $title = $ruang->nomor_ruang ? ' Ruang ' . $ruang->nomor_ruang : 'Peminjaman Ruang Tidak Diketahui';
-
-            // memasukkan data ke array
+            // Menambahkan jumlah ruangan yang terpakai pada tanggal tersebut
+            if (!isset($ruanganTerpakaiPerTanggal[$tanggal])) {
+                $ruanganTerpakaiPerTanggal[$tanggal] = 1;
+            } else {
+                $ruanganTerpakaiPerTanggal[$tanggal]++;
+            }
+        }
+        
+        // Membuat event untuk setiap tanggal dengan judul berupa jumlah ruangan yang terpakai
+        foreach ($ruanganTerpakaiPerTanggal as $tanggal => $jumlahRuangan) {
             $events[] = [
-                'title' => $title,
-                'start' => $start->format('Y-m-d'),
-                'end' => $end->format('Y-m-d'),
-                'color' => $warna[$indeks],
+                'title' => 'Ruangan tersedia : ' . ($totalRuangan - $jumlahRuangan),
+                'start' => $tanggal,
+                'end' => $tanggal,
+                'color' => $warna[$indeks % count($warna)],
             ];
 
-            $indeks = ($indeks + 1) % count($warna);
-        }
+            $indeks++;
 
+        }
         return view('kepala-upt.kalender.kalender', compact('events'));
     }
 }
