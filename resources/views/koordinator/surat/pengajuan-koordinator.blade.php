@@ -170,6 +170,10 @@
                         <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
                             method="POST">
                             @csrf
+
+                            <textarea id="alasan_penolakan" name="alasan_penolakan" rows="4"
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+                                placeholder="Tulis alasan penolakan di sini..."></textarea>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="button"
                                 class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Kembali</button>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="submit" name="status"
@@ -213,7 +217,7 @@
                         <div class="flex gap-2">
                             <h2 class="text-lg whitespace-nowrap">Detail Pengajuan :</h2>
                             <div class="text-lg space-y-4 flex flex-col mx-2">
-                                    {{-- <ul>
+                                {{-- <ul>
                                         <span class="font-medium">Tanggal:
                                             {{ \Carbon\Carbon::parse($data['tanggal_peminjaman'])->format('d F Y') }}</span>
                                             <li class="list-disc mx-4">{{ 'Ruangan : ' . $ruang['nomor_ruang'] }}</li>
@@ -244,26 +248,4 @@
         </div>
         </div>
     @endforeach
-
-    <div id="myModal" class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center hidden">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-
-            <div
-                class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
-                <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                    viewBox="0 0 18 18">
-                    <path d="M18 1.4L16.6 0 9 7.6 1.4 0 0 1.4 7.6 9 0 16.6 1.4 18 9 10.4 16.6 18 18 16.6 10.4 9z" />
-                </svg>
-                <span class="text-sm">(Esc)</span>
-            </div>
-
-            <!-- Add your modal content here -->
-            <div class="modal-content py-4 text-left px-6">
-                <!-- Konten detail ruang peminjaman akan dimasukkan di sini -->
-                <div id="modal-content-body"></div>
-            </div>
-        </div>
-    </div>
 @endsection
