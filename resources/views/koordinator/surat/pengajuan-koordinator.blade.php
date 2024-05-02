@@ -68,29 +68,41 @@
                                         method="POST">
                                         @csrf
                                         <button type="button" data-modal-target="tolak-modal{{ $surat->id }}"
-                                            data-modal-toggle="tolak-modal{{ $surat->id }}"
-                                            class="">
-                                            <span class="bg-red-500 mx-2 px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out">Tolak</span>
+                                            data-modal-toggle="tolak-modal{{ $surat->id }}" class="">
+                                            <span
+                                                class="bg-red-500 mx-2 px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out">Tolak</span>
                                         </button>
                                     </form>
                                     <button type="button" data-modal-target="terima-modal{{ $surat->id }}"
-                                        data-modal-toggle="terima-modal{{ $surat->id }}"
-                                        class="">
-                                        <span class="bg-green-500 mx-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">Terima</span>
+                                        data-modal-toggle="terima-modal{{ $surat->id }}" class="">
+                                        <span
+                                            class="bg-green-500 mx-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300 ease-in-out">Terima</span>
                                     </button>
-                                    <button data-modal-target="detail-modal{{ $surat->id }}"
+                                    {{-- <button data-modal-target="detail-modal{{ $surat->id }}"
                                         data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
                                         class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
-                                        <span class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
+                                        <span
+                                            class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
+                                    </button> --}}
+                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button data-modal-target="detail-modal{{ $surat->id }}"
+                                        data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
+                                        class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
+                                        <span
+                                            class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
                                     </button>
+                                </a>
                                 @else
-                                    <button data-modal-target="detail-modal{{ $surat->id }}"
-                                        data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
-                                        class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
-                                        <span class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
-                                    </button>
+                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button data-modal-target="detail-modal{{ $surat->id }}"
+                                            data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
+                                            class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
+                                            <span
+                                                class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
+                                        </button>
+                                    </a>
+
+                                    <span class="text-black">sudah direspon</span>
                                 @endif
-                                <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}">test</a>
+                                {{-- <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}">test</a> --}}
                             </td>
                         </tr>
                     </tbody>
@@ -189,7 +201,7 @@
     @endforeach
 
     <!-- Main modal-Detail -->
-    @foreach ($permintaanRuang as $surat)
+    {{-- @foreach ($permintaanRuang as $surat)
         <div id="detail-modal{{ $surat->id }}" tabindex="-1" aria-hidden="true"
             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -217,11 +229,11 @@
                         <div class="flex gap-2">
                             <h2 class="text-lg whitespace-nowrap">Detail Pengajuan :</h2>
                             <div class="text-lg space-y-4 flex flex-col mx-2">
-                                {{-- <ul>
+                                <ul>
                                         <span class="font-medium">Tanggal:
                                             {{ \Carbon\Carbon::parse($data['tanggal_peminjaman'])->format('d F Y') }}</span>
                                             <li class="list-disc mx-4">{{ 'Ruangan : ' . $ruang['nomor_ruang'] }}</li>
-                                    </ul> --}}
+                                    </ul>
                             </div>
                         </div>
                     </div>
@@ -247,5 +259,5 @@
             </div>
         </div>
         </div>
-    @endforeach
+    @endforeach --}}
 @endsection

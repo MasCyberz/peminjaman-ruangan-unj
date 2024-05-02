@@ -62,7 +62,7 @@ class KoordinatorController extends Controller
     public function getRuangPeminjamanDetail($suratId){
         // Mengambil data ruang_peminjaman berdasarkan surat_id
         $ruangPeminjaman = RuangPeminjaman::where('surat_id', $suratId)->get();
-
+        $surat = Surat::findOrFail($suratId);
         // Mengelompokkan data ruang_peminjaman berdasarkan tanggal_peminjaman
         $groupedRuangPeminjaman = $ruangPeminjaman->groupBy('tanggal_peminjaman');
 
@@ -81,6 +81,8 @@ class KoordinatorController extends Controller
                 'ruang_peminjaman' => $formattedRuangPeminjaman,
             ];
         }
+// dd($formattedData);
+        return view('koordinator.surat.detail-peminjaman', ['formattedData' => $formattedData, 'surat' => $surat ]);
     }
 
     public function pengajuan_store(Request $request, $suratId)

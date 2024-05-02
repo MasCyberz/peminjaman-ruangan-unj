@@ -33,7 +33,7 @@
                     readonly />
             </div>
 
-            <div class="mb-2">
+            <div class="mb-5">
                 {{-- <input type="hidden" id="nama_peminjam" name="nama_peminjam" value="{{ $suratList->nama_peminjam }}"
                     class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"
                     readonly />
@@ -55,8 +55,14 @@
 
             @foreach ($suratList->detailPeminjaman as $surat)
                 <div class="mb-4">
-                    <h3 class="text-lg font-semibold mb-2">Tanggal: {{ \Carbon\Carbon::parse($surat->tanggal_peminjaman)->format('d F Y') }}</h3>
+                    <h3 class="text-lg font-semibold">Tanggal: {{ \Carbon\Carbon::parse($surat->tanggal_peminjaman)->format('d F Y') }}</h3>
 
+                    <div>
+                        <span> Jumlah Ruang Dipinjam : {{ $surat->jml_ruang }}</span>
+                    </div>
+                    <div>
+                        <span>Jumlah Pc Dipinjam : {{ $surat->jml_pc }}</span>
+                    </div>
 
                     <!-- Dropdown Component -->
                     <div x-data="{ open: false }" @click.away="open = false" class="relative">
@@ -90,12 +96,6 @@
                                 @endforeach
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-2">
-                        <span> Jumlah Ruang Dipinjam : {{ $surat->jml_ruang }}</span>
-                    </div>
-                    <div>
-                        <span>Jumlah Pc Dipinjam : {{ $surat->jml_pc }}</span>
                     </div>
                 </div>
             @endforeach

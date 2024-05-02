@@ -130,7 +130,6 @@
         <br><br><br><br>
         <p><strong>Kepala UPT TIK</strong></p>
         <p>Universitas Negeri Jakarta</p>
-        <p>Nomor kontak: 08123818238321</p>
     </footer>
 </body>
 

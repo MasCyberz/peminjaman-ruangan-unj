@@ -78,7 +78,7 @@ class KepalaUptController extends Controller
             // Ubah status pada pivot tabel ruang_peminjaman
             foreach ($ruangans as $ruangan) {
                 // Hapus ruangan yang dipinjam oleh surat dari pivot tabel
-                $surat->ruangans()->detach($ruangan->id);
+                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'ka, jaringan, koordinator menolak surat ini']);
             }
 
             $surat->status = 'ditolak';
