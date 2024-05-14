@@ -19,6 +19,9 @@
                     </h3>
                 </div>
                 <div class="p-4 md:p-5 space-y-4">
+
+                    {{-- {{ $peminjamanStatus }} --}}
+
                     <div class="flex">
                         <div class="flex flex-col z-10">
                             <span class="block mt-3 mx-3 text-base font-semibold">Nomor Surat</span>
@@ -26,11 +29,18 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">Nama Peminjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Lama Peminjaman</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Detail Peminjaman</span>
+                            @if ($peminjamanStatus->contains('ditolak koordinator'))
+                            <span class="block mt-3 mx-3 text-base font-semibold">Ruang Dipinjam</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Alasan Penolakan</span>
+                            @endif
                         </div>
                         <div class="flex flex-col z-10">
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">:</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">:</span>
+
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">:</span>
                         </div>
@@ -50,9 +60,18 @@
                                     </ul>
                                 @endforeach
                             </span>
+                            <span class="block mt-3 mx-8 text-base font-semibold">
+                                @foreach ($suratList->ruangans as $noruang)
+
+                                <ul class="list-disc">
+                                    <li>{{ $noruang->nomor_ruang }}</li>
+                                </ul>
+                                @endforeach
+                            </span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->alasan_penolakan }}</span>
                         </div>
                     </div>
-                </div>
+                </div>
                 <div class="flex items-center ps-8 p-4 rounded-b">
                     <a href="{{ asset('storage/file_surat/' . $suratList->file_surat) }}" data-modal-hide="static-modal"
                         type="button" target="_blank"

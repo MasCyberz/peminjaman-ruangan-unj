@@ -57,13 +57,17 @@
             @foreach ($permintaanRuang as $surat)
                 <table class="text-gray-900 w-[90%] table-fixed">
                     <tbody class="border-y border-gray-400 text-left">
+                        @php
+                            $firstRuangan = $surat->ruangans->first();
+                            $status = optional(optional($firstRuangan)->pivot)->status;
+                        @endphp
                         <tr
-                            class="{{ $surat->ruangans->first()->pivot->status == 'pending' ? '' : 'text-slate-500 bg-slate-200' }}">
+                        class="{{ $status == 'pending' ? '' : 'text-slate-500 bg-slate-200' }}">
                             <th class="px-6 py-2 border-s border-e border-gray-400 leading-loose font-medium">
                                 Nomor Surat : {{ $surat->nomor_surat }}
                             </th>
                             <td class="px-6 py-2 border-e border-gray-400 text-white flex items-center">
-                                @if ($surat->ruangans->first()->pivot->status == 'pending')
+                                @if ($status == 'pending')
                                     <form action="{{ route('pengajuan_store_koordinator', ['suratId' => $surat->id]) }}"
                                         method="POST">
                                         @csrf
@@ -84,15 +88,17 @@
                                         <span
                                             class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
                                     </button> --}}
-                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button data-modal-target="detail-modal{{ $surat->id }}"
-                                        data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
-                                        class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
-                                        <span
-                                            class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
-                                    </button>
-                                </a>
+                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button
+                                            data-modal-target="detail-modal{{ $surat->id }}"
+                                            data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
+                                            class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
+                                            <span
+                                                class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
+                                        </button>
+                                    </a>
                                 @else
-                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button data-modal-target="detail-modal{{ $surat->id }}"
+                                    <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}"><button
+                                            data-modal-target="detail-modal{{ $surat->id }}"
                                             data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
                                             class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
                                             <span

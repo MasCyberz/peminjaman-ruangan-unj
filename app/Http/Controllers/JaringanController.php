@@ -39,7 +39,7 @@ class JaringanController extends Controller
 
         // // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
-        $peminjamanstatus = [];
+        $peminjamanStatus = [];
         // Query status peminjaman untuk setiap surat dalam $suratIdsPending
         foreach ($suratIdsPending as $suratId) {
             // Ambil status peminjaman
@@ -89,10 +89,22 @@ class JaringanController extends Controller
         return view('jaringan.surat.data-referensi', ['ruanganList' => $ruangan, 'fasilitasList' => $fasilitas]);
     }
 
+    // public function show_detail($id)
+    // {
+    //     $surat = surat::with('detailPeminjaman')->FindOrFail($id);
+    //     return view('jaringan.surat.detail-surat-peminjaman', ['suratList' => $surat]);
+    // }
+
     public function show_detail($id)
     {
-        $surat = surat::with('detailPeminjaman')->FindOrFail($id);
-        return view('jaringan.surat.detail-surat-peminjaman', ['suratList' => $surat]);
+        $surat = surat::with(['detailPeminjaman', 'ruangans' => function ($query) {
+            $query->select('ruangans_id', 'surat_id', 'nomor_ruang')->withPivot('status');
+        }])->FindOrFail($id);
+
+        // Mendapatkan status peminjaman dari pivot table
+        $peminjamanStatus = $surat->ruangans->pluck('pivot.status', 'id');
+
+        return view('jaringan.surat.detail-surat-peminjaman', ['suratList' => $surat, 'peminjamanStatus' => $peminjamanStatus]);
     }
 
     public function ajukanPeminjaman($surat_id)
@@ -240,4 +252,6 @@ class JaringanController extends Controller
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Status tolakan koordinator berhasil diterima.');
     }
+
+    
 }

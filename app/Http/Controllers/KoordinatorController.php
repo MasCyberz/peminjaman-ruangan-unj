@@ -31,12 +31,12 @@ class KoordinatorController extends Controller
 
         if (!empty($suratIsPending)) {
             // Jika ada surat pending, gunakan FIELD untuk mengurutkan
-            $surat = Surat::with('detailPeminjaman')
+            $surat = Surat::with(['detailPeminjaman', 'ruangans'])
                 ->orderByRaw("FIELD(id, " . implode(',', $suratIsPending) . ") DESC, created_at DESC")
                 ->paginate(15);
         } else {
             // Jika tidak ada surat pending, urutkan berdasarkan created_at atau kriteria lain
-            $surat = Surat::with('detailPeminjaman')
+            $surat = Surat::with(['detailPeminjaman', 'ruangans'])
                 ->orderBy('created_at', 'DESC')
                 ->paginate(15);
         }
