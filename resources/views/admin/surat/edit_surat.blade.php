@@ -22,7 +22,6 @@
             enctype="multipart/form-data">
             @csrf
 
-            {{ $SuratYgDiedit->detailPeminjaman }}
             @method('PUT')
             <div class="mb-2">
                 <label for="nomor_surat" class="block mb-2 text-sm text-gray-900 font-semibold">Nomor Surat</label>
@@ -54,7 +53,8 @@
             <div class="mb-2">
                 <label for="jml_hari" class="block mb-2 text-sm text-gray-900 font-semibold">Jumlah Hari</label>
                 <input type="number" id="jml_hari" name="jml_hari" value="{{ $SuratYgDiedit->jml_hari }}"
-                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"placeholder="Masukkan jumlah ruangan yang diinginkan" />
+                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-full outline-none ps-5 block w-full p-1.5"placeholder="Masukkan jumlah ruangan yang diinginkan"
+                    readonly />
                 @error('jml_hari')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
                 @enderror
@@ -68,7 +68,7 @@
                             <input type="date" id="tanggal_{{ $index }}" name="tanggal_peminjaman[]"
                                 class="mt-1 p-2 border border-gray-300 rounded-md" min="{{ date('Y-m-d') }}"
                                 value="{{ $detailPeminjaman->tanggal_peminjaman }}">
-                            <button type="button" class="text-red-500 font-semibold mt-1"
+                            <button type="button" class="mt-2 p-2 bg-red-500 text-white rounded-md"
                                 onclick="hapusPeminjaman('{{ $index }}')">
                                 Hapus
                             </button>
@@ -115,7 +115,7 @@
                 @error('file')
                     <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
                 @enderror
-                <span id="file-name">{{ $SuratYgDiedit->file_surat }}</span>
+                <span id="file-name"></span>
                 <a href="{{ route('peminjaman') }}"
                     class="text-white ms-auto bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Cancel</a>
                 <button type="submit"
@@ -123,14 +123,16 @@
             </div>
         </form>
     </div>
+    <br>
 
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tambahPeminjamanBtn = document.getElementById('tambahPeminjaman');
             const peminjamanFieldsContainer = document.getElementById('peminjamanFields');
+            const jumlahHariInput = document.getElementById('jml_hari'); // Ambil elemen input jml_hari
 
-            let peminjamanIndex = 1;
+            let peminjamanIndex = {{ $SuratYgDiedit->detailPeminjaman->count() }};
 
             tambahPeminjamanBtn.addEventListener('click', function() {
                 const peminjamanField = document.createElement('div');
@@ -140,6 +142,7 @@
                     <div>
                         <label for="tanggal_${peminjamanIndex}" class="block">Tanggal Peminjaman</label>
                         <input type="date" id="tanggal_${peminjamanIndex}" name="tanggal_peminjaman[]" class="mt-1 p-2 border border-gray-300 rounded-md" min="{{ date('Y-m-d') }}">
+                        <button type="button" class="hapus-peminjaman mt-2 p-2 bg-red-500 text-white rounded-md">Hapus</button>
                     </div>
                     <div>
                         <label for="jml_ruang_${peminjamanIndex}" class="block">Jumlah Ruangan</label>
@@ -151,10 +154,42 @@
                     </div>
                 `;
 
+                const hapusPeminjamanBtn = peminjamanField.querySelector('.hapus-peminjaman');
+                hapusPeminjamanBtn.addEventListener('click', function() {
+                    peminjamanField.remove();
+                    updateJumlahHari(); // Update jumlah hari setelah menghapus peminjaman
+                });
                 peminjamanFieldsContainer.appendChild(peminjamanField);
 
                 peminjamanIndex++;
+                updateJumlahHari(); // Panggil fungsi untuk mengupdate jumlah hari saat menambah peminjaman
             });
+
+            // Fungsi untuk menghitung jumlah hari
+            function updateJumlahHari() {
+                const inputsTanggal = document.querySelectorAll('input[type="date"]');
+                let jumlahHari = 0;
+                inputsTanggal.forEach(input => {
+                    if (input.value !== '') {
+                        jumlahHari++;
+                    }
+                });
+
+                // Update nilai input jml_hari
+                const jumlahHariInput = document.getElementById('jml_hari');
+                jumlahHariInput.value = jumlahHari;
+            }
+
+            // Panggil fungsi untuk menghitung jumlah hari saat halaman dimuat
+            updateJumlahHari();
+
+            // Panggil fungsi updateJumlahHari saat ada perubahan pada input tanggal
+            peminjamanFieldsContainer.addEventListener('change', function(event) {
+                if (event.target && event.target.matches('input[type="date"]')) {
+                    updateJumlahHari();
+                }
+            });
+
         });
     </script>
 
@@ -164,6 +199,22 @@
             var peminjamanDiv = document.getElementById('peminjaman_' + index);
             // Hapus div peminjaman dari parent form
             peminjamanDiv.remove();
+            updateJumlahHari(); // Panggil fungsi untuk mengupdate jumlah hari setelah menghapus peminjaman
+        }
+
+        // Fungsi untuk menghitung jumlah hari
+        function updateJumlahHari() {
+            const inputsTanggal = document.querySelectorAll('input[type="date"]');
+            let jumlahHari = 0;
+            inputsTanggal.forEach(input => {
+                if (input.value !== '') {
+                    jumlahHari++;
+                }
+            });
+
+            // Update nilai input jml_hari
+            const jumlahHariInput = document.getElementById('jml_hari');
+            jumlahHariInput.value = jumlahHari;
         }
     </script>
 

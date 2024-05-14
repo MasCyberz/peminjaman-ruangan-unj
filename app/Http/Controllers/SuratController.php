@@ -248,7 +248,7 @@ class SuratController extends Controller
                 'nomor_surat' => $request->nomor_surat,
                 'asal_surat' => $request->asal_surat,
                 'nama_peminjam' => $request->nama_peminjam,
-                'jml_ruang' => $request->jml_ruang,
+                'jml_hari' => $request->jml_hari,
                 'file_surat' => $namaBaru ?? $surat->file_surat,
                 'status' => 'pending',
             ]);

@@ -112,57 +112,82 @@
                                             </td>
                                             <td
                                                 class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center transition-all duration-300 ease-in-out">
+
+                                                @if (!empty($peminjaman))
+                                                    {{-- @foreach ($peminjaman as $suratId)
+                                                        @php
+                                                            $peminjamanDetail = App\Models\RuangPeminjaman::where(
+                                                                'surat_id',
+                                                                $suratId,
+                                                            )->first();
+                                                        @endphp
+                                                        @if ($peminjamanDetail && $peminjamanDetail->status == 'ditolak koordinator')
+                                                            <form
+                                                                action="{{ route('tolak_peminjaman_jaringan', $suratId) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <button type="submit">Terima tolakan koordinator</button>
+                                                            </form>
+                                                        @endif
+                                                    @endforeach --}}
+                                                    @foreach ($suratList as $surat)
+                                                        @if ($peminjamanStatus[$surat->id] == 'ditolak koordinator')
+                                                            <form
+                                                                action="{{ route('tolak_peminjaman_jaringan', $surat->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <button type="submit">Terima tolakan koordinator</button>
+                                                            </form>
+                                                        @break
+                                                    @endif
+                                                @endforeach
+                                            @else
                                                 <a href="/jaringan/detail-surat/{{ $surat->id }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
-                                                @if (!in_array($surat->id, $peminjaman))
-                                                @endif
                                                 <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
                                                     class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
                                                     Ruangan</a>
-                                                <form
-                                                    action="{{ route('tolak_peminjaman_jaringan', $surat->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    <button type="submit">Terima tolakan koordinator</button>
-                                                </form>
+                                            @endif
 
-                                            </td>
-                                            <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
-                                                @if ($suratSelesai->contains($surat->id))
-                                                    <div
-                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
-                                                        Sedang ditinjau Koordinator.
-                                                    </div>
-                                                @elseif ($surat->status == 'diterima')
-                                                    <div
-                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
-                                                        Diterima Oleh KA.
-                                                    </div>
-                                                @elseif ($surat->ruangans->contains('status', 'ditolak koordinator'))
-                                                    <div
-                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-red-100 text-red-800">
-                                                        Ditolak oleh Koordinator.
-                                                        <form action="{{ route('terima_tolakan', $surat->id) }}"
-                                                            method="POST" class="inline">
-                                                            @csrf
-                                                            <button type="submit"
-                                                                class="text-green-600 hover:text-green-900">
-                                                                Terima
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="my-5">
-                            {{ $suratList->withQueryString()->links('pagination::tailwind') }}
-                        </div>
+
+
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
+                                            @if ($suratSelesai->contains($surat->id))
+                                                <div
+                                                    class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                    Sedang ditinjau Koordinator.
+                                                </div>
+                                            @elseif ($surat->status == 'diterima')
+                                                <div
+                                                    class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
+                                                    Diterima Oleh KA.
+                                                </div>
+                                            @elseif ($surat->ruangans->contains('status', 'ditolak koordinator'))
+                                                <div
+                                                    class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-red-100 text-red-800">
+                                                    Ditolak oleh Koordinator.
+                                                    <form action="{{ route('terima_tolakan', $surat->id) }}"
+                                                        method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="text-green-600 hover:text-green-900">
+                                                            Terima
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="my-5">
+                        {{ $suratList->withQueryString()->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>
-            {{-- table atas end --}}
-        @endsection
+        </div>
+        {{-- table atas end --}}
+    @endsection

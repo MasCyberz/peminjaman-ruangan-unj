@@ -39,6 +39,14 @@ class JaringanController extends Controller
 
         // // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+        $peminjamanstatus = [];
+        // Query status peminjaman untuk setiap surat dalam $suratIdsPending
+        foreach ($suratIdsPending as $suratId) {
+            // Ambil status peminjaman
+            $status = RuangPeminjaman::where('surat_id', $suratId)->value('status');
+            // Simpan status dalam array
+            $peminjamanStatus[$suratId] = $status;
+        }
 
         // Ambil kata kunci pencarian dari form
         $limit = $request->input('numero', 10);
@@ -67,7 +75,8 @@ class JaringanController extends Controller
             'suratList' => $surat,
             'numero' => $request->input('numero'),
             'peminjaman' => $suratIdsPending,
-            'suratSelesai' => $suratSelesai
+            'suratSelesai' => $suratSelesai,
+            'peminjamanStatus' => $peminjamanStatus, // Mengirim status peminjaman ke view
             // 'ruanganList' => $ruanganTersedia,
             // 'ruanganList' => $ruangan,
         ]);

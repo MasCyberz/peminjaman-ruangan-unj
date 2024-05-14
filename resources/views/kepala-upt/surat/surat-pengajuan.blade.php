@@ -75,10 +75,10 @@
                                                     Details
                                                 </a>
                                             @endif
-                                            <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
+                                            {{-- <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
                                                 class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                                                 Details
-                                            </a>
+                                            </a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
