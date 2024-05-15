@@ -22,16 +22,16 @@
 
                     {{-- {{ $peminjamanStatus }} --}}
 
-                    <div class="flex">
+                    {{-- <div class="flex">
                         <div class="flex flex-col z-10">
                             <span class="block mt-3 mx-3 text-base font-semibold">Nomor Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Asal Surat</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Nama Peminjam</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Lama Peminjaman</span>
+                            <span class="block mt-3 mx-3 text-base font-semibold">Alasan Penolakan</span>
                             <span class="block mt-3 mx-3 text-base font-semibold">Detail Peminjaman</span>
                             @if ($peminjamanStatus->contains('ditolak koordinator'))
-                            <span class="block mt-3 mx-3 text-base font-semibold">Ruang Dipinjam</span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">Alasan Penolakan</span>
+                                <span class="block mt-3 mx-3 text-base font-semibold">Ruang Dipinjam</span>
                             @endif
                         </div>
                         <div class="flex flex-col z-10">
@@ -52,6 +52,8 @@
                             <span class="block mt-3 mx-3 text-base font-semibold">
                                 {{ $suratList->jml_hari . ' hari' }}
                             </span>
+
+                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->alasan_penolakan }}</span>
                             <span class="block mt-3 mx-8 text-base font-semibold">
                                 @foreach ($suratList->detailPeminjaman as $tgl)
                                     <ul class="list-disc">
@@ -62,16 +64,72 @@
                             </span>
                             <span class="block mt-3 mx-8 text-base font-semibold">
                                 @foreach ($suratList->ruangans as $noruang)
-
-                                <ul class="list-disc">
-                                    <li>{{ $noruang->nomor_ruang }}</li>
-                                </ul>
+                                    <ul class="list-disc">
+                                        <li>{{ $noruang->nomor_ruang }}</li>
+                                    </ul>
                                 @endforeach
                             </span>
-                            <span class="block mt-3 mx-3 text-base font-semibold">{{ $suratList->alasan_penolakan }}</span>
+                        </div>
+                    </div> --}}
+
+                    <div class="p-4 md:p-5 space-y-4">
+                        <div class="space-y-3">
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Nomor Surat</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3">{{ $suratList->nomor_surat }}</span>
+                            </div>
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Asal Surat</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3">{{ $suratList->asal_surat }}</span>
+                            </div>
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Nama Peminjam</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3">{{ $suratList->nama_peminjam }}</span>
+                            </div>
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Lama Peminjaman</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3">{{ $suratList->jml_hari . ' hari' }}</span>
+                            </div>
+                            @if ($peminjamanStatus->contains('ditolak koordinator'))
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Alasan Penolakan</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3 text-wrap">{{ $suratList->alasan_penolakan }}</span>
+                            </div>
+                            @endif
+                            <div class="flex">
+                                <span class="block text-base font-semibold w-1/3">Detail Peminjaman</span>
+                                <span class="block text-base font-semibold w-10">:</span>
+                                <span class="block text-base font-semibold w-2/3">
+                                    <ul class="list-disc pl-5">
+                                        @foreach ($suratList->detailPeminjaman as $tgl)
+                                            <li>{{ \Carbon\Carbon::parse($tgl->tanggal_peminjaman)->format('d F Y') . ' - ' . $tgl->jml_ruang . ' ruang.' }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </span>
+                            </div>
+                            @if ($peminjamanStatus->contains('ditolak koordinator'))
+                                <div class="flex">
+                                    <span class="block text-base font-semibold w-1/3">Ruang Dipinjam</span>
+                                    <span class="block text-base font-semibold w-10">:</span>
+                                    <span class="block text-base font-semibold w-2/3">
+                                        <ul class="list-disc pl-5">
+                                            @foreach ($suratList->ruangans as $noruang)
+                                                <li>{{ $noruang->nomor_ruang }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                     </div>
-                </div>
+
+                </div>
                 <div class="flex items-center ps-8 p-4 rounded-b">
                     <a href="{{ asset('storage/file_surat/' . $suratList->file_surat) }}" data-modal-hide="static-modal"
                         type="button" target="_blank"

@@ -61,8 +61,7 @@
                             $firstRuangan = $surat->ruangans->first();
                             $status = optional(optional($firstRuangan)->pivot)->status;
                         @endphp
-                        <tr
-                        class="{{ $status == 'pending' ? '' : 'text-slate-500 bg-slate-200' }}">
+                        <tr class="{{ $status == 'pending' ? '' : 'text-slate-500 bg-slate-200' }}">
                             <th class="px-6 py-2 border-s border-e border-gray-400 leading-loose font-medium">
                                 Nomor Surat : {{ $surat->nomor_surat }}
                             </th>
@@ -191,7 +190,8 @@
 
                             <textarea id="alasan_penolakan" name="alasan_penolakan" rows="4"
                                 class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
-                                placeholder="Tulis alasan penolakan di sini..."></textarea>
+                                placeholder="Tulis alasan penolakan di sini...
+Contoh : Terdapat perbaikan ruangan"></textarea>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="button"
                                 class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Kembali</button>
                             <button data-modal-hide="tolak-modal{{ $surat->id }}" type="submit" name="status"

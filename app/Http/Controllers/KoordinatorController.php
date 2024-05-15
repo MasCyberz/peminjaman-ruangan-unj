@@ -99,9 +99,9 @@ class KoordinatorController extends Controller
         // Update status semua ruangan yang terkait dengan surat
         foreach ($surat->ruangans as $ruangan) {
             if ($status == 'diterima') {
-                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'diterima']);
+                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'diterima', 'created_at' => Carbon::now()]);
             } elseif ($status == 'ditolak') {
-                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'ditolak koordinator']);
+                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'ditolak koordinator', 'created_at' => Carbon::now()]);
             }
         }
 

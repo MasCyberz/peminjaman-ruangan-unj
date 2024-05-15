@@ -50,31 +50,40 @@
                             </thead>
                             <tbody class="">
                                 @foreach ($suratList as $surat)
+                                    @php
+                                        $isAcceptedOrRejected =
+                                            $surat->status == 'diterima' || $surat->status == 'ditolak';
+                                        $hasJaringanMenerimaTolakan =
+                                            $surat->ruangans
+                                                ->where('pivot.status', 'jaringan menerima tolakan koordinator')
+                                                ->count() > 0;
+                                        $isGrayText = $isAcceptedOrRejected && !$hasJaringanMenerimaTolakan;
+                                    @endphp
                                     <tr class="font-medium text-left">
                                         <th
                                             class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-center text-base
-                                    @if ($surat->status == 'diterima' || $surat->status == 'ditolak') text-slate-400 font-normal @endif">
+                                            {{ $isGrayText ? 'text-slate-400 font-normal' : '' }}">
                                             <span>{{ $loop->iteration + $suratList->firstItem() - 1 }}</span>
                                         </th>
                                         <td
                                             class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center
-                                        @if ($surat->status == 'diterima' || $surat->status == 'ditolak') text-slate-400 font-normal @endif">
+                                            {{ $isGrayText ? 'text-slate-400 font-normal' : '' }}">
                                             <span>{{ $surat->nomor_surat . ' | ' . $surat->asal_surat }}</span>
                                         </td>
                                         <td
                                             class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center text-red-600 transition-all duration-300 ease-in-out">
-                                            @if ($surat->status == 'diterima' || $surat->status == 'ditolak')
+                                            {{-- @if ($surat->status == 'diterima' || $surat->status == 'ditolak')
                                                 <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
                                                     id="detailButton_{{ $surat->id }}"
                                                     class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out opacity-50">
-                                                    Details
-                                                </a>
-                                            @else
-                                                <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
-                                                    class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-                                                    Details
-                                                </a>
-                                            @endif
+                                                Details
+                                                </a> --}}
+                                            {{-- @else --}}
+                                            <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
+                                                class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                                                Details
+                                            </a>
+                                            {{-- @endif --}}
                                             {{-- <a href="{{ route('detail_peminjaman_kepala_upt', [$surat->id]) }}"
                                                 class="bg-left-bottom bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                                                 Details
@@ -89,16 +98,15 @@
             </div>
             <div class="my-5">
                 @if ($suratList)
-                {{ $suratList->links('pagination::tailwind') }}
+                    {{ $suratList->links('pagination::tailwind') }}
                 @else
-
                 @endif
             </div>
         </div>
     </div>
 
 
-    <script>
+    {{-- <script>
         function disableLink(buttonId) {
             var detailButton = document.getElementById(buttonId);
             detailButton.removeEventListener('click', handleClick);
@@ -117,6 +125,6 @@
                 button.addEventListener('click', handleClick);
             });
         });
-    </script>
+    </script> --}}
 
 @endsection

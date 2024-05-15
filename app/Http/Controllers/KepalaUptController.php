@@ -12,17 +12,28 @@ class KepalaUptController extends Controller
 {
     public function index()
     {
-        $pengajuan = surat::select('status')->where('status', 'pending')->count();
+        $pendingSuratCount = surat::select('status')->where('status', 'pending')->count();
+
+        // Menghitung jumlah surat yang memiliki relasi dengan RuangPeminjaman berstatus "jaringan menerima tolakan koordinator"
+        $rejectedSuratCount = Surat::whereHas('ruangans', function ($query) {
+            $query->where('ruang_peminjaman.status', 'jaringan menerima tolakan koordinator');
+        })->count();
+
+        // Menghitung total pengajuan
+        $pengajuan = $pendingSuratCount + $rejectedSuratCount;
+
         return view('kepala-upt.surat.index', ['pengajuan' => $pengajuan]);
     }
 
     public function peminjaman()
     {
         // Mengambil data dari table RuangPeminjaman. mengecek apakah surat_id ada atau tidak di table RuangPeminjaman
-        $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
+        $suratIdsPending = RuangPeminjaman::pluck('surat_id', 'status')->toArray();
 
         if (!empty($suratIdsPending)) {
-            $surat = Surat::with('detailPeminjaman', 'ruangans')
+            $surat = Surat::with(['detailPeminjaman', 'ruangans' => function ($query) {
+                $query->wherePivot('status', 'jaringan menerima tolakan koordinator');
+            }])
                 ->where(function ($query) use ($suratIdsPending) {
                     $query->whereIn('id', $suratIdsPending)
                         ->orWhereNotIn('id', $suratIdsPending); // Menambahkan kondisi untuk menampilkan semua surat jika tidak ada surat_id di RuangPeminjaman
@@ -40,7 +51,7 @@ class KepalaUptController extends Controller
 
     public function show_peminjaman($id)
     {
-        $pengajuan = surat::with('detailPeminjaman')->FindOrFail($id);
+        $pengajuan = surat::with('detailPeminjaman', 'ruangans')->FindOrFail($id);
 
         if ($pengajuan) {
             return view('kepala-upt.surat.surat-pengajuan-detail', ['pengajuanList' => $pengajuan]);
@@ -78,7 +89,7 @@ class KepalaUptController extends Controller
             // Ubah status pada pivot tabel ruang_peminjaman
             foreach ($ruangans as $ruangan) {
                 // Hapus ruangan yang dipinjam oleh surat dari pivot tabel
-                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'ka, jaringan, koordinator menolak surat ini']);
+                $surat->ruangans()->updateExistingPivot($ruangan->id, ['status' => 'ka, jaringan, koordinator menolak surat ini', 'tanggal_peminjaman' => null]);
             }
 
             $surat->status = 'ditolak';
@@ -159,7 +170,7 @@ class KepalaUptController extends Controller
                 $ruanganTerpakaiPerTanggal[$tanggal]++;
             }
         }
-        
+
         // Membuat event untuk setiap tanggal dengan judul berupa jumlah ruangan yang terpakai
         foreach ($ruanganTerpakaiPerTanggal as $tanggal => $jumlahRuangan) {
             $events[] = [
@@ -170,7 +181,6 @@ class KepalaUptController extends Controller
             ];
 
             $indeks++;
-
         }
         return view('kepala-upt.kalender.kalender', compact('events'));
     }

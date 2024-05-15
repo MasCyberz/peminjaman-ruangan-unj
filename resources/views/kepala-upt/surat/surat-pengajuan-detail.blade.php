@@ -154,7 +154,7 @@
                         @if ($tolakStatusDitemukan)
                             <button type="button" data-modal-target="terima-tolak-modal" data-modal-toggle="terima-tolak-modal"
                                 class="bg-green-500 hover:bg-green-700 text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 ms-1.5 text-center transition-all duration-200 ease-in-out">Terima</button>
-                        @else
+                        @elseif ($pengajuanList->status == 'pending')
                             <form id="rejectForm"
                                 action="{{ route('respond_kepala_upt', ['id' => $pengajuanList->id, 'response' => 'reject']) }}"
                                 method="POST">

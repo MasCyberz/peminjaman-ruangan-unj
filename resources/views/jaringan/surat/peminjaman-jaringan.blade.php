@@ -101,55 +101,79 @@
                                     </tr>
                                 </thead>
                                 <tbody class="">
+                                    {{-- @foreach ($peminjaman as $item)
 
+                                    {{ $item }}
+                                    @endforeach --}}
                                     @foreach ($suratList as $surat)
-    @php
-        $isPending = in_array($surat->id, $peminjaman);
-        $status = $isPending ? $peminjamanStatus[$surat->id] ?? '' : '';
-        $rejectedByCoordinator = $status === 'ditolak koordinator';
-        $isProcessed = $suratSelesai->contains($surat->id);
-        $textClass = $isPending || $rejectedByCoordinator ? 'text-slate-500' : '';
-    @endphp
-    <tr class="font-bold text-start {{ $textClass }}">
-        <td class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base {{ $textClass }}">
-            <span>{{ $surat->nomor_surat }}</span>
-            <span> | </span>
-            <span>{{ $surat->asal_surat }}</span>
-        </td>
-        <td class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center transition-all duration-300 ease-in-out {{ $textClass }}">
-            @if ($isPending)
-                @if ($rejectedByCoordinator)
-                    <form action="{{ route('tolak_peminjaman_jaringan', $surat->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-black text-white">Terima tolakan koordinator</button>
-                    </form>
-                @endif
-            @else
-                <a href="/jaringan/detail-surat/{{ $surat->id }}" class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
-                <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}" class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan Ruangan</a>
-            @endif
-        </td>
-        <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
-            @if ($rejectedByCoordinator)
-                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-red-500 text-white">
-                    Ditolak oleh Koordinator.
-                </div>
-            @elseif ($isProcessed)
-                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-yellow-300 text-black">
-                    Ditolak oleh Koordinator - Sudah Diterima
-                </div>
-            @elseif ($surat->status == 'diterima')
-                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
-                    Diterima Oleh KA.
-                </div>
-            @else
-                <div class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
-                    Sedang ditinjau Koordinator.
-                </div>
-            @endif
-        </td>
-    </tr>
-@endforeach
+                                        @php
+                                            $isPending = in_array($surat->id, $peminjaman);
+                                            $status = $isPending ? $peminjamanStatus[$surat->id] ?? '' : '';
+                                            $rejectedByCoordinator = $status === 'ditolak koordinator';
+                                            $isProcessed = $suratSelesai->contains($surat->id);
+                                            $isJaringanMenerimaTolakan = in_array($surat->id, $jaringanMenerimaTolakan);
+                                            $isSedangDitinjau = in_array($surat->id, $sedangDitinjau);
+                                            $textClass = $isPending || $rejectedByCoordinator ? '' : 'text-slate-500';
+                                        @endphp
+                                        <tr class="font-bold text-start">
+                                            <td
+                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base {{ $textClass }} ">
+                                                <span>{{ $surat->nomor_surat }}</span>
+                                                <span> | </span>
+                                                <span>{{ $surat->asal_surat }}</span>
+                                            </td>
+                                            <td
+                                                class="px-6 py-2 border-b whitespace-nowrap border-x border-gray-400 text-base text-center transition-all duration-300 ease-in-out">
+                                                @if ($isPending)
+                                                    @if ($rejectedByCoordinator)
+                                                        <a href="/jaringan/detail-surat/{{ $surat->id }}"
+                                                            class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
+                                                        <form action="{{ route('tolak_peminjaman_jaringan', $surat->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                class="bg-left-bottom bg-gradient-to-r text-slate-600 from-slate-500 to-slate-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3 ">Terima
+                                                                tolakan koordinator</button>
+                                                        </form>
+                                                    @endif
+                                                @else
+                                                    <a href="/jaringan/detail-surat/{{ $surat->id }}"
+                                                        class="bg-left-bottom bg-gradient-to-r text-red-600 from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer mx-3">Details</a>
+                                                    <a href="{{ route('ajukan_peminjaman_jaringan', $surat->id) }}"
+                                                        class="bg-left-bottom bg-gradient-to-r text-green-600 from-green-500 to-green-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out cursor-pointer">Ajukan
+                                                        Ruangan</a>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
+                                                @if ($isSedangDitinjau)
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                        Sedang ditinjau Koordinator.
+                                                    </div>
+                                                @elseif ($rejectedByCoordinator)
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-red-500 text-white">
+                                                        Ditolak oleh Koordinator.
+                                                    </div>
+                                                @elseif ($isJaringanMenerimaTolakan)
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-yellow-300 text-black">
+                                                        Ditolak oleh Koordinator - Sudah Diterima
+                                                    </div>
+                                                @elseif ($surat->status == 'diterima')
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
+                                                        Diterima Oleh KA.
+                                                    </div>
+                                                @else
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                        Sedang ditinjau Koordinator.
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
 
 

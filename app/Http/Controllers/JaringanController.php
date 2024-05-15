@@ -37,15 +37,28 @@ class JaringanController extends Controller
         // Ambil isi yang ada di ruangan
         $ruangan = Ruangan::get();
 
-        // // Ambil semua ID surat yang sedang dalam proses peminjaman
+        // Ambil semua ID surat yang sedang dalam proses peminjaman
         $suratIdsPending = RuangPeminjaman::pluck('surat_id')->toArray();
         $peminjamanStatus = [];
+        $jaringanMenerimaTolakan = [];
+        $sedangDitinjau = [];
+
         // Query status peminjaman untuk setiap surat dalam $suratIdsPending
         foreach ($suratIdsPending as $suratId) {
             // Ambil status peminjaman
             $status = RuangPeminjaman::where('surat_id', $suratId)->value('status');
             // Simpan status dalam array
             $peminjamanStatus[$suratId] = $status;
+
+            // Cek status "pending"
+            if ($status == 'pending') {
+                $sedangDitinjau[] = $suratId;
+            }
+
+            // Cek status "jaringan menerima tolakan koordinator"
+            if ($status == 'jaringan menerima tolakan koordinator') {
+                $jaringanMenerimaTolakan[] = $suratId;
+            }
         }
 
         // Ambil kata kunci pencarian dari form
@@ -77,6 +90,8 @@ class JaringanController extends Controller
             'peminjaman' => $suratIdsPending,
             'suratSelesai' => $suratSelesai,
             'peminjamanStatus' => $peminjamanStatus, // Mengirim status peminjaman ke view
+            'jaringanMenerimaTolakan' => $jaringanMenerimaTolakan,
+            'sedangDitinjau' => $sedangDitinjau, // Mengirim status "pending" ke view
             // 'ruanganList' => $ruanganTersedia,
             // 'ruanganList' => $ruangan,
         ]);
@@ -252,6 +267,4 @@ class JaringanController extends Controller
         // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Status tolakan koordinator berhasil diterima.');
     }
-
-    
 }
