@@ -32,7 +32,7 @@
                             @endphp
 
                             @foreach ($pengajuanList->ruangans as $item)
-                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator')
+                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator'  || $item->pivot->status == 'ka, jaringan, koordinator menolak surat ini')
                                     @php
                                         $tolakStatusDitemukan = true;
                                     @endphp
@@ -57,7 +57,7 @@
                             @endphp
 
                             @foreach ($pengajuanList->ruangans as $item)
-                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator')
+                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator'  || $item->pivot->status == 'ka, jaringan, koordinator menolak surat ini')
                                     @php
                                         $tolakStatusDitemukan = true;
                                     @endphp
@@ -88,7 +88,7 @@
                                 @endphp
 
                                 @foreach ($pengajuanList->ruangans as $item)
-                                    @if ($item->pivot->status == 'jaringan menerima tolakan koordinator')
+                                    @if ($item->pivot->status == 'jaringan menerima tolakan koordinator'  || $item->pivot->status == 'ka, jaringan, koordinator menolak surat ini')
                                         @php
                                             $tolakStatusDitemukan = true;
                                         @endphp
@@ -109,7 +109,7 @@
                             @endphp
 
                             @foreach ($pengajuanList->ruangans as $item)
-                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator')
+                                @if ($item->pivot->status == 'jaringan menerima tolakan koordinator'  || $item->pivot->status == 'ka, jaringan, koordinator menolak surat ini')
                                     @php
                                         $tolakStatusDitemukan = true;
                                     @endphp

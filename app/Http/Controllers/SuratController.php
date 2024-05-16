@@ -81,18 +81,21 @@ class SuratController extends Controller
             'nomor_surat' => 'required',
             'asal_surat' => 'required',
             'nama_peminjam' => 'required',
-            'jml_ruang' => 'required|min:1',
-            'jml_pc' => 'required|min:1',
+            'jml_ruang.*' => 'required|min:1',
+            'jml_pc.*' => 'required|min:1',
             'jml_hari' => 'required|min:1',
-            'tanggal_peminjaman' => 'required',
+            'tanggal_peminjaman.*' => 'required',
         ], [
             'required' => ' :attribute harus diisi',
             'file.mimes' => 'File harus berupa PDF',
             'file.max' => 'File maksimal 2 MB',
-            'jml_pc.min' => 'Jumlah PC harus lebih dari 0',
-            'jml_ruang.min' => 'Jumlah Ruang harus lebih dari 0',
+            'jml_pc.*.min' => 'Jumlah PC harus lebih dari 0',
+            'jml_ruang.*.min' => 'Jumlah Ruang harus lebih dari 0',
             'jml_hari.min' => 'Jumlah Hari harus lebih dari 0',
             'jml_hari.required' => 'Jumlah Hari harus diisi',
+            'tanggal_peminjaman.*.required' => 'Tangal Peminjaman harus diisi',
+            'jml_pc.*.required' => 'Jumlah PC harus diisi',
+            'jml_ruang.*.required' => 'Jumlah Ruang harus diisi',
         ]);
 
         if ($request->hasFile('file')) {
@@ -279,6 +282,11 @@ class SuratController extends Controller
     public function destroy($id)
     {
         $surat = surat::FindOrFail($id);
+        $filePath = $surat->file_surat;
+        // Hapus file dari storage jika ada
+        if (Storage::exists($filePath)) {
+            Storage::delete($filePath);
+        }
         $surat->delete();
         session()->flash('success', 'Data berhasil dihapus');
         return redirect('/admin/peminjaman')->with('success', 'Data berhasil dihapus');

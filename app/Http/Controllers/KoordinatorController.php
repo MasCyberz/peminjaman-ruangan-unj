@@ -106,7 +106,7 @@ class KoordinatorController extends Controller
         }
 
         if($status == 'diterima' && $surat->file_surat){
-            Storage::delete($path);
+            // Storage::delete($path);
         }
 
         if ($status == 'ditolak') {

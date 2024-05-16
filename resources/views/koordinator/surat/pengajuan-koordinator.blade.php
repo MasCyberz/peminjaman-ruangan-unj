@@ -61,7 +61,7 @@
                             $firstRuangan = $surat->ruangans->first();
                             $status = optional(optional($firstRuangan)->pivot)->status;
                         @endphp
-                        <tr class="{{ $status == 'pending' ? '' : 'text-slate-500 bg-slate-200' }}">
+                        <tr class="{{ $status == 'pending' ? '' : 'text-slate-500 bg-slate-100' }}">
                             <th class="px-6 py-2 border-s border-e border-gray-400 leading-loose font-medium">
                                 Nomor Surat : {{ $surat->nomor_surat }}
                             </th>
@@ -101,11 +101,9 @@
                                             data-modal-toggle="detail-modal{{ $surat->id }}" type="button"
                                             class="px-4 py-2 mx-2 rounded-lg cursor-pointer">
                                             <span
-                                                class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-1000 ease-in-out ">Details</span>
+                                                class="bg-left-bottom text-red-500 bg-gradient-to-r from-red-500 to-red-500 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-in-out ">Details</span>
                                         </button>
                                     </a>
-
-                                    <span class="text-black">sudah direspon</span>
                                 @endif
                                 {{-- <a href="{{ route('detail_peminjaman_koordinator', ['suratId' => $surat->id]) }}">test</a> --}}
                             </td>

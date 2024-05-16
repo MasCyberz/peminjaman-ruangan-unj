@@ -69,6 +69,7 @@
                 <button type="submit"
                     class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-5 py-2.5 text-center">Save</button>
             </div>
+            <span class="text-xs text-red-500">*Jika tidak ada foto abaikan.</span>
         </form>
     </div>
 

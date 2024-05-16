@@ -65,7 +65,7 @@
                         <input type="date" id="tanggal_0" name="tanggal_peminjaman[]"
                             class="mt-1 p-2 border border-gray-300 rounded-md" min="{{ date('Y-m-d') }}">
                     </div>
-                    @error('tanggal_peminjaman')
+                    @error('tanggal_peminjaman.*')
                         <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
                     @enderror
                     <div>
@@ -73,7 +73,7 @@
                         <input type="number" id="jml_ruang_0" name="jml_ruang[]"
                             class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
-                    @error('jml_ruang')
+                    @error('jml_ruang.*')
                         <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
                     @enderror
                     <div>
@@ -81,7 +81,7 @@
                         <input type="number" id="jml_pc_0" name="jml_pc[]"
                             class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
-                    @error('jml_pc')
+                    @error('jml_pc.*')
                         <p class="text-red-500 text-sm mt-1 capitalize">{{ $message }}</p>
                     @enderror
                 </div>

@@ -1,7 +1,7 @@
 @extends('layouts.mainlayout-admin')
 
-@section('title', 'Management-user')
-@section('page', 'Management-user')
+@section('title', 'Management user')
+@section('page', 'Management User')
 
 @section('content')
 

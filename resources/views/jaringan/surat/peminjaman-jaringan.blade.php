@@ -109,11 +109,13 @@
                                         @php
                                             $isPending = in_array($surat->id, $peminjaman);
                                             $status = $isPending ? $peminjamanStatus[$surat->id] ?? '' : '';
+                                            $suratDiterima = $surat->status === 'diterima';
                                             $rejectedByCoordinator = $status === 'ditolak koordinator';
+                                            $acceptedByCoordinator = $status === 'diterima';
                                             $isProcessed = $suratSelesai->contains($surat->id);
                                             $isJaringanMenerimaTolakan = in_array($surat->id, $jaringanMenerimaTolakan);
                                             $isSedangDitinjau = in_array($surat->id, $sedangDitinjau);
-                                            $textClass = $isPending || $rejectedByCoordinator ? '' : 'text-slate-500';
+                                            $textClass = ($rejectedByCoordinator) ? '' : ($isPending ? 'text-slate-500' : '');
                                         @endphp
                                         <tr class="font-bold text-start">
                                             <td
@@ -147,7 +149,7 @@
                                             <td class="px-6 py-2 whitespace-nowrap border-b border-x border-black text-sm">
                                                 @if ($isSedangDitinjau)
                                                     <div
-                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-slate-600">
                                                         Sedang ditinjau Koordinator.
                                                     </div>
                                                 @elseif ($rejectedByCoordinator)
@@ -160,15 +162,15 @@
                                                         class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-yellow-300 text-black">
                                                         Ditolak oleh Koordinator - Sudah Diterima
                                                     </div>
+                                                @elseif ($acceptedByCoordinator)
+                                                    <div
+                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
+                                                        Sudah Disetujui Koordinator.
+                                                    </div>
                                                 @elseif ($surat->status == 'diterima')
                                                     <div
                                                         class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-green-100 text-green-800">
                                                         Diterima Oleh KA.
-                                                    </div>
-                                                @else
-                                                    <div
-                                                        class="w-full h-full px-3 py-2 rounded-full uppercase text-center bg-slate-300 text-white">
-                                                        Sedang ditinjau Koordinator.
                                                     </div>
                                                 @endif
                                             </td>

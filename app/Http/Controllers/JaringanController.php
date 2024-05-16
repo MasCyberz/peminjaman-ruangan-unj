@@ -56,7 +56,7 @@ class JaringanController extends Controller
             }
 
             // Cek status "jaringan menerima tolakan koordinator"
-            if ($status == 'jaringan menerima tolakan koordinator') {
+            if ($status == 'jaringan menerima tolakan koordinator' || $status == 'ka, jaringan, koordinator menolak surat ini') {
                 $jaringanMenerimaTolakan[] = $suratId;
             }
         }
@@ -70,7 +70,10 @@ class JaringanController extends Controller
         $surat = surat::where(function ($query) use ($request) {
             $query->where('status', 'diterima')
                 ->orWhereHas('ruangans', function ($query) {
-                    $query->where('ruang_peminjaman.status', 'ditolak koordinator');
+                    $query->where('ruang_peminjaman.status', 'ka, jaringan, koordinator menolak surat ini');
+                })
+                ->orWhereHas('ruangans', function ($query) {
+                    $query->where('ruang_peminjaman.status', 'ditolak koordinator',);
                 });
         })
             ->where(function ($query) use ($request) {
@@ -224,6 +227,8 @@ class JaringanController extends Controller
             'ruangan' => 'required|array',
             'ruangan.*' => 'required|array',
             'ruangan.*.*' => 'required|exists:ruangans,id', // Pastikan ruangan yang dipilih ada dalam database
+        ],[
+            'ruangan.required' => 'Harus memilih ruangan.'
         ]);
 
         $ruangan = $request->ruangan;
